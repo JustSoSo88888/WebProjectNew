@@ -7,7 +7,7 @@ const config = {
   baseUrl: '',
   //测试api
   mockUrl: '',
-  frontUrl: window.location.origin,//本地地址
+  frontUrl: typeof window !== 'undefined' ? window.location.origin : '',//本地地址
   apiKey: 'SocgBG7E5uSYS0N9yiEyIvIO8cZf9Dpk',//签名Key
   secondApikey: 'LH7BhZKuFMAMoBoRu3eM3SMtUzOgoRMw',//签名key1
   // 是否启用 DevTools 检测（禁止用户打开 F12）
