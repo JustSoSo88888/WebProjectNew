@@ -9,7 +9,7 @@
 
 <style scoped lang="scss">
 .main {
-  width: 7.5rem;
+  width: rem(375);
   margin: 0 auto;
   overflow: hidden;
   height: 100vh;

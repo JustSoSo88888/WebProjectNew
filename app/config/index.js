@@ -2,6 +2,10 @@
 const config = {
   // 项目名称
   projectName: 'SP',
+  // 是否启用 DevTools 检测（禁止用户打开 F12）
+  // true: 生产环境生效，检测到 devtools 打开时跳转空白页
+  // false: 关闭检测（开发调试时设为 false）
+  enableDevtoolsDetector: false,
 }
 
 export default config
