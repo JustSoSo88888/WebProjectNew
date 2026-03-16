@@ -6,13 +6,6 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, onBeforeMount, onBeforeUnmount } from 'vue'
-
-useHead({
-  title: '登录',
-})
-
-const count = ref(0)
-
 onBeforeMount(() => {
 
 })
