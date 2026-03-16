@@ -30,7 +30,7 @@ const switchLang = (lang) => {
 }
 
 const handleLogin = () => {
-  console.log('login')
+  console.log('语言包',locale.value)
 }
 </script>
 
