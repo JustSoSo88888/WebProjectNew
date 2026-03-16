@@ -1,22 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import type {} from '@nuxtjs/i18n'
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
-
-  modules: [
-    '@pinia/nuxt',
-    '@nuxtjs/i18n',
-  ],
-
-  i18n: {
-    locales: [
-      { code: 'zh-CN', file: 'zh-CN.js' },
-      { code: 'en', file: 'en.js' },
-    ],
-    defaultLocale: 'zh-CN',
-    langDir: 'locales',
-    strategy: 'no_prefix',
-  },
   app: {
     // 全局 <head> 配置
     head: {
