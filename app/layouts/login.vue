@@ -7,10 +7,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted, onBeforeMount, onBeforeUnmount } from 'vue'
 
-definePageMeta({
-  layout: 'login',
-})
-
 useHead({
   title: '登录',
 })

@@ -14,7 +14,7 @@ export default defineNuxtConfig({
       { code: 'en', file: 'en.js' },
     ],
     defaultLocale: 'zh-CN',
-    langDir: 'locales/',
+    langDir: 'locales',
     strategy: 'no_prefix',
   },
   app: {
@@ -40,6 +40,16 @@ export default defineNuxtConfig({
   ],
 
   devtools: { enabled: true },
+
+  vite: {
+    optimizeDeps: {
+      include: [
+        '@vue/devtools-core',
+        '@vue/devtools-kit',
+        'vant',
+      ]
+    }
+  },
 
   // 开发服务器配置
   devServer: {

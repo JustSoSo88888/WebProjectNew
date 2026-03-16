@@ -13,12 +13,12 @@
       >EN</span>
     </div>
 
-    <h1>{{ t('user.login') }}</h1>
+    <h1>{{ t('login') }}</h1>
 
     <div class="form">
-      <input type="text" :placeholder="t('user.username')" />
-      <input type="password" :placeholder="t('user.password')" />
-      <button @click="handleLogin">{{ t('user.login') }}</button>
+      <input type="text" :placeholder="t('username')" />
+      <input type="password" :placeholder="t('password')" />
+      <button @click="handleLogin">{{ t('login') }}</button>
     </div>
   </div>
 </template>
@@ -34,7 +34,7 @@ definePageMeta({
 const { t, locale } = useI18n()
 
 useHead({
-  title: t('user.login'),
+  title: t('login'),
 })
 
 const switchLang = (lang) => {
