@@ -1,0 +1,38 @@
+<template>
+  <div>
+    <h1>首页</h1>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, onUnmounted, onBeforeMount, onBeforeUnmount } from 'vue'
+
+definePageMeta({
+  layout: 'default',
+})
+
+useHead({
+  title: '首页',
+})
+
+const count = ref(0)
+
+onBeforeMount(() => {
+
+})
+
+onMounted(() => {
+
+})
+
+onBeforeUnmount(() => {
+
+})
+
+onUnmounted(() => {
+
+})
+</script>
+
+<style scoped lang="scss">
+</style>
