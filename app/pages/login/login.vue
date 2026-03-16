@@ -36,7 +36,7 @@ const handleLogin = () => {
 
 <style scoped lang="scss">
 .page-login {
-  padding: 40px 20px;
+  padding: rem(40) rem(20);
 
   .lang-switch {
     display: flex;

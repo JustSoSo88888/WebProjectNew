@@ -1,0 +1,64 @@
+// ===== Flex 工具类 =====
+
+// 基础
+.flex        { display: flex; }
+.inline-flex { display: inline-flex; }
+
+// 方向
+.flex-row    { flex-direction: row; }
+.flex-col    { flex-direction: column; }
+.flex-row-reverse { flex-direction: row-reverse; }
+.flex-col-reverse { flex-direction: column-reverse; }
+
+// 换行
+.flex-wrap   { flex-wrap: wrap; }
+.flex-nowrap { flex-wrap: nowrap; }
+
+// 主轴对齐 (justify-content)
+.justify-start   { justify-content: flex-start; }
+.justify-end     { justify-content: flex-end; }
+.justify-center  { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.justify-around  { justify-content: space-around; }
+.justify-evenly  { justify-content: space-evenly; }
+
+// 交叉轴对齐 (align-items)
+.items-start    { align-items: flex-start; }
+.items-end      { align-items: flex-end; }
+.items-center   { align-items: center; }
+.items-baseline { align-items: baseline; }
+.items-stretch  { align-items: stretch; }
+
+// 常用组合
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-end {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.flex-col-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+// flex 子项
+.flex-1    { flex: 1; }
+.flex-auto { flex: auto; }
+.flex-none { flex: none; }
+
+.grow      { flex-grow: 1; }
+.shrink-0  { flex-shrink: 0; }

@@ -44,6 +44,13 @@ export default defineNuxtConfig({
   ],
   devtools: { enabled: true },
   vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@use "~/assets/scss/config.scss" as *;`,
+        },
+      },
+    },
     optimizeDeps: {
       include: [
         '@vue/devtools-core',

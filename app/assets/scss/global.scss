@@ -1,4 +1,5 @@
-
+@use 'config' as *;
+@use 'flex';
 
 /* ===== Reset ===== */
 * {
@@ -7,17 +8,14 @@
   box-sizing: border-box;
 }
 
-@function rem($pixels) {
-    @return calc($pixels / 50) * 1rem;
-}
-
-/* ===== 全局样式 ===== */
+/* ===== 基础 ===== */
 html,
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color: #000;
-  background-color: #fff;
+  color: $color-text-primary;
+  background-color: $color-bg-page;
   font-size: rem(14);
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
@@ -25,3 +23,70 @@ a {
   text-decoration: none;
 }
 
+img {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+textarea,
+button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+/* ===== 滚动条 ===== */
+::-webkit-scrollbar {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $color-gray-300;
+  border-radius: $radius-full;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ===== 通用工具类 ===== */
+.w-full  { width: 100%; }
+.h-full  { height: 100%; }
+
+.text-center { text-align: center; }
+.text-left   { text-align: left; }
+.text-right  { text-align: right; }
+
+.text-primary   { color: $color-primary; }
+.text-success   { color: $color-success; }
+.text-warning   { color: $color-warning; }
+.text-danger    { color: $color-danger; }
+.text-secondary { color: $color-text-secondary; }
+
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ellipsis-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pointer { cursor: pointer; }
+
+.hidden  { display: none !important; }

@@ -1,0 +1,59 @@
+// ===== rem 函数 =====
+@function rem($pixels) {
+  @return calc($pixels / 50) * 1rem;
+}
+
+// ===== 项目颜色配置 =====
+
+// 主色
+$color-primary:        #3b82f6;
+$color-primary-light:  #93c5fd;
+$color-primary-dark:   #1d4ed8;
+
+// 辅助色
+$color-success:        #22c55e;
+$color-warning:        #f59e0b;
+$color-danger:         #ef4444;
+$color-info:           #64748b;
+
+// 中性色
+$color-white:          #ffffff;
+$color-black:          #000000;
+$color-gray-100:       #f5f5f5;
+$color-gray-200:       #eeeeee;
+$color-gray-300:       #dddddd;
+$color-gray-400:       #bbbbbb;
+$color-gray-500:       #999999;
+$color-gray-600:       #666666;
+$color-gray-700:       #444444;
+$color-gray-800:       #333333;
+$color-gray-900:       #111111;
+
+// 文字色
+$color-text-primary:   #333333;
+$color-text-secondary: #666666;
+$color-text-placeholder: #bbbbbb;
+$color-text-disabled:  #cccccc;
+
+// 边框色
+$color-border:         #dddddd;
+$color-border-light:   #eeeeee;
+
+// 背景色
+$color-bg-page:        #f5f7fa;
+$color-bg-card:        #ffffff;
+
+// ===== 圆角 =====
+$radius-sm:   4px;
+$radius-md:   6px;
+$radius-lg:   12px;
+$radius-full: 9999px;
+
+// ===== 阴影 =====
+$shadow-sm:  0 1px 4px rgba(0, 0, 0, 0.08);
+$shadow-md:  0 4px 12px rgba(0, 0, 0, 0.10);
+$shadow-lg:  0 8px 24px rgba(0, 0, 0, 0.12);
+
+// ===== 过渡 =====
+$transition-base: all 0.2s ease;
+$transition-fast: all 0.1s ease;
