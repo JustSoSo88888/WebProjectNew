@@ -1,6 +1,26 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
+
+  modules: [
+    '@pinia/nuxt',
+    '@nuxtjs/i18n',
+  ],
+  i18n: {
+    locales: [
+      { code: 'en', file: 'en.js', name: 'English' },
+      { code: 'es', file: 'es.js', name: 'Español' },
+    ],
+    defaultLocale: 'en',
+    langDir: './locales',
+    strategy: 'no_prefix',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_lang',
+      redirectOn: 'root',
+      alwaysRedirect: false,
+    },
+  },
   app: {
     // 全局 <head> 配置
     head: {
@@ -22,9 +42,7 @@ export default defineNuxtConfig({
   css: [
     '~/assets/scss/global.scss',
   ],
-
   devtools: { enabled: true },
-
   vite: {
     optimizeDeps: {
       include: [
@@ -34,15 +52,10 @@ export default defineNuxtConfig({
       ]
     }
   },
-
   // 开发服务器配置
   devServer: {
     host: 'localhost',
     port: 3090,
   },
-
-
-
-
 })
 

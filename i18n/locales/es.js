@@ -1,0 +1,15 @@
+export default {
+  confirm: 'Confirmar',
+  cancel: 'Cancelar',
+  submit: 'Enviar',
+  back: 'Volver',
+  loading: 'Cargando...',
+  noData: 'Sin datos',
+  home: 'Inicio',
+  mine: 'Mi cuenta',
+  login: 'Iniciar sesión',
+  logout: 'Cerrar sesión',
+  register: 'Registrarse',
+  username: 'Usuario',
+  password: 'Contraseña',
+}
