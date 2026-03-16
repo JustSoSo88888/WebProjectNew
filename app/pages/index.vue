@@ -11,10 +11,6 @@ definePageMeta({
   layout: 'default',
 })
 
-useHead({
-  title: '首页',
-})
-
 const count = ref(0)
 
 onBeforeMount(() => {
