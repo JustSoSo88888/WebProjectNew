@@ -1,3 +1,5 @@
+
+
 /* ===== Reset ===== */
 * {
   margin: 0;
@@ -5,23 +7,21 @@
   box-sizing: border-box;
 }
 
-/* ===== 全局变量 ===== */
-:root {
-  --primary-color: #3b82f6;
-  --text-color: #333;
-  --bg-color: #fff;
+@function rem($pixels) {
+    @return calc($pixels / 50) * 1rem;
 }
 
 /* ===== 全局样式 ===== */
 html,
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 14px;
-  color: var(--text-color);
-  background-color: var(--bg-color);
+  color: #000;
+  background-color: #fff;
+  font-size: rem(14);
 }
 
 a {
   color: inherit;
   text-decoration: none;
 }
+

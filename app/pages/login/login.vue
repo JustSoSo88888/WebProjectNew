@@ -76,12 +76,12 @@ const handleLogin = () => {
       border-radius: 6px;
       font-size: 14px;
       outline: none;
-      &:focus { border-color: var(--primary-color); }
+      &:focus { border-color: #3b82f6; }
     }
 
     button {
       height: 44px;
-      background-color: var(--primary-color);
+      background-color: #3b82f6;
       color: #fff;
       border: none;
       border-radius: 6px;

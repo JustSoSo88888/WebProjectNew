@@ -14,8 +14,14 @@ export default defineNuxtPlugin(() => {
       appStore.setIsMobile(isMobile)
     }
 
+    let timer = null
+    function setRemUnitDebounced() {
+      clearTimeout(timer)
+      timer = setTimeout(setRemUnit, 100)
+    }
+
     setRemUnit()
-    window.addEventListener('resize', setRemUnit)
+    window.addEventListener('resize', setRemUnitDebounced)
     window.addEventListener('orientationchange', setRemUnit)
   }
 })
