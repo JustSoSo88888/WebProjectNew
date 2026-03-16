@@ -3,14 +3,14 @@ import config from '~/config/index.js'
 // 本地存储
 export const storage = {
   set: (key, value) => {
-    localStorage.setItem(config.storagePrefix + key, JSON.stringify(value))
+    localStorage.setItem(`${config.projectName}_${key}`, value)
   },
   get: (key) => {
-    const val = localStorage.getItem(config.storagePrefix + key)
-    return val ? JSON.parse(val) : null
+    const val = localStorage.getItem(`${config.projectName}_${key}`)
+    return val ? val : null
   },
   remove: (key) => {
-    localStorage.removeItem(config.storagePrefix + key)
+    localStorage.removeItem(`${config.projectName}_${key}`)
   },
   clear: () => {
     localStorage.clear()

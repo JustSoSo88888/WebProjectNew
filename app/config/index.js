@@ -1,10 +1,7 @@
 // 项目基础配置
 const config = {
-  // 应用信息
-  appName: 'SP',
-
-  // 本地存储 key 前缀
-  storagePrefix: `${appName}_`,
+  // 项目名称
+  projectName: 'SP',
 }
 
 export default config
