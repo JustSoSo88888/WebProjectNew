@@ -1,4 +1,11 @@
 import config from '~/config/index.js'
+import {
+  showLoadingToast,
+  closeToast,
+  showToast as vantShowToast,
+  showSuccessToast,
+  showFailToast,
+} from 'vant'
 
 // 本地存储
 export const storage = {
@@ -49,5 +56,30 @@ export const throttle = (fn, interval = 300) => {
       last = now
       fn(...args)
     }
+  }
+}
+
+// Vant Loading
+export const showLoading = (message) => {
+  message = message ?? $t('loading')
+  showLoadingToast({
+    message,
+    forbidClick: true,
+    duration: 0,
+  })
+}
+
+export const hideLoading = () => {
+  closeToast()
+}
+
+// Vant Toast 提示  type: 'text' | 'success' | 'fail'
+export const showMsg = (message, type = 'text') => {
+  if (type === 'success') {
+    showSuccessToast(message)
+  } else if (type === 'fail') {
+    showFailToast(message)
+  } else {
+    vantShowToast(message)
   }
 }
