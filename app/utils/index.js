@@ -10,16 +10,20 @@ import {
 // 本地存储
 export const storage = {
   set: (key, value) => {
+    if (typeof localStorage === 'undefined') return
     localStorage.setItem(`${config.projectName}_${key}`, value)
   },
   get: (key) => {
+    if (typeof localStorage === 'undefined') return null
     const val = localStorage.getItem(`${config.projectName}_${key}`)
     return val ? val : null
   },
   remove: (key) => {
+    if (typeof localStorage === 'undefined') return
     localStorage.removeItem(`${config.projectName}_${key}`)
   },
   clear: () => {
+    if (typeof localStorage === 'undefined') return
     localStorage.clear()
   },
 }
