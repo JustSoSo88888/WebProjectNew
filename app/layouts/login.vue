@@ -1,33 +1,30 @@
 <template>
   <div class="main">
+    <div class="topbar">
+      <LangSwitch />
+    </div>
     <slot />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, onBeforeMount, onBeforeUnmount } from 'vue'
-onBeforeMount(() => {
-
-})
-
-onMounted(() => {
-
-})
-
-onBeforeUnmount(() => {
-
-})
-
-onUnmounted(() => {
-
-})
 </script>
 
 <style scoped lang="scss">
 .main {
+  position: relative;
   width: rem(375);
   margin: 0 auto;
+  min-height: 100vh;
+  background: #F4F6F9;
   overflow: hidden;
-  height: 100vh;
+}
+
+.topbar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: flex-end;
+  padding: rem(16) rem(20) 0;
 }
 </style>

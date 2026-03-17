@@ -20,7 +20,10 @@ export default defineNuxtPlugin(() => {
       timer = setTimeout(setRemUnit, 100)
     }
 
+    // 立即执行一次
     setRemUnit()
+    // load 后再执行一次，确保 clientHeight 已稳定
+    window.addEventListener('load', setRemUnit)
     window.addEventListener('resize', setRemUnitDebounced)
     window.addEventListener('orientationchange', setRemUnit)
   }
