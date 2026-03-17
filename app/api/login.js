@@ -9,3 +9,12 @@ import api from './api';
 export const emailLogin = (params) => {
     return api.post('/login/login', params);
 }
+
+/**
+ * 用户注册
+ * @param params
+ * @returns {Promise<unknown>}
+ */
+export const emailRegister = (params) => {
+    return api.post('/login/register', params);
+}

@@ -102,7 +102,7 @@
         <!-- 邀请码 -->
         <div class="field">
           <label>{{ $t('inviteCode') }}</label>
-          <div class="input-wrap" :class="{ focused: focus === 'invite' }">
+          <div class="input-wrap" :class="{ focused: focus === 'invite' , error: errors.inviteCode}">
             <svg viewBox="0 0 24 24" fill="none">
               <path d="M20 12V22H4V12" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
               <path d="M22 7H2v5h20V7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
@@ -116,6 +116,7 @@
               @blur="focus = ''"
             />
           </div>
+          <span v-if="errors.inviteCode" class="err-msg">{{ errors.inviteCode }}</span>
         </div>
 
         <!-- 注册按钮 -->
@@ -135,13 +136,14 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive } from 'vue';
+import { emailRegister } from '~/api/login';
 
 definePageMeta({ layout: 'login' })
 
 const { t } = useI18n()
 const form = reactive({ email: '', password: '', confirmPassword: '', inviteCode: '' })
-const errors = reactive({ email: '', password: '', confirmPassword: '' })
+const errors = reactive({ email: '', password: '', confirmPassword: '' , inviteCode: ''})
 const focus = ref('')
 const showPwd = ref(false)
 const showConfirm = ref(false)
@@ -151,29 +153,25 @@ const validate = () => {
   errors.email = ''
   errors.password = ''
   errors.confirmPassword = ''
-  if (!form.email) { errors.email = 'Email is required'; return false }
-  if (!/\S+@\S+\.\S+/.test(form.email)) { errors.email = 'Invalid email'; return false }
-  if (!form.password) { errors.password = 'Password is required'; return false }
-  if (form.password.length < 6) { errors.password = 'At least 6 characters'; return false }
-  if (!form.confirmPassword) { errors.confirmPassword = 'Please confirm password'; return false }
-  if (form.password !== form.confirmPassword) { errors.confirmPassword = 'Passwords do not match'; return false }
+  if (!form.email) { errors.email = '请输入邮箱'; return false }
+  if (!/\S+@\S+\.\S+/.test(form.email)) { errors.email = '请输入正确邮箱'; return false }
+  if (!form.password) { errors.password = '请输入密码'; return false }
+  if (form.password.length < 6 || form.password.length > 18) { errors.password = '请输入6~18位密码'; return false }
+  if (!form.confirmPassword) { errors.confirmPassword = '请输入确认密码'; return false }
+  if (form.password !== form.confirmPassword) { errors.confirmPassword = '密码不一致请重新输入'; return false }
+  if (!form.inviteCode) { errors.inviteCode = '请输入邀请码'; return false }
   return true
 }
 
 const handleRegister = async () => {
   if (!validate() || loading.value) return
   loading.value = true
-  showLoading()
-  try {
-    await new Promise(r => setTimeout(r, 1500))
-    hideLoading()
-    showMsg(t('register') + ' success', 'success')
-  } catch {
-    hideLoading()
-    showMsg('Register failed', 'fail')
-  } finally {
-    loading.value = false
+  let params = {
+    email: form.email,
+    password: form.password
   }
+  emailRegister(params)
+
 }
 </script>
 
