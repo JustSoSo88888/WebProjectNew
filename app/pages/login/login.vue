@@ -1,6 +1,5 @@
 <template>
-  <ClientOnly>
-    <div class="page-login">
+  <div class="page-login">
       <!-- Logo区 -->
       <div class="logo-area">
         <div class="logo-icon">
@@ -81,7 +80,6 @@
         <NuxtLink to="/login/register">{{ $t('signUp') }}</NuxtLink>
       </div>
     </div>
-  </ClientOnly>
 </template>
 
 <script setup>

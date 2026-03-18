@@ -1,12 +1,14 @@
 <template>
   <NuxtRouteAnnouncer />
   <NuxtLayout>
-    <NuxtPage />
+    <NuxtPage :transition="pageTransition" />
   </NuxtLayout>
 </template>
 
 <script setup>
-// 在客户端 hydration 完成后立即同步 font-size，消除 SSR/CSR 差异导致的跳动
+import { ref, computed, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
 if (import.meta.client) {
   const setFontSize = () => {
     const d = document.documentElement
@@ -15,5 +17,28 @@ if (import.meta.client) {
   }
   setFontSize()
 }
-</script>
 
+const route = useRoute()
+
+const TAB_ORDER = { '/': 0, '/login/login': 1, '/login/register': 2, '/finance': 3, '/team': 4, '/task': 5, '/profile': 6 }
+
+const getTabIndex = (path) => {
+  for (const [key, val] of Object.entries(TAB_ORDER)) {
+    if (path === key || (key !== '/' && path.startsWith(key))) return val
+  }
+  return -1
+}
+
+const transitionName = ref('slide-left')
+
+const pageTransition = computed(() => ({
+  name: transitionName.value,
+  mode: 'out-in',
+}))
+
+watch(() => route.path, (newPath, oldPath) => {
+  const ni = getTabIndex(newPath)
+  const oi = getTabIndex(oldPath)
+  transitionName.value = (ni >= 0 && oi >= 0 && ni < oi) ? 'slide-right' : 'slide-left'
+})
+</script>

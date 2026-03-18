@@ -82,62 +82,11 @@
     <!-- ④ 功能菜单 -->
     <div class="section menu-grid">
       <div class="menu-list">
-        <button class="menu-item">
-          <span class="menu-icon" style="background:#EFF6FF">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M4 6h16M4 10h16M4 14h10" stroke="#2563EB" stroke-width="1.8" stroke-linecap="round" />
-            </svg>
+        <button v-for="item in menuItems" :key="item.label" class="menu-item" @click="item.action?.()">
+          <span class="menu-icon" :style="{ background: item.bg }">
+            <svg viewBox="0 0 24 24" fill="none" v-html="item.icon"></svg>
           </span>
-          <span class="menu-label">新闻</span>
-        </button>
-        <button class="menu-item">
-          <span class="menu-icon" style="background:#F5F3FF">
-            <svg viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="9" stroke="#7C3AED" stroke-width="1.8" />
-              <path d="M12 8v4l3 3" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" />
-            </svg>
-          </span>
-          <span class="menu-label">关于我们</span>
-        </button>
-        <button class="menu-item">
-          <span class="menu-icon" style="background:#FFF7ED">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path
-                d="M20 12v10H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"
-                stroke="#D97706" stroke-width="1.6" stroke-linejoin="round" />
-            </svg>
-          </span>
-          <span class="menu-label">現金贈禮</span>
-        </button>
-        <button class="menu-item">
-          <span class="menu-icon" style="background:#FFF1F2">
-            <svg viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="9" stroke="#DC2626" stroke-width="1.8" />
-              <path d="M12 3v9l6 3" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round" />
-            </svg>
-          </span>
-          <span class="menu-label">幸运转盘</span>
-        </button>
-        <button class="menu-item">
-          <span class="menu-icon" style="background:#F0FDF4">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="#059669" stroke-width="1.8"
-                stroke-linecap="round" />
-              <circle cx="9" cy="7" r="4" stroke="#059669" stroke-width="1.8" />
-              <path d="M19 8v6M22 11h-6" stroke="#059669" stroke-width="1.8" stroke-linecap="round" />
-            </svg>
-          </span>
-          <span class="menu-label">邀请</span>
-        </button>
-        <button class="menu-item">
-          <span class="menu-icon" style="background:#F0F9FF">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="#0284C7" stroke-width="1.8" stroke-linecap="round" />
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="#0284C7"
-                stroke-width="1.8" stroke-linejoin="round" />
-            </svg>
-          </span>
-          <span class="menu-label">手册</span>
+          <span class="menu-label">{{ item.label }}</span>
         </button>
       </div>
     </div>
@@ -251,6 +200,15 @@ let noticeTimer = null
 
 const bannerList = [img1, img2, img3, img4]
 const activityList = [activity, activity1]
+
+const menuItems = [
+  { label: '新闻',    bg: '#EFF6FF', icon: '<path d="M4 6h16M4 10h16M4 14h10" stroke="#2563EB" stroke-width="1.8" stroke-linecap="round"/>' },
+  { label: '关于我们', bg: '#F5F3FF', icon: '<circle cx="12" cy="12" r="9" stroke="#7C3AED" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round"/>' },
+  { label: '現金贈禮', bg: '#FFF7ED', icon: '<path d="M20 12v10H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" stroke="#D97706" stroke-width="1.6" stroke-linejoin="round"/>' },
+  { label: '幸运转盘', bg: '#FFF1F2', icon: '<circle cx="12" cy="12" r="9" stroke="#DC2626" stroke-width="1.8"/><path d="M12 3v9l6 3" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round"/>' },
+  { label: '邀请',    bg: '#F0FDF4', icon: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="#059669" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#059669" stroke-width="1.8"/><path d="M19 8v6M22 11h-6" stroke="#059669" stroke-width="1.8" stroke-linecap="round"/>' },
+  { label: '手册',    bg: '#F0F9FF', icon: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="#0284C7" stroke-width="1.8" stroke-linecap="round"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="#0284C7" stroke-width="1.8" stroke-linejoin="round"/>' },
+]
 
 function previewActivity(index) {
   showImagePreview({ images: activityList, startPosition: index })
