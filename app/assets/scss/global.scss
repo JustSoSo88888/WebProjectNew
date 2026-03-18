@@ -11,11 +11,13 @@
 /* ===== 基础 ===== */
 html,
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', 'Segoe UI', sans-serif;
   color: $color-text-primary;
-  background-color: #fff;
+  background-color: $color-bg-page;
   font-size: rem(14);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
 }
 
 a {
@@ -51,15 +53,6 @@ ol {
   display: none;
 }
 
-::-webkit-scrollbar-thumb {
-  background: $color-gray-300;
-  border-radius: $radius-full;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
 /* ===== 通用工具类 ===== */
 .w-full  { width: 100%; }
 .h-full  { height: 100%; }
@@ -73,6 +66,7 @@ ol {
 .text-warning   { color: $color-warning; }
 .text-danger    { color: $color-danger; }
 .text-secondary { color: $color-text-secondary; }
+.text-muted     { color: $color-text-muted; }
 
 .ellipsis {
   overflow: hidden;
@@ -88,5 +82,4 @@ ol {
 }
 
 .pointer { cursor: pointer; }
-
 .hidden  { display: none !important; }

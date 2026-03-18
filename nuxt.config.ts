@@ -37,8 +37,9 @@ export default defineNuxtConfig({
       script: [
         {
           // 内联到 <head> 最前，SSR/CSR 都能在渲染前设好 font-size
-          innerHTML: `(function(){var d=document.documentElement;var w=d.clientWidth;var h=d.clientHeight;var m=/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent);d.style.fontSize=(m?(w/375)*50:(h/1080)*80)+'px';})();`,
+          innerHTML: `(function(){function setFontSize(){var d=document.documentElement;var w=d.clientWidth;var h=d.clientHeight;var m=/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent);d.style.fontSize=(m?(w/375)*50:(h/1080)*80)+'px';}setFontSize();window.addEventListener('resize',setFontSize);})();`,
           type: 'text/javascript',
+          tagPosition: 'head',
         },
       ],
     },

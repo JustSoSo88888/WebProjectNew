@@ -5,9 +5,11 @@
       <div class="logo-area">
         <div class="logo-icon">
           <svg viewBox="0 0 48 48" fill="none">
-            <rect width="48" height="48" rx="14" fill="#1677FF" />
-            <path d="M14 24h20M24 14v20" stroke="#fff" stroke-width="3" stroke-linecap="round" />
-            <circle cx="24" cy="24" r="8" stroke="#fff" stroke-width="2.5" opacity="0.4" />
+            <rect width="48" height="48" rx="12" fill="#2563EB"/>
+            <rect x="13" y="13" width="9" height="9" rx="2" fill="white" opacity="0.9"/>
+            <rect x="26" y="13" width="9" height="9" rx="2" fill="white" opacity="0.5"/>
+            <rect x="13" y="26" width="9" height="9" rx="2" fill="white" opacity="0.5"/>
+            <rect x="26" y="26" width="9" height="9" rx="2" fill="white" opacity="0.9"/>
           </svg>
         </div>
         <h1 class="logo-title">SP</h1>
