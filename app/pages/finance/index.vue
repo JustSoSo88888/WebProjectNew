@@ -36,7 +36,7 @@
       <div class="wallet-row">
         <div class="wallet-label">钱包余额</div>
         <div class="wallet-amount">
-          <span class="wallet-unit">BRL</span>
+          <span class="wallet-unit">R$</span>
           <span class="wallet-num">{{ userInfo.balance }}</span>
         </div>
       </div>
@@ -44,12 +44,12 @@
       <!-- 收益统计 -->
       <div class="earnings-row">
         <div class="earning-item">
-          <div class="earning-val">BRL{{ userInfo.totalEarnings }}</div>
+          <div class="earning-val">R${{ userInfo.totalEarnings }}</div>
           <div class="earning-label">总收益</div>
         </div>
         <div class="earning-divider"></div>
         <div class="earning-item">
-          <div class="earning-val earning-val--today">+BRL{{ userInfo.todayEarnings }}</div>
+          <div class="earning-val earning-val--today">+R${{ userInfo.todayEarnings }}</div>
           <div class="earning-label">今日收益</div>
         </div>
       </div>
@@ -81,7 +81,7 @@
                 {{ item.days }} 天
               </div>
               <div class="product-profit">
-                <span class="profit-label">每日利润</span>
+                <span class="profit-label">日收益率</span>
                 <span class="profit-val">{{ item.dailyRate }}%</span>
               </div>
             </div>
@@ -90,7 +90,7 @@
           <div class="product-bottom">
             <div class="product-stat">
               <span class="stat-label">最低存款</span>
-              <span class="stat-val">BRL{{ item.minDeposit }}</span>
+              <span class="stat-val">R${{ item.minDeposit }}</span>
             </div>
             <div class="product-progress-wrap">
               <div class="progress-info">
@@ -109,12 +109,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+ import { ref } from 'vue'
+ import { navigateTo } from '#imports'
 
-definePageMeta({ layout: 'default' })
-
-const router = useRouter()
+ definePageMeta({ layout: 'default' })
 
 const userInfo = ref({
   account: 'user_8821',
@@ -164,11 +162,11 @@ const products = ref([
 ])
 
 function goRecord() {
-  router.push('/finance/record')
+  navigateTo('/finance/record')
 }
 
 function handleBuy(item) {
-  router.push(`/finance/detail?id=${item.id}`)
+  navigateTo(`/finance/detail?id=${item.id}`)
 }
 </script>
 

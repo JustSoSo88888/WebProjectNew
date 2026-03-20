@@ -11,7 +11,7 @@
         </div>
         <div class="hero-divider"></div>
         <div class="hero-stat">
-          <div class="hero-stat-val">¥{{ teamInfo.totalIncome }}</div>
+          <div class="hero-stat-val">R${{ teamInfo.totalIncome }}</div>
           <div class="hero-stat-label">团队收入</div>
         </div>
         <div class="hero-divider"></div>
@@ -55,7 +55,7 @@
         </div>
         <div class="group-stats">
           <div class="group-stat" v-for="stat in group.stats" :key="stat.label">
-            <div class="group-stat-val">¥{{ stat.val }}</div>
+            <div class="group-stat-val">R${{ stat.val }}</div>
             <div class="group-stat-label">{{ stat.label }}</div>
           </div>
         </div>
@@ -105,13 +105,21 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch, nextTick, onMounted } from 'vue'
 import { showToast } from 'vant'
+import { useRoute } from 'vue-router'
 import QRCode from 'qrcode'
 
 definePageMeta({ layout: 'default' })
 
+const route = useRoute()
 const activeTab = ref('team')
+
+onMounted(() => {
+  if (route.query.tab) {
+    activeTab.value = route.query.tab
+  }
+})
 
 const tabs = [
   { key: 'team', label: '团队' },

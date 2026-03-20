@@ -69,7 +69,7 @@
           <div class="task-name">{{ task.name }}</div>
           <div class="task-reward">
             <span class="reward-label">收益</span>
-            <span class="reward-amount">+¥{{ task.reward }}</span>
+            <span class="reward-amount">+R${{ task.reward }}</span>
           </div>
           <div v-if="task.status === 'completed'" class="task-time">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">

@@ -3,6 +3,11 @@
   @return calc($pixels / 50) * 1rem;
 }
 
+// ===== 货币配置 =====
+// 支持的货币: BRL (巴西雷亚尔), USD (美元), EUR (欧元), CNY (人民币), etc.
+$currency-symbol: 'R$';
+$currency-code: 'BRL';
+
 // ===== 项目颜色配置（白色系科技风）=====
 
 // 主色 — 科技蓝
@@ -43,6 +48,7 @@ $color-gray-900:       #111827;
 $color-text-primary:   #0F172A;
 $color-text-secondary: #475569;
 $color-text-muted:     #94A3B8;
+$color-text-muted-bg:  #F1F5F9;
 $color-text-placeholder: #CBD5E1;
 $color-text-disabled:  #E2E8F0;
 

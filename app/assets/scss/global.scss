@@ -112,3 +112,42 @@ ol {
     transform: none;
   }
 }
+
+/* ===== 底部固定栏 ===== */
+.bottom-bar {
+  position: fixed;
+  bottom: 0; // Adjust based on bottom navigation height
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: rem(375);
+  padding: rem(10) rem(16);
+  background: #fff;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  z-index: 10;
+}
+
+.add-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: rem(8);
+  padding: rem(14) 0;
+  border-radius: $radius-md;
+  background: $gradient-primary;
+  color: #fff;
+  font-size: rem(15);
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  svg {
+    width: rem(18);
+    height: rem(18);
+  }
+
+  &:active {
+    opacity: 0.9;
+  }
+}
