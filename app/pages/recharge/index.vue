@@ -91,7 +91,11 @@
     import {ref, computed} from 'vue'
     import {navigateTo} from '#imports'
 
-    definePageMeta({layout: 'second-page'})
+    definePageMeta({
+    layout: 'second-page',
+    pageTransition: { name: 'slide-left', mode: 'out-in' },
+    layoutTransition: false
+})
 
     // 当前余额（模拟）
     const balance = ref('2,580.00')

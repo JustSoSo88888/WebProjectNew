@@ -91,7 +91,11 @@
 import { showToast } from 'vant'
 import { getLuckyConfig, doLuckyDraw, getLuckyRecords } from '~/api/lucky'
 
-definePageMeta({ layout: 'second-page' })
+definePageMeta({ 
+    layout: 'second-page',
+    pageTransition: { name: 'slide-left', mode: 'out-in' },
+    layoutTransition: false
+})
 
 const SPIN_DURATION = 4000
 

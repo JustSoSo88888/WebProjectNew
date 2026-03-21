@@ -1,7 +1,7 @@
 <template>
     <div class="main">
         <div class="main__content">
-            <NuxtPage/>
+            <NuxtPage />
         </div>
         <BottomNav/>
     </div>
@@ -25,20 +25,5 @@
             -webkit-overflow-scrolling: touch;
             padding-bottom: rem(64);
         }
-    }
-
-    .slide-left-enter-active,
-    .slide-left-leave-active {
-        transition: all 0.25s ease-out;
-    }
-
-    .slide-left-enter-from {
-        opacity: 0;
-        transform: translateX(rem(20));
-    }
-
-    .slide-left-leave-to {
-        opacity: 0;
-        transform: translateX(rem(-20));
     }
 </style>

@@ -168,7 +168,11 @@
     import activity from '@/assets/img/activity/activity.jpg'
     import activity1 from '@/assets/img/activity/activity1.jpg'
 
-    definePageMeta({layout: 'default'})
+    definePageMeta({
+    layout: 'default',
+    pageTransition: { name: 'slide-left', mode: 'out-in' },
+    layoutTransition: false
+})
 
     const noticeX = ref(0)
     let noticeTimer = null

@@ -44,7 +44,7 @@
         </div>
         
         <div class="second-page__content">
-            <slot/>
+            <NuxtPage />
         </div>
     </div>
 </template>
