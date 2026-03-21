@@ -68,6 +68,7 @@ const pageTitleMap = {
     '/withdrawal/setPassword': '设置密码',
     '/finance/record': '理财记录',
     '/finance/detail': '产品详情',
+    '/lucky': 'Lucky Turntable',
 }
 
 const pageTitle = computed(() => {
