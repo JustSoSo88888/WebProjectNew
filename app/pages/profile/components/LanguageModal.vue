@@ -21,7 +21,7 @@
                     <span class="lang-flag">{{ lang.flag }}</span>
                     <span class="lang-name">{{ lang.name }}</span>
                     <svg v-if="currentLang === lang.code" class="lang-check" viewBox="0 0 24 24" fill="none">
-                        <path d="M20 6L9 17l-5-5" stroke="#2563EB" stroke-width="2" stroke-linecap="round"
+                        <path d="M20 6L9 17l-5-5" stroke="#D97706" stroke-width="2" stroke-linecap="round"
                               stroke-linejoin="round"/>
                     </svg>
                 </button>

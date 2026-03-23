@@ -14,8 +14,8 @@
           />
           <defs>
             <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#2563EB" />
-              <stop offset="100%" stop-color="#7C3AED" />
+              <stop offset="0%" stop-color="#d97706" />
+              <stop offset="100%" stop-color="#b45309" />
             </linearGradient>
           </defs>
         </svg>
@@ -158,8 +158,8 @@ const filteredTasks = computed(() => {
   gap: rem(20);
   margin: rem(14);
   padding: rem(20) rem(18);
-  background: linear-gradient(135deg, #F0F5FF 0%, #EDE9FE 100%);
-  border: 1px solid #DBEAFE;
+  background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+  border: 1px solid #FDE68A;
   border-radius: $radius-xl;
   box-shadow: $shadow-md;
 }
@@ -248,7 +248,7 @@ const filteredTasks = computed(() => {
 .stat-divider {
   width: 1px;
   height: rem(32);
-  background: #DBEAFE;
+  background: #FDE68A;
 }
 
 // ── Tabs ──────────────────────────────────────────────────
@@ -411,9 +411,9 @@ const filteredTasks = computed(() => {
   &--active {
     background: $color-primary-bg;
     color: $color-primary;
-    border: 1.5px solid rgba(37, 99, 235, 0.25);
+    border: 1.5px solid rgba(217, 119, 6, 0.25);
 
-    &:active { background: #DBEAFE; }
+    &:active { background: #FDE68A; }
   }
 
   &--done {

@@ -415,8 +415,8 @@ onMounted(() => {
     font-weight: 500;
 
     &.ongoing {
-        background: #DBEAFE;
-        color: #2563EB;
+        background: $color-primary-bg;
+        color: #d97706;
     }
 
     &.completed {
@@ -448,7 +448,7 @@ onMounted(() => {
     color: $color-text-primary;
 
     &.highlight {
-        color: #2563EB;
+        color: #d97706;
     }
 
     &.profit {
@@ -473,7 +473,7 @@ onMounted(() => {
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #2563EB, #7C3AED);
+    background: $gradient-primary;
     border-radius: $radius-full;
     transition: width 0.3s ease;
 }

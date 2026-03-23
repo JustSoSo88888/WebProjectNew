@@ -288,7 +288,7 @@ const goToRecord = () => {
 
 // ── Product Header ──────────────────────────────────────────
 .product-header {
-    background: linear-gradient(135deg, #1D4ED8 0%, #7C3AED 100%);
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
     padding: rem(16);
     display: flex;
     gap: rem(16);
@@ -581,7 +581,7 @@ const goToRecord = () => {
 
 .invest-btn {
     padding: rem(12) rem(32);
-    background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+    background: $gradient-primary;
     color: #fff;
     border-radius: $radius-md;
     font-size: rem(15);
@@ -717,7 +717,7 @@ const goToRecord = () => {
 .success-btn {
     width: 100%;
     padding: rem(12) 0;
-    background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+    background: $gradient-primary;
     color: #fff;
     border-radius: $radius-md;
     font-size: rem(14);

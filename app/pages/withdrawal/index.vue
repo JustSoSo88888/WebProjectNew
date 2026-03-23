@@ -216,11 +216,11 @@ const onCancelSetPassword = () => {
 }
 
 .balance-card {
-    background: linear-gradient(135deg, #1D4ED8 0%, #7C3AED 100%);
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
     border-radius: $radius-xl;
     padding: rem(20);
     margin-bottom: rem(12);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    box-shadow: $shadow-gold;
 }
 
 .balance-label {
@@ -447,12 +447,12 @@ const onCancelSetPassword = () => {
     width: rem(56);
     height: rem(56);
     border-radius: 50%;
-    background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
+    background: linear-gradient(135deg, #FFFBEB, #FEF3C7);
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto rem(16);
-    color: #2563EB;
+    color: #d97706;
 
     svg {
         width: rem(28);

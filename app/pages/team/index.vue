@@ -135,7 +135,7 @@ const teamInfo = ref({
 const teamGroups = ref([
   {
     name: 'A队',
-    color: 'linear-gradient(135deg, #2563EB, #3B82F6)',
+    color: 'linear-gradient(135deg, #d97706, #FBBF24)',
     members: 52,
     stats: [
       { label: '注册会员', val: '52' },
@@ -145,7 +145,7 @@ const teamGroups = ref([
   },
   {
     name: 'B队',
-    color: 'linear-gradient(135deg, #7C3AED, #A78BFA)',
+    color: 'linear-gradient(135deg, #b45309, #d97706)',
     members: 43,
     stats: [
       { label: '注册会员', val: '43' },
@@ -184,7 +184,7 @@ function generateQR() {
   QRCode.toCanvas(qrCanvas.value, inviteInfo.value.link, {
     width: 160,
     margin: 1,
-    color: { dark: '#1D4ED8', light: '#EFF6FF' },
+    color: { dark: '#d97706', light: '#FFFBEB' },
   })
 }
 
@@ -207,10 +207,10 @@ async function copyText(text, type) {
 
 .hero-card {
   margin: rem(12) rem(14);
-  background: linear-gradient(135deg, #1D4ED8 0%, #7C3AED 100%);
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
   border-radius: $radius-xl;
   padding: rem(20) rem(18);
-  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+  box-shadow: $shadow-gold;
 }
 
 .hero-title {
@@ -360,7 +360,7 @@ async function copyText(text, type) {
 }
 
 .qr-wrap {
-  background: #EFF6FF;
+  background: $color-primary-bg;
   border-radius: $radius-lg;
   padding: rem(10);
   box-shadow: $shadow-sm;

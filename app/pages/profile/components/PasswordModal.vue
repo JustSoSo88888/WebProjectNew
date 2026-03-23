@@ -210,7 +210,7 @@
         }
 
         &.icon-login {
-            color: #2563EB;
+            color: #D97706;
         }
     }
 

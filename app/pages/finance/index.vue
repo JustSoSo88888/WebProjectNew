@@ -171,17 +171,23 @@ function handleBuy(item) {
 </script>
 
 <style scoped lang="scss">
+@use '~/assets/scss/config' as *;
+
 .finance {
-  padding-bottom: rem(20);
+  background: $color-bg-page;
+  min-height: 100vh;
+  padding-bottom: rem(80);
 }
 
-// 顶部英雄卡片
+// Hero Banner
 .hero-card {
   margin: rem(12) rem(14);
-  background: linear-gradient(135deg, #1D4ED8 0%, #7C3AED 100%);
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
   border-radius: $radius-xl;
   padding: rem(20) rem(18);
-  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+  box-shadow: $shadow-gold;
+  position: relative;
+  overflow: hidden;
 }
 
 .hero-top {
@@ -189,6 +195,8 @@ function handleBuy(item) {
   align-items: flex-start;
   justify-content: space-between;
   margin-bottom: rem(20);
+  position: relative;
+  z-index: 3;
 }
 
 .user-info {
@@ -217,7 +225,7 @@ function handleBuy(item) {
 .user-account {
   font-size: rem(14);
   font-weight: 700;
-  color: #fff;
+  color: $color-white;
   margin-bottom: rem(4);
 }
 
@@ -253,7 +261,7 @@ function handleBuy(item) {
   border-radius: $radius-full;
   font-size: rem(11);
   font-weight: 600;
-  color: #fff;
+  color: $color-white;
   cursor: pointer;
   backdrop-filter: blur(8px);
   transition: $transition-fast;
@@ -270,6 +278,8 @@ function handleBuy(item) {
 
 .wallet-row {
   margin-bottom: rem(16);
+  position: relative;
+  z-index: 3;
 }
 
 .wallet-label {
@@ -293,7 +303,7 @@ function handleBuy(item) {
 .wallet-num {
   font-size: rem(32);
   font-weight: 800;
-  color: #fff;
+  color: $color-white;
   letter-spacing: -1px;
   line-height: 1;
 }
@@ -305,6 +315,8 @@ function handleBuy(item) {
   border-radius: $radius-lg;
   padding: rem(12) rem(16);
   gap: rem(0);
+  position: relative;
+  z-index: 3;
 }
 
 .earning-item {
@@ -315,7 +327,7 @@ function handleBuy(item) {
 .earning-val {
   font-size: rem(16);
   font-weight: 700;
-  color: #fff;
+  color: $color-white;
   margin-bottom: rem(3);
 
   &--today {
@@ -336,14 +348,31 @@ function handleBuy(item) {
 
 // 产品列表
 .product-section {
-  padding: 0 rem(14);
+  margin: rem(16) rem(16) 0;
+  background: $color-white;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  border: 1px solid $color-border;
+  padding-bottom: rem(16);
 }
 
 .section-header {
+  padding: rem(20) rem(16) rem(12);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: rem(10);
+
+  h2 {
+    font-size: rem(18);
+    font-weight: 700;
+    color: $color-text-primary;
+    margin-bottom: rem(4);
+  }
+
+  p {
+    font-size: rem(13);
+    color: $color-text-secondary;
+  }
 }
 
 .section-title {
@@ -358,21 +387,22 @@ function handleBuy(item) {
 }
 
 .product-list {
+  padding: 0 rem(16);
   display: flex;
   flex-direction: column;
-  gap: rem(10);
+  gap: rem(12);
 }
 
 .product-card {
-  background: #fff;
-  border-radius: $radius-lg;
+  background: linear-gradient(135deg, $color-bg-page 0%, $color-white 100%);
   border: 1px solid $color-border;
-  box-shadow: $shadow-sm;
+  border-radius: $radius-lg;
   overflow: hidden;
   cursor: pointer;
   transition: $transition-fast;
 
   &:active {
+    transform: scale(0.98);
     box-shadow: $shadow-md;
     border-color: $color-primary-light;
   }
@@ -494,7 +524,7 @@ function handleBuy(item) {
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #2563EB 0%, #7C3AED 100%);
+  background: $gradient-primary;
   border-radius: $radius-full;
   transition: width 0.4s ease;
 }

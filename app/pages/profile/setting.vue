@@ -225,8 +225,8 @@
         }
 
         &.security-icon {
-            color: #2563EB;
-            background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
+            color: #D97706;
+            background: linear-gradient(135deg, #FFFBEB, #FEF3C7);
         }
 
         &.logout-icon {

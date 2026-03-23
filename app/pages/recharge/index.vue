@@ -122,8 +122,8 @@
             id: 'bank',
             name: '银行转账',
             range: 'R$500 - R$200,000',
-            iconBg: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)',
-            icon: '<rect x="2" y="5" width="20" height="14" rx="2" stroke="#2563EB" stroke-width="1.8"/><path d="M2 10h20" stroke="#2563EB" stroke-width="1.8"/><path d="M6 15h4M14 15h4" stroke="#2563EB" stroke-width="1.8" stroke-linecap="round"/>',
+            iconBg: 'linear-gradient(135deg, #FFFBEB, #FEF3C7)',
+            icon: '<rect x="2" y="5" width="20" height="14" rx="2" stroke="#D97706" stroke-width="1.8"/><path d="M2 10h20" stroke="#D97706" stroke-width="1.8"/><path d="M6 15h4M14 15h4" stroke="#D97706" stroke-width="1.8" stroke-linecap="round"/>',
         },
         {
             id: 'usdt',
