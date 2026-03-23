@@ -32,31 +32,39 @@
             <!-- 快捷操作卡片 -->
             <div class="quick-cards">
                 <button class="qc-item qc-recharge" @click="navigateTo('/recharge')">
+                    <div class="qc-glow qc-glow--recharge"></div>
                     <div class="qc-icon">
                         <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5"
-                                stroke-linecap="round" />
+                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" />
+                            <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </div>
-                    <span class="qc-label">充值</span>
+                    <div class="qc-content">
+                        <span class="qc-label">充值</span>
+                    </div>
                 </button>
                 <button class="qc-item qc-withdraw" @click="navigateTo('/withdrawal')">
+                    <div class="qc-glow qc-glow--withdraw"></div>
                     <div class="qc-icon">
                         <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.5"
-                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M12 2v13M7 7l5-5 5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M5 17h14v3H5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
                         </svg>
                     </div>
-                    <span class="qc-label">提现</span>
+                    <div class="qc-content">
+                        <span class="qc-label">提现</span>
+                    </div>
                 </button>
                 <button class="qc-item qc-profit">
+                    <div class="qc-glow qc-glow--profit"></div>
                     <div class="qc-icon">
                         <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor"
-                                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M12 2l3 7h7l-5.5 4.5 2 7.5-6.5-4.5-6.5 4.5 2-7.5L2 9h7l3-7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
                         </svg>
                     </div>
-                    <span class="qc-label">收益</span>
+                    <div class="qc-content">
+                        <span class="qc-label">收益</span>
+                    </div>
                 </button>
             </div>
         </div>
@@ -440,67 +448,126 @@ onUnmounted(() => {
 .quick-cards {
     display: flex;
     gap: rem(12);
-    padding: rem(16);
+    padding: 0 rem(16) rem(16);
     position: absolute;
     bottom: rem(10);
     width: 100%;
     z-index: 4;
+    box-sizing: border-box;
 }
 
 .qc-item {
     flex: 1;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: rem(10);
-    padding: rem(10) rem(10);
+    gap: rem(8);
+    padding: rem(14) rem(10);
     box-sizing: border-box;
-    background: $color-white;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-lg;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: rem(16);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
     cursor: pointer;
-    transition: $transition-fast;
-    border: 1px solid $color-border;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    overflow: hidden;
 
     &:active {
-        transform: translateY(2px);
-        box-shadow: $shadow-md;
+        transform: translateY(2px) scale(0.98);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     }
 
-    .qc-icon {
-        width: rem(48);
-        height: rem(48);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: $radius-md;
-        color: $color-white;
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
-        svg {
-            width: rem(24);
-            height: rem(24);
+    .qc-glow {
+        position: absolute;
+        top: -50%;
+        width: 120%;
+        height: 100%;
+        opacity: 0.15;
+        filter: blur(30px);
+        pointer-events: none;
+        transition: opacity 0.3s;
+
+        &--recharge {
+            background: linear-gradient(180deg, #F59E0B 0%, #D97706 100%);
+        }
+
+        &--withdraw {
+            background: linear-gradient(180deg, #10B981 0%, #059669 100%);
+        }
+
+        &--profit {
+            background: linear-gradient(180deg, #8B5CF6 0%, #7C3AED 100%);
         }
     }
 
+    &:hover .qc-glow {
+        opacity: 0.25;
+    }
+
+    .qc-icon {
+        width: rem(52);
+        height: rem(52);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: rem(14);
+        color: $color-white;
+        position: relative;
+        z-index: 1;
+        transition: transform 0.3s;
+
+        svg {
+            width: rem(26);
+            height: rem(26);
+        }
+    }
+
+    &:hover .qc-icon {
+        transform: scale(1.05);
+    }
+
+    .qc-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: rem(2);
+        position: relative;
+        z-index: 1;
+    }
+
     .qc-label {
-        font-size: rem(13);
-        font-weight: 600;
+        font-size: rem(14);
+        font-weight: 700;
         color: $color-text-primary;
+        letter-spacing: 0.5px;
+    }
+
+    .qc-desc {
+        font-size: rem(10);
+        color: $color-text-muted;
+        font-weight: 500;
     }
 
     &.qc-recharge .qc-icon {
-        background: $gradient-primary;
-        box-shadow: $shadow-gold;
+        background: linear-gradient(135deg, #FBBF24 0%, #D97706 50%, #B45309 100%);
+        box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
     }
 
     &.qc-withdraw .qc-icon {
-        background: linear-gradient(135deg, $color-success, #34D399);
-        box-shadow: 0 4px 12px rgba($color-success, 0.3);
+        background: linear-gradient(135deg, #34D399 0%, #10B981 50%, #059669 100%);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
     }
 
     &.qc-profit .qc-icon {
-        background: linear-gradient(135deg, $color-primary-dark, $color-primary-light);
-        box-shadow: $shadow-gold;
+        background: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 50%, #7C3AED 100%);
+        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
     }
 }
 
