@@ -3,9 +3,18 @@ export default defineNuxtConfig({
     compatibilityDate: '2025-07-15',
     ssr: false,
     srcDir: 'app',
+
+    nitro: {
+        prerender: {
+            crawlLinks: true,
+            routes: ['/']
+        }
+    },
+
     modules: [
         '@pinia/nuxt',
         '@nuxtjs/i18n',
+        '@vite-pwa/nuxt',
     ],
 
     build: {
@@ -39,6 +48,7 @@ export default defineNuxtConfig({
             ],
             link: [
                 {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'},
+                {rel: 'manifest', href: '/manifest.webmanifest'},
             ],
             script: [
                 {
@@ -74,7 +84,79 @@ export default defineNuxtConfig({
     // 开发服务器配置
     devServer: {
         host: 'localhost',
-        port: 3090,
+        port: 3005,
     },
+    pwa: {
+        registerType: 'autoUpdate',
+        manifest: {
+            name: 'NovaTravel',
+            short_name: 'NovaTravel',
+            description: 'NovaTravel Application',
+            theme_color: '#ffffff',
+            background_color: '#ffffff',
+            display: 'standalone',
+            start_url: '/',
+            scope: '/',
+            icons: [
+                {
+                    src: '/logo.png',
+                    sizes: '64x64',
+                    type: 'image/png',
+                    purpose: 'any'
+                },
+                {
+                    src: '/logo.png',
+                    sizes: '120x120',
+                    type: 'image/png',
+                    purpose: 'any'
+                },
+                {
+                    src: '/logo.png',
+                    sizes: '144x144',
+                    type: 'image/png',
+                    purpose: 'any'
+                },
+                {
+                    src: '/logo.png',
+                    sizes: '152x152',
+                    type: 'image/png',
+                    purpose: 'any'
+                },
+                {
+                    src: '/logo.png',
+                    sizes: '192x192',
+                    type: 'image/png',
+                    purpose: 'any'
+                },
+                {
+                    src: '/logo.png',
+                    sizes: '384x384',
+                    type: 'image/png',
+                    purpose: 'any'
+                },
+                {
+                    src: '/logo.png',
+                    sizes: '512x512',
+                    type: 'image/png',
+                    purpose: 'any'
+                },
+                {
+                    src: '/logo.png',
+                    sizes: '512x512',
+                    type: 'image/png',
+                    purpose: 'maskable'
+                }
+            ]
+        },
+        workbox: {
+            navigateFallback: '/',
+            cleanupOutdatedCaches: true,
+            navigateFallbackDenylist: [/^\/manifest\.webmanifest$/]
+        },
+        devOptions: {
+            enabled: true,
+            type: 'module'
+        }
+    }
 })
 

@@ -4,6 +4,7 @@
       <LangSwitch />
     </div>
     <slot />
+    <PwaInstallPrompt/>
   </div>
 </template>
 

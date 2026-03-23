@@ -2,7 +2,7 @@
 const config = {
   debug: true,//是否处于调试阶段
   // 项目名称
-  projectName: 'SP',
+  projectName: 'NovaTravel',
   //正式api
   baseUrl: '',
   //测试api
