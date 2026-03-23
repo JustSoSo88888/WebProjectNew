@@ -39,7 +39,7 @@ export default defineNuxtConfig({
         pageTransition: {name: 'slide-left', mode: 'out-in'},
         // 全局 <head> 配置
         head: {
-            title: 'NovaTravel',
+            title: 'Nova Travel',
             charset: 'utf-8',
             viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
             meta: [

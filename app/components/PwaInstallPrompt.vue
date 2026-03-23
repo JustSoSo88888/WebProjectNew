@@ -79,6 +79,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { useAppStore } from '~/stores/app.js'
 
 const DISMISS_KEY = 'NovaTravel_pwa_dismissed';
 
@@ -86,6 +87,7 @@ const deferredPrompt = ref(null);
 const showInstallBanner = ref(false);
 const showIosGuide = ref(false);
 const showChromeBanner = ref(false);
+const appStore = useAppStore()
 
 const isIos = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
 const isAndroid = () => /android/i.test(navigator.userAgent);
@@ -109,22 +111,26 @@ const installPwa = async () => {
     const { outcome } = await deferredPrompt.value.userChoice;
     deferredPrompt.value = null;
     showInstallBanner.value = false;
+    appStore.setIsPWAshow(false);
 };
 
 const dismissBanner = () => {
     showInstallBanner.value = false;
+    appStore.setIsPWAshow(false);
 };
 
 const handleChromeClose = () => {
     showChromeBanner.value = false;
+    appStore.setIsPWAshow(false);
 };
 
 const handleIosGuideClose = () => {
     showIosGuide.value = false;
+    appStore.setIsPWAshow(false);
 };
 
 onMounted(() => {
-
+    if (!appStore.getIsPWAShow) return;
     if (isInStandaloneMode()) {
         return;
     }
