@@ -5,7 +5,7 @@
             <div v-if="showInstallBanner" class="pwa-install-banner">
                 <img src="/logo.png" class="pwa-icon" alt="icon" />
                 <div class="pwa-info">
-                    <div class="pwa-name">NovaTravel</div>
+                    <div class="pwa-name">Nova Travel</div>
                     <div class="pwa-desc">{{ $t('添加到主屏幕，获得更好体验') }}</div>
                 </div>
                 <div class="pwa-actions">
@@ -155,6 +155,8 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
+@use '~/assets/scss/config' as *;
+
 .pwa-install-banner {
     position: fixed;
     bottom: rem(80);
@@ -162,15 +164,15 @@ onBeforeUnmount(() => {
     transform: translateX(-50%);
     width: calc(100% - rem(32));
     max-width: rem(375);
-    background: #FFFFFF;
-    border: 1px solid #E2E8F0;
+    background: $color-white;
+    border: 1px solid $color-border;
     border-radius: rem(16);
     padding: rem(16);
     display: flex;
     align-items: center;
     gap: rem(12);
     z-index: 9996;
-    box-shadow: 0 rem(10) rem(15) rgba(0, 0, 0, 0.06), 0 rem(4) rem(6) rgba(0, 0, 0, 0.04);
+    box-shadow: $shadow-lg;
 
     .pwa-icon {
         width: rem(48);
@@ -186,12 +188,12 @@ onBeforeUnmount(() => {
         .pwa-name {
             font-size: rem(15);
             font-weight: 600;
-            color: #0F172A;
+            color: $color-text-primary;
         }
 
         .pwa-desc {
             font-size: rem(12);
-            color: #475569;
+            color: $color-text-secondary;
             margin-top: rem(2);
         }
     }
@@ -204,25 +206,27 @@ onBeforeUnmount(() => {
     }
 
     .pwa-btn-install {
-        background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
-        color: #FFFFFF;
+        background: $gradient-primary;
+        color: $color-white;
         border: none;
         border-radius: rem(10);
         padding: rem(8) rem(16);
         font-size: rem(14);
         font-weight: 600;
         cursor: pointer;
-        transition: opacity 0.2s ease;
+        transition: all 0.2s ease;
+        box-shadow: $shadow-gold;
 
         &:active {
             opacity: 0.9;
+            transform: translateY(1px);
         }
     }
 
     .pwa-btn-close {
         background: transparent;
         border: none;
-        color: #94A3B8;
+        color: $color-text-muted;
         font-size: rem(20);
         cursor: pointer;
         padding: rem(4);
@@ -230,14 +234,14 @@ onBeforeUnmount(() => {
         transition: color 0.2s ease;
 
         &:hover {
-            color: #475569;
+            color: $color-text-secondary;
         }
     }
 }
 
 .pwa-chrome-banner {
-    border-color: #DBEAFE;
-    background: #EFF6FF;
+    border-color: $color-primary-bg;
+    background: $color-primary-bg;
 
     .pwa-chrome-icon {
         flex-shrink: 0;
@@ -251,14 +255,14 @@ onBeforeUnmount(() => {
 
 .ios-guide-popup {
     padding: rem(32) rem(24);
-    background: #FFFFFF;
+    background: $color-white;
 
     .ios-guide-title {
         text-align: center;
         margin-bottom: rem(24);
         font-size: rem(18);
         font-weight: 600;
-        color: #0F172A;
+        color: $color-text-primary;
     }
 
     .ios-guide-steps {
@@ -272,43 +276,46 @@ onBeforeUnmount(() => {
         display: flex;
         align-items: center;
         gap: rem(12);
-        color: #475569;
+        color: $color-text-secondary;
         font-size: rem(14);
 
         .ios-step-num {
             width: rem(28);
             height: rem(28);
             border-radius: 50%;
-            background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
-            color: #FFFFFF;
+            background: $gradient-primary;
+            color: $color-white;
             font-weight: 600;
             font-size: rem(14);
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            box-shadow: $shadow-gold;
         }
 
         .ios-share-icon {
             font-size: rem(18);
-            color: #2563EB;
+            color: $color-primary;
         }
     }
 
     .ios-guide-close {
         width: 100%;
         padding: rem(14);
-        background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
-        color: #FFFFFF;
+        background: $gradient-primary;
+        color: $color-white;
         border: none;
         border-radius: rem(10);
         font-size: rem(15);
         font-weight: 600;
         cursor: pointer;
-        transition: opacity 0.2s ease;
+        transition: all 0.2s ease;
+        box-shadow: $shadow-gold;
 
         &:active {
             opacity: 0.9;
+            transform: translateY(1px);
         }
     }
 }

@@ -1,231 +1,234 @@
 @use 'config' as *;
 
-// ===== 登录/注册页布局 =====
-.page-login,
-.page-register {
+// ===== 登录页布局 =====
+.page-login ,.page-register{
+  position: relative;
+  min-height: 100vh;
+  padding: rem(20);
+  overflow: hidden;
+}
+
+// ===== 背景图层 =====
+// 📸 背景图片提示：请准备一张高端旅游场景图片
+// 建议：豪华酒店、私人飞机、游艇、或世界著名景点
+// 尺寸：至少 1920x1080px
+// 格式：JPG 或 WebP
+// 路径：将图片放在 /public/images/login-bg.jpg
+.bg-layer {
+  position: absolute;
+  inset: 0;
+  background: $gradient-bg, url('../../assets/img/bg/login-bg.png') center/cover no-repeat;
+  z-index: 0;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 50%, rgba($color-primary, 0.15) 0%, transparent 50%);
+  }
+}
+
+// ===== 内容区 =====
+.login-content {
   position: relative;
   z-index: 1;
-  padding: rem(24) rem(24) rem(48);
-  min-height: 100vh;
+  width: 100%;
 }
 
-// ===== Logo 区 =====
-.logo-area {
+// ===== 品牌区 =====
+.brand-section {
+  text-align: center;
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: rem(10);
-  margin-bottom: rem(40);
+  margin-bottom: rem(-20);
+  margin-top: rem(-40);
+  
 
-  .logo-icon svg {
-    width: rem(36);
-    height: rem(36);
-    border-radius: rem(10);
-    filter: drop-shadow(0 2px 8px rgba(37, 99, 235, 0.3));
+  .logo {
+    display: block;
+    width: rem(200);
   }
 
-  .logo-title {
-    font-size: rem(20);
-    font-weight: 700;
-    color: $color-text-primary;
-    letter-spacing: -0.5px;
+  .tagline {
+    font-size: rem(14);
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 300;
+    letter-spacing: 2px;
   }
 }
 
-// ===== 页面标题 =====
-.page-header {
-  margin-bottom: rem(28);
+// ===== 登录卡片 =====
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: rem(16);
+  padding: rem(40) rem(32);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 
   h2 {
     font-size: rem(26);
-    font-weight: 700;
+    font-weight: 600;
     color: $color-text-primary;
     margin-bottom: rem(6);
-    letter-spacing: -0.5px;
-    line-height: 1.2;
   }
 
-  p {
+  .subtitle {
     font-size: rem(14);
     color: $color-text-secondary;
-    line-height: 1.5;
+    margin-bottom: rem(28);
   }
-}
-
-// ===== 表单卡片 =====
-.form-card {
-  background: $color-bg-card;
-  border: 1px solid $color-border;
-  border-radius: $radius-xl;
-  padding: rem(24) rem(20);
-  box-shadow: $shadow-md;
-  display: flex;
-  flex-direction: column;
-  gap: rem(18);
 }
 
 // ===== 字段 =====
 .field {
-  display: flex;
-  flex-direction: column;
-  gap: rem(7);
+  margin-bottom: rem(20);
 
   label {
-    font-size: rem(12);
-    font-weight: 600;
+    display: block;
+    font-size: rem(13);
+    font-weight: 500;
     color: $color-text-secondary;
-    letter-spacing: 0.2px;
-    text-transform: uppercase;
+    margin-bottom: rem(8);
   }
 }
 
 // ===== 输入框 =====
 .input-wrap {
-  display: flex;
-  align-items: center;
-  gap: rem(10);
-  height: rem(50);
-  padding: 0 rem(14);
-  background: $color-gray-50;
-  border: 1.5px solid $color-border;
-  border-radius: $radius-md;
-  transition: $transition-fast;
+  position: relative;
 
   svg {
-    width: rem(16);
-    height: rem(16);
+    position: absolute;
+    left: rem(14);
+    top: 50%;
+    transform: translateY(-50%);
+    width: rem(18);
+    height: rem(18);
     color: $color-text-muted;
-    flex-shrink: 0;
+    pointer-events: none;
   }
 
   input {
-    flex: 1;
-    border: none;
-    outline: none;
-    background: transparent;
+    width: 100%;
+    background: $color-bg-page;
+    border: 1.5px solid $color-border;
+    border-radius: rem(10);
+    padding: rem(13) rem(14) rem(13) rem(42);
     font-size: rem(14);
     color: $color-text-primary;
-    font-weight: 450;
+    transition: all 0.2s;
 
     &::placeholder {
-      color: $color-text-placeholder;
-      font-weight: 400;
+      color: $color-text-muted;
+    }
+
+    &:focus {
+      outline: none;
+      background: $color-white;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px $color-primary-glow;
     }
   }
 
-  &.focused {
+  &.focused input {
+    background: $color-white;
     border-color: $color-primary;
-    background: $color-primary-bg;
     box-shadow: 0 0 0 3px $color-primary-glow;
-
-    svg { color: $color-primary; }
   }
 
-  &.error {
+  &.error input {
     border-color: $color-danger;
-    background: $color-danger-bg;
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.08);
+    box-shadow: 0 0 0 3px rgba($color-danger, 0.1);
   }
 
   .eye-btn {
-    width: rem(32);
-    height: rem(32);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: absolute;
+    right: rem(14);
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
     cursor: pointer;
-    border-radius: $radius-sm;
-    transition: $transition-fast;
+    padding: 0;
+    color: #94a3b8;
+    transition: color 0.2s;
 
-    &:hover { background: $color-gray-200; }
+    &:hover {
+      color: $color-text-secondary;
+    }
 
     svg {
-      width: rem(16);
-      height: rem(16);
-      color: $color-text-muted;
+      position: static;
+      transform: none;
     }
   }
 }
 
 // ===== 错误提示 =====
 .err-msg {
-  font-size: rem(11);
+  font-size: rem(12);
   color: $color-danger;
-  font-weight: 500;
+  margin-top: rem(6);
 }
 
 // ===== 忘记密码 =====
 .forgot {
   text-align: right;
-  margin-top: rem(-6);
+  margin-bottom: rem(24);
 
   a {
-    font-size: rem(12);
+    font-size: rem(13);
     color: $color-primary;
-    cursor: pointer;
+    text-decoration: none;
     font-weight: 500;
-    transition: $transition-fast;
+    transition: color 0.2s;
 
-    &:hover { color: $color-primary-dark; }
+    &:hover {
+      color: $color-primary-dark;
+    }
   }
 }
 
 // ===== 主按钮 =====
 .btn-primary {
-  height: rem(50);
-  background: $color-primary;
-  color: #fff;
+  width: 100%;
+  height: rem(48);
+  background: $gradient-primary;
+  color: $color-white;
   border: none;
-  border-radius: $radius-md;
+  border-radius: rem(10);
   font-size: rem(15);
   font-weight: 600;
   cursor: pointer;
-  transition: $transition-fast;
+  transition: all 0.2s;
+  box-shadow: $shadow-gold;
   display: flex;
   align-items: center;
   justify-content: center;
-  letter-spacing: -0.1px;
-  box-shadow: $shadow-blue;
-  position: relative;
-  overflow: hidden;
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 100%);
-    pointer-events: none;
-  }
 
   &:hover {
-    background: $color-primary-dark;
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
     transform: translateY(-1px);
-  }
-
-  &:active {
-    transform: translateY(0);
-    box-shadow: $shadow-blue;
+    box-shadow: 0 6px 20px rgba($color-primary, 0.5);
   }
 
   &:disabled {
-    opacity: 0.5;
+    opacity: 0.6;
     cursor: not-allowed;
     transform: none;
-    box-shadow: none;
   }
 }
 
-// ===== 加载点 =====
+// ===== 加载动画 =====
 .dots {
   display: flex;
-  gap: rem(5);
+  gap: rem(4);
 
   i {
     display: block;
     width: rem(6);
     height: rem(6);
     border-radius: 50%;
-    background: #fff;
+    background: $color-white;
     animation: dot 1s ease-in-out infinite;
 
     &:nth-child(2) { animation-delay: 0.15s; }
@@ -233,21 +236,23 @@
   }
 }
 
-// ===== 底部跳转 =====
+// ===== 底部链接 =====
 .bottom-link {
   text-align: center;
-  margin-top: rem(24);
-  font-size: rem(13);
+  margin-top: rem(20);
+  font-size: rem(14);
   color: $color-text-secondary;
 
   a {
     color: $color-primary;
     font-weight: 600;
-    margin-left: rem(4);
-    cursor: pointer;
-    transition: $transition-fast;
+    margin-left: rem(6);
+    text-decoration: none;
+    transition: color 0.2s;
 
-    &:hover { color: $color-primary-dark; }
+    &:hover {
+      color: $color-primary-dark;
+    }
   }
 }
 

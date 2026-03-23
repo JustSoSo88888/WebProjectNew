@@ -1,8 +1,6 @@
 <template>
   <div class="main">
-    <div class="topbar">
-      <LangSwitch />
-    </div>
+    
     <slot />
     <PwaInstallPrompt/>
   </div>
@@ -32,13 +30,5 @@
     pointer-events: none;
     z-index: 0;
   }
-}
-
-.topbar {
-  position: relative;
-  z-index: 10;
-  display: flex;
-  justify-content: flex-end;
-  padding: rem(16) rem(20) 0;
 }
 </style>

@@ -1,42 +1,30 @@
 <template>
   <div class="page-register">
-      <!-- Logo区 -->
-      <div class="logo-area">
-        <div class="logo-icon">
-          <svg viewBox="0 0 48 48" fill="none">
-            <rect width="48" height="48" rx="12" fill="#2563EB"/>
-            <rect x="13" y="13" width="9" height="9" rx="2" fill="white" opacity="0.9"/>
-            <rect x="26" y="13" width="9" height="9" rx="2" fill="white" opacity="0.5"/>
-            <rect x="13" y="26" width="9" height="9" rx="2" fill="white" opacity="0.5"/>
-            <rect x="26" y="26" width="9" height="9" rx="2" fill="white" opacity="0.9"/>
-          </svg>
-        </div>
-        <h1 class="logo-title">SP</h1>
+    <!-- 背景图层 -->
+    <div class="bg-layer"></div>
+
+    <!-- 内容区 -->
+    <div class="login-content">
+      <!-- Logo 和品牌 -->
+      <div class="brand-section">
+        <img :src="LOGO" class="logo" alt="">
       </div>
 
-      <!-- 标题 -->
-      <div class="page-header">
+      <!-- 注册卡片 -->
+      <div class="login-card">
         <h2>{{ $t('register') }}</h2>
-        <p>Create your account</p>
-      </div>
+        <p class="subtitle">Start your exclusive journey today</p>
 
-      <!-- 表单 -->
-      <div class="form-card">
         <!-- 邮箱 -->
         <div class="field">
           <label>{{ $t('email') }}</label>
           <div class="input-wrap" :class="{ focused: focus === 'email', error: errors.email }">
             <svg viewBox="0 0 24 24" fill="none">
-              <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
-              <path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5" />
+              <path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
             </svg>
-            <input
-              v-model="form.email"
-              type="email"
-              :placeholder="$t('emailPlaceholder')"
-              @focus="focus = 'email'"
-              @blur="focus = ''"
-            />
+            <input v-model="form.email" type="email" :placeholder="$t('emailPlaceholder')" @focus="focus = 'email'"
+              @blur="focus = ''" />
           </div>
           <span v-if="errors.email" class="err-msg">{{ errors.email }}</span>
         </div>
@@ -46,24 +34,21 @@
           <label>{{ $t('password') }}</label>
           <div class="input-wrap" :class="{ focused: focus === 'pwd', error: errors.password }">
             <svg viewBox="0 0 24 24" fill="none">
-              <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/>
-              <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5" />
+              <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
             </svg>
-            <input
-              v-model="form.password"
-              :type="showPwd ? 'text' : 'password'"
-              :placeholder="$t('passwordPlaceholder')"
-              @focus="focus = 'pwd'"
-              @blur="focus = ''"
-            />
+            <input v-model="form.password" :type="showPwd ? 'text' : 'password'"
+              :placeholder="$t('passwordPlaceholder')" @focus="focus = 'pwd'" @blur="focus = ''" />
             <button class="eye-btn" @click="showPwd = !showPwd">
               <svg v-if="!showPwd" viewBox="0 0 24 24" fill="none">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.5"/>
-                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.5" />
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5" />
               </svg>
               <svg v-else viewBox="0 0 24 24" fill="none">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path
+                  d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
               </svg>
             </button>
           </div>
@@ -75,25 +60,23 @@
           <label>{{ $t('confirmPassword') }}</label>
           <div class="input-wrap" :class="{ focused: focus === 'confirm', error: errors.confirmPassword }">
             <svg viewBox="0 0 24 24" fill="none">
-              <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/>
-              <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              <path d="M9 16l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5" />
+              <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              <path d="M9 16l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
             </svg>
-            <input
-              v-model="form.confirmPassword"
-              :type="showConfirm ? 'text' : 'password'"
-              :placeholder="$t('confirmPasswordPlaceholder')"
-              @focus="focus = 'confirm'"
-              @blur="focus = ''"
-            />
+            <input v-model="form.confirmPassword" :type="showConfirm ? 'text' : 'password'"
+              :placeholder="$t('confirmPasswordPlaceholder')" @focus="focus = 'confirm'" @blur="focus = ''" />
             <button class="eye-btn" @click="showConfirm = !showConfirm">
               <svg v-if="!showConfirm" viewBox="0 0 24 24" fill="none">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.5"/>
-                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.5" />
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5" />
               </svg>
               <svg v-else viewBox="0 0 24 24" fill="none">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path
+                  d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
               </svg>
             </button>
           </div>
@@ -103,19 +86,15 @@
         <!-- 邀请码 -->
         <div class="field">
           <label>{{ $t('inviteCode') }}</label>
-          <div class="input-wrap" :class="{ focused: focus === 'invite' , error: errors.inviteCode}">
+          <div class="input-wrap" :class="{ focused: focus === 'invite', error: errors.inviteCode }">
             <svg viewBox="0 0 24 24" fill="none">
-              <path d="M20 12V22H4V12" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-              <path d="M22 7H2v5h20V7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-              <path d="M12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M20 12V22H4V12" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+              <path d="M22 7H2v5h20V7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+              <path d="M12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"
+                stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
             </svg>
-            <input
-              v-model="form.inviteCode"
-              type="text"
-              :placeholder="$t('inviteCodePlaceholder')"
-              @focus="focus = 'invite'"
-              @blur="focus = ''"
-            />
+            <input v-model="form.inviteCode" type="text" :placeholder="$t('inviteCodePlaceholder')"
+              @focus="focus = 'invite'" @blur="focus = ''" />
           </div>
           <span v-if="errors.inviteCode" class="err-msg">{{ errors.inviteCode }}</span>
         </div>
@@ -125,25 +104,27 @@
           <span v-if="!loading">{{ $t('register') }}</span>
           <span v-else class="dots"><i></i><i></i><i></i></span>
         </button>
-      </div>
 
-      <!-- 登录跳转 -->
-      <div class="bottom-link">
-        <span>{{ $t('hasAccount') }}</span>
-        <NuxtLink to="/login/login">{{ $t('signIn') }}</NuxtLink>
+        <!-- 登录链接 -->
+        <div class="bottom-link">
+          <span>{{ $t('hasAccount') }}</span>
+          <NuxtLink to="/login/login">{{ $t('signIn') }}</NuxtLink>
+        </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script setup>
 import { ref, reactive } from 'vue';
 import { emailRegister } from '~/api/login';
+import LOGO from '../../../public/logo-transparent.png'
 
 definePageMeta({ layout: 'login' })
 
 const { t } = useI18n()
 const form = reactive({ email: '', password: '', confirmPassword: '', inviteCode: '' })
-const errors = reactive({ email: '', password: '', confirmPassword: '' , inviteCode: ''})
+const errors = reactive({ email: '', password: '', confirmPassword: '', inviteCode: '' })
 const focus = ref('')
 const showPwd = ref(false)
 const showConfirm = ref(false)
@@ -171,7 +152,6 @@ const handleRegister = async () => {
     password: form.password
   }
   emailRegister(params)
-
 }
 </script>
 

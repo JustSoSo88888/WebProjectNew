@@ -69,6 +69,8 @@ const navItems = [
 </script>
 
 <style scoped lang="scss">
+@use '~/assets/scss/config' as *;
+
 .bottom-nav {
   position: fixed;
   bottom: 0;
@@ -76,11 +78,11 @@ const navItems = [
   transform: translateX(-50%);
   width: rem(375);
   height: rem(64);
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(226, 232, 240, 0.8);
-  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.06);
+  border-top: 1px solid $color-border;
+  box-shadow: $shadow-lg;
   display: flex;
   align-items: stretch;
   z-index: 50;
@@ -94,16 +96,15 @@ const navItems = [
     justify-content: center;
     gap: rem(4);
     cursor: pointer;
-    color: #94A3B8;
+    color: $color-text-muted;
     transition: $transition-fast;
     min-height: rem(44);
     text-decoration: none;
     position: relative;
 
     &--active {
-      color: #2563EB;
+      color: $color-primary;
 
-      // 顶部指示线
       &::before {
         content: '';
         position: absolute;
@@ -111,13 +112,14 @@ const navItems = [
         left: 50%;
         transform: translateX(-50%);
         width: rem(24);
-        height: 2px;
-        background: #2563EB;
+        height: 3px;
+        background: $gradient-primary;
         border-radius: 0 0 rem(2) rem(2);
+        box-shadow: $shadow-gold;
       }
 
       .bottom-nav__icon {
-        background: rgba(37, 99, 235, 0.08);
+        background: $color-primary-bg;
         border-radius: rem(8);
       }
     }
@@ -150,7 +152,7 @@ const navItems = [
 
     .bottom-nav__item--active & {
       font-weight: 700;
-      color: #2563EB;
+      color: $color-primary;
     }
   }
 }

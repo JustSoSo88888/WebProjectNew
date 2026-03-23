@@ -67,6 +67,8 @@ const select = (code) => {
 </script>
 
 <style scoped lang="scss">
+@use '~/assets/scss/config' as *;
+
 .lang-switch {
   position: relative;
 }
@@ -76,17 +78,18 @@ const select = (code) => {
   align-items: center;
   gap: rem(5);
   padding: rem(6) rem(12);
-  border: 1px solid #D0D7E3;
+  border: 1px solid $color-border;
   border-radius: $radius-full;
-  background: #ffffff;
-  color: #4A5568;
+  background: $color-white;
+  color: $color-text-secondary;
   font-size: rem(13);
   cursor: pointer;
   transition: $transition-fast;
 
   &:hover {
-    border-color: #0052CC;
-    color: #0052CC;
+    border-color: $color-primary;
+    color: $color-primary;
+    box-shadow: 0 0 0 3px $color-primary-glow;
   }
 
   svg { width: rem(16); height: rem(16); }
@@ -106,7 +109,7 @@ const select = (code) => {
   left: 50%;
   transform: translateX(-50%);
   width: rem(375);
-  background: #fff;
+  background: $color-white;
   border-radius: rem(20) rem(20) 0 0;
   z-index: 101;
   padding-bottom: env(safe-area-inset-bottom, 16px);
@@ -156,7 +159,7 @@ const select = (code) => {
     &:hover { background: $color-gray-100; }
 
     &.active {
-      background: rgba(22, 119, 255, 0.06);
+      background: $color-primary-bg;
       .lang-name { color: $color-primary; font-weight: 600; }
     }
 

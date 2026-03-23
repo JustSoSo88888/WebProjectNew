@@ -1,101 +1,89 @@
 <template>
     <div class="home">
 
-        <!-- ① Banner + 工具栏 + 公告 + 快捷功能 -->
-        <div class="banner">
-            <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+        <!-- Hero Banner -->
+        <div class="hero-banner">
+            <van-swipe class="hero-swipe" :autoplay="4000" indicator-color="#d97706">
                 <van-swipe-item v-for="(item, index) in bannerList" :key="index">
-                    <img :src="item" alt="">
+                    <img :src="item" alt="旅游景点">
+                    <div class="hero-overlay"></div>
                 </van-swipe-item>
             </van-swipe>
 
-            <!-- 工具栏：右上角 -->
-            <div class="tools-bar">
-                <button class="tool-btn">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="white"
-                              stroke-width="1.8"
-                              stroke-linejoin="round"/>
-                    </svg>
-                </button>
-                <button class="tool-btn">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/>
-                        <path d="M12 3c-2.5 3-4 5.5-4 9s1.5 6 4 9M12 3c2.5 3 4 5.5 4 9s-1.5 6-4 9M3 12h18"
-                              stroke="white"
-                              stroke-width="1.8" stroke-linecap="round"/>
-                    </svg>
-                </button>
-                <button class="tool-btn">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <rect x="3" y="5" width="18" height="14" rx="2" stroke="white" stroke-width="1.8"/>
-                        <path d="M3 7l9 6 9-6" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
-                    </svg>
-                </button>
-            </div>
-
-            <!-- 公告：顶部玻璃条 -->
-            <div class="banner-notice">
-        <span class="banner-notice-icon">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="white"
-                  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </span>
-                <div class="banner-notice-scroll">
-                    <div class="banner-notice-track" :style="{ transform: `translateX(${noticeX}px)` }">
-                        <span>系统公告：平台升级维护通知，请关注最新动态&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;活动公告：现金赠礼活动火热进行中，立即参与&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;温馨提示：请妥善保管账户信息，谨防诈骗</span>
-                    </div>
+            <!-- 顶部工具栏 -->
+            <div class="top-bar">
+                <div class="brand">Nova Travel</div>
+                <div class="tools">
+                    <button class="tool-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M12 3c-2.5 3-4 5.5-4 9s1.5 6 4 9M12 3c2.5 3 4 5.5 4 9s-1.5 6-4 9M3 12h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <button class="tool-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
+        </div>
 
-            <!-- 快捷功能：底部渐变按钮 -->
-            <div class="quick-actions">
-                <button class="qa-btn qa-btn--blue" @click="navigateTo('/recharge')">
+        <!-- 快捷操作卡片 -->
+        <div class="quick-cards">
+            <button class="qc-item qc-recharge" @click="navigateTo('/recharge')">
+                <div class="qc-icon">
                     <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
                     </svg>
-                    <span>充值</span>
-                </button>
-                <button class="qa-btn qa-btn--green" @click="navigateTo('/withdrawal')">
+                </div>
+                <span class="qc-label">充值</span>
+            </button>
+            <button class="qc-item qc-withdraw" @click="navigateTo('/withdrawal')">
+                <div class="qc-icon">
                     <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M12 19V5M5 12l7-7 7 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    <span>提现</span>
-                </button>
-                <button class="qa-btn qa-btn--purple" @click="() => { }">
+                </div>
+                <span class="qc-label">提现</span>
+            </button>
+            <button class="qc-item qc-profit">
+                <div class="qc-icon">
                     <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    <span>收益</span>
+                </div>
+                <span class="qc-label">收益</span>
+            </button>
+        </div>
+
+        <!-- 功能菜单 -->
+        <div class="features-section">
+            <div class="features-grid">
+                <button v-for="item in menuItems" :key="item.label" class="feature-card" @click="item.action?.()">
+                    <div class="feature-icon" :style="{ background: item.bg }">
+                        <svg viewBox="0 0 24 24" fill="none" v-html="item.icon"></svg>
+                    </div>
+                    <span class="feature-label">{{ item.label }}</span>
                 </button>
             </div>
         </div>
 
-        <!-- ④ 功能菜单 -->
-        <div class="section menu-grid">
-            <div class="menu-list">
-                <button v-for="item in menuItems" :key="item.label" class="menu-item" @click="item.action?.()">
-          <span class="menu-icon" :style="{ background: item.bg }">
-            <svg viewBox="0 0 24 24" fill="none" v-html="item.icon"></svg>
-          </span>
-                    <span class="menu-label">{{ item.label }}</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- ⑤ 图片轮播 -->
-        <div class="section carousel-section">
-            <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+        <!-- 精选活动 -->
+        <div class="activity-section">
+            <van-swipe class="activity-swipe" :autoplay="3000" indicator-color="#d97706">
                 <van-swipe-item v-for="(item, index) in activityList" :key="index">
-                    <img :src="item" alt="" @click="previewActivity(index)">
+                    <img :src="item" alt="活动" @click="previewActivity(index)">
                 </van-swipe-item>
             </van-swipe>
         </div>
 
-        <!-- ⑥ 会员等级 -->
-        <div class="section vip-section">
-            <div class="section-title">会员等级</div>
+        <!-- 会员等级 -->
+        <div class="vip-section">
+            <div class="section-header">
+                <h2>会员等级</h2>
+                <p>升级享受更多专属权益</p>
+            </div>
             <div class="vip-list">
                 <div v-for="vip in vipLevels" :key="vip.level" class="vip-card"
                      :class="{ 'vip-card--current': vip.current }">
@@ -147,7 +135,7 @@
                     </div>
 
                     <button class="vip-join-btn"
-                            :style="{ background: vip.current ? 'linear-gradient(135deg, #9CA3AF, #6B7280)' : 'linear-gradient(135deg, #2563EB, #7C3AED)' }">
+                            :style="{ background: vip.current ? 'linear-gradient(135deg, #9CA3AF, #6B7280)' : 'linear-gradient(135deg, #d97706, #b45309)' }">
                         {{ vip.current ? '当前等级' : '立即加入' }}
                     </button>
                 </div>
@@ -332,55 +320,76 @@
 </script>
 
 <style scoped lang="scss">
-    .home {
-        padding-bottom: rem(20);
-    }
+@use '~/assets/scss/config' as *;
 
-    // ① Banner
-    .banner {
-        position: relative;
-        width: 100%;
-        height: rem(400);
-        overflow: hidden;
-    }
+.home {
+    background: $color-bg-page;
+    min-height: 100vh;
+    padding-bottom: rem(80);
+}
 
-    .my-swipe {
+// Hero Banner
+.hero-banner {
+    position: relative;
+    height: rem(480);
+    overflow: hidden;
+}
+
+.hero-swipe {
+    width: 100%;
+    height: 100%;
+
+    img {
         width: 100%;
         height: 100%;
+        object-fit: cover;
+    }
+}
 
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%);
+}
+
+.top-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: rem(16) rem(16);
+    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, transparent 100%);
+
+    .brand {
+        font-size: rem(20);
+        font-weight: 600;
+        color: $color-white;
+        letter-spacing: 2px;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
 
-    .tools-bar {
-        position: absolute;
-        top: rem(50);
-        right: rem(12);
+    .tools {
         display: flex;
-        flex-direction: column;
-        gap: rem(10);
-        z-index: 2;
+        gap: rem(8);
     }
 
-    .tool-btn {
+    .tool-icon {
+        width: rem(36);
+        height: rem(36);
         display: flex;
-        flex-direction: column;
         align-items: center;
-        gap: rem(3);
+        justify-content: center;
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border-radius: $radius-full;
+        border: 1px solid rgba(255,255,255,0.2);
+        color: $color-white;
         cursor: pointer;
-        padding: rem(8) rem(8);
-        border-radius: $radius-md;
         transition: $transition-fast;
-        font-size: rem(10);
-        color: rgba(255, 255, 255, 0.85);
-        font-weight: 500;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(8px);
 
         svg {
             width: rem(18);
@@ -388,273 +397,152 @@
         }
 
         &:active {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255,255,255,0.25);
+            transform: scale(0.95);
         }
     }
+}
 
-    // ② 快捷功能 — 渐变按钮
-    .quick-actions {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 2;
-        display: flex;
-        gap: rem(8);
-        padding: rem(8);
+.hero-content {
+    position: absolute;
+    bottom: rem(80);
+    left: 0;
+    right: 0;
+    z-index: 3;
+    text-align: center;
+    padding: 0 rem(20);
+
+    .hero-title {
+        font-size: rem(32);
+        font-weight: 700;
+        color: $color-white;
+        margin-bottom: rem(8);
+        text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+        letter-spacing: 1px;
     }
 
-    .qa-btn {
-        flex: 1;
+    .hero-subtitle {
+        font-size: rem(15);
+        color: rgba(255,255,255,0.9);
+        text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+        letter-spacing: 2px;
+    }
+}
+
+// 快捷卡片
+.quick-cards {
+    display: flex;
+    gap: rem(12);
+    padding: rem(16);
+    margin-top: rem(-150);
+    position: relative;
+    z-index: 4;
+}
+
+.qc-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: rem(10);
+    padding: rem(20) rem(12);
+    background: $color-white;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-lg;
+    cursor: pointer;
+    transition: $transition-fast;
+    border: 1px solid $color-border;
+
+    &:active {
+        transform: translateY(2px);
+        box-shadow: $shadow-md;
+    }
+
+    .qc-icon {
+        width: rem(48);
+        height: rem(48);
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: rem(6);
-        padding: rem(10) 0;
         border-radius: $radius-md;
+        color: $color-white;
+
+        svg {
+            width: rem(24);
+            height: rem(24);
+        }
+    }
+
+    .qc-label {
         font-size: rem(13);
         font-weight: 600;
-        color: #fff;
-        cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-
-        svg {
-            width: rem(20);
-            height: rem(20);
-        }
-
-        &:active {
-            opacity: 0.9;
-            transform: scale(0.98);
-        }
-
-        &--blue {
-            background: linear-gradient(135deg, #1E40AF, #3B82F6);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
-
-        &--green {
-            background: linear-gradient(135deg, #047857, #10B981);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
-
-        &--purple {
-            background: linear-gradient(135deg, #5B21B6, #8B5CF6);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
+        color: $color-text-primary;
     }
 
-    .section {
-        margin: rem(10) rem(14);
-        background: #FFFFFF;
-        border-radius: $radius-lg;
-        border: 1px solid $color-border;
-        box-shadow: $shadow-sm;
-        overflow: hidden;
-
-
+    &.qc-recharge .qc-icon {
+        background: $gradient-primary;
+        box-shadow: $shadow-gold;
     }
 
-    .carousel-section {
-        height: rem(150);
+    &.qc-withdraw .qc-icon {
+        background: linear-gradient(135deg, $color-success, #34D399);
+        box-shadow: 0 4px 12px rgba($color-success, 0.3);
     }
 
-    .section-title {
-        font-size: rem(13);
+    &.qc-profit .qc-icon {
+        background: linear-gradient(135deg, $color-primary-dark, $color-primary-light);
+        box-shadow: $shadow-gold;
+    }
+}
+
+// 通用区域样式
+.section-header {
+    padding: rem(20) rem(16) rem(12);
+
+    h2 {
+        font-size: rem(18);
         font-weight: 700;
         color: $color-text-primary;
-        padding: rem(14) rem(14) rem(4);
-        letter-spacing: -0.2px;
+        margin-bottom: rem(4);
     }
 
-    // ③ 公告 — 叠在 banner 顶部
-    .banner-notice {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 2;
-        display: flex;
-        align-items: center;
-        gap: rem(8);
-        padding: rem(8) rem(12);
-        background: rgba(0, 0, 0, 0.32);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .banner-notice-icon {
-        flex-shrink: 0;
-        width: rem(16);
-        height: rem(16);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        svg {
-            width: 100%;
-            height: 100%;
-        }
-    }
-
-    .banner-notice-scroll {
-        flex: 1;
-        overflow: hidden;
-        height: rem(18);
-        position: relative;
-    }
-
-    .banner-notice-track {
-        white-space: nowrap;
-        position: absolute;
-        top: 0;
-        left: 0;
-        font-size: rem(11);
-        color: rgba(255, 255, 255, 0.85);
-        line-height: rem(18);
-    }
-
-    // ④ 功能菜单
-    .menu-grid {
-        padding-bottom: rem(14);
-    }
-
-    .menu-list {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: rem(2);
-        padding: rem(8) rem(8) 0;
-    }
-
-    .menu-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: rem(7);
-        padding: rem(10) rem(4);
-        cursor: pointer;
-        border-radius: $radius-md;
-        transition: $transition-fast;
-
-        &:active {
-            background: $color-bg-hover;
-        }
-    }
-
-    .menu-icon {
-        width: rem(46);
-        height: rem(46);
-        border-radius: $radius-md;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        svg {
-            width: rem(22);
-            height: rem(22);
-        }
-    }
-
-    .menu-label {
-        font-size: rem(11);
+    p {
+        font-size: rem(13);
         color: $color-text-secondary;
-        font-weight: 500;
-        white-space: nowrap;
+    }
+}
+
+// 功能菜单
+.features-section {
+    margin: rem(16) rem(16) rem(20);
+    background: $color-white;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-md;
+    border: 1px solid $color-border;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: rem(8);
+    padding: rem(8) rem(12) rem(16);
+}
+
+.feature-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: rem(8);
+    padding: rem(12) rem(8);
+    border-radius: $radius-md;
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:active {
+        background: $color-bg-hover;
     }
 
-
-    .carousel-track {
-        display: flex;
-        gap: rem(10);
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        padding: rem(4) rem(14) rem(4);
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
-    }
-
-    .carousel-item {
-        flex-shrink: 0;
-        width: rem(280);
-        height: rem(120);
-        border-radius: $radius-md;
-        scroll-snap-align: start;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: rem(8);
-        border: 1px solid $color-border;
-
-        svg {
-            width: rem(28);
-            height: rem(28);
-        }
-
-        span {
-            font-size: rem(12);
-            color: $color-text-muted;
-        }
-    }
-
-    .carousel-dots {
-        display: flex;
-        justify-content: center;
-        gap: rem(6);
-        margin-top: rem(10);
-
-        span {
-            width: rem(6);
-            height: rem(6);
-            border-radius: $radius-full;
-            background: $color-border;
-            cursor: pointer;
-            transition: $transition-fast;
-
-            &.active {
-                width: rem(18);
-                background: $color-primary;
-            }
-        }
-    }
-
-    // ⑥ 会员等级
-    .vip-section {
-        padding-bottom: rem(16);
-    }
-
-    .vip-list {
-        padding: 0 rem(14);
-        display: flex;
-        flex-direction: column;
-        gap: rem(12);
-    }
-
-    .vip-card {
-        background: linear-gradient(135deg, #F8FAFF 0%, #EFF6FF 100%);
-        border: 1px solid #DBEAFE;
-        border-radius: $radius-lg;
-        padding: rem(16);
-
-        &--current {
-            border-color: #F59E0B;
-            background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
-        }
-    }
-
-    .vip-header {
-        display: flex;
-        gap: rem(14);
-        align-items: flex-start;
-        margin-bottom: rem(16);
-    }
-
-    .vip-badge {
-        flex-shrink: 0;
+    .feature-icon {
         width: rem(52);
         height: rem(52);
         border-radius: $radius-md;
@@ -663,57 +551,136 @@
         justify-content: center;
 
         svg {
-            width: rem(28);
-            height: rem(28);
+            width: rem(24);
+            height: rem(24);
         }
     }
 
-    .vip-info {
-        flex: 1;
-    }
-
-    .vip-name {
-        font-size: rem(15);
-        font-weight: 700;
-        color: $color-text-primary;
-        margin-bottom: rem(4);
-        display: flex;
-        align-items: center;
-        gap: rem(6);
-    }
-
-    .vip-tag {
-        font-size: rem(10);
-        font-weight: 700;
-        color: #D97706;
-        background: #FEF3C7;
-        border: 1px solid #FDE68A;
-        border-radius: $radius-full;
-        padding: rem(1) rem(6);
-    }
-
-    .vip-desc {
-        font-size: rem(11);
+    .feature-label {
+        font-size: rem(12);
+        font-weight: 500;
         color: $color-text-secondary;
-        margin-bottom: rem(8);
     }
+}
 
-    .vip-progress-bar {
-        height: rem(5);
-        background: #DBEAFE;
-        border-radius: $radius-full;
-        overflow: hidden;
-    }
+// 活动区域
+.activity-section {
+    margin: 0 rem(16) rem(20);
+    background: $color-white;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-md;
+    border: 1px solid $color-border;
+    overflow: hidden;
+}
 
-    .vip-progress-fill {
+.activity-swipe {
+    height: rem(180);
+
+    img {
+        width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, #2563EB, #7C3AED);
-        border-radius: $radius-full;
+        object-fit: cover;
+        cursor: pointer;
     }
+}
 
-    .vip-tasks {
-        margin-bottom: rem(14);
+// VIP会员区域
+.vip-section {
+    margin: 0 rem(16) rem(20);
+    background: $color-white;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-md;
+    border: 1px solid $color-border;
+    padding-bottom: rem(16);
+}
+
+.vip-list {
+    padding: 0 rem(16);
+    display: flex;
+    flex-direction: column;
+    gap: rem(12);
+}
+
+.vip-card {
+    background: linear-gradient(135deg, $color-bg-page 0%, $color-white 100%);
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    padding: rem(16);
+    transition: $transition-fast;
+
+    &--current {
+        border-color: $color-primary;
+        background: linear-gradient(135deg, $color-primary-bg 0%, #FEF3C7 100%);
+        box-shadow: $shadow-gold;
     }
+}
+
+.vip-header {
+    display: flex;
+    gap: rem(14);
+    align-items: flex-start;
+    margin-bottom: rem(16);
+}
+
+.vip-badge {
+    flex-shrink: 0;
+    width: rem(56);
+    height: rem(56);
+    border-radius: $radius-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+
+    svg {
+        width: rem(30);
+        height: rem(30);
+    }
+}
+
+.vip-info {
+    flex: 1;
+}
+
+.vip-name {
+    font-size: rem(16);
+    font-weight: 700;
+    color: $color-text-primary;
+    margin-bottom: rem(4);
+    display: flex;
+    align-items: center;
+    gap: rem(6);
+}
+
+.vip-tag {
+    font-size: rem(10);
+    font-weight: 700;
+    padding: rem(2) rem(8);
+    border-radius: $radius-full;
+}
+
+.vip-desc {
+    font-size: rem(12);
+    color: $color-text-secondary;
+    margin-bottom: rem(8);
+}
+
+.vip-progress-bar {
+    height: rem(6);
+    background: $color-border-light;
+    border-radius: $radius-full;
+    overflow: hidden;
+}
+
+.vip-progress-fill {
+    height: 100%;
+    background: $gradient-primary;
+    border-radius: $radius-full;
+    box-shadow: 0 0 8px rgba($color-primary, 0.4);
+}
+
+.vip-tasks {
+    margin-bottom: rem(14);
 
     .vip-tasks-title {
         font-size: rem(11);
@@ -728,8 +695,8 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: rem(9) 0;
-        border-bottom: 1px solid rgba(219, 234, 254, 0.6);
+        padding: rem(10) 0;
+        border-bottom: 1px solid $color-border-light;
 
         &:last-child {
             border-bottom: none;
@@ -778,7 +745,7 @@
         font-weight: 700;
         color: $color-primary;
         background: $color-primary-bg;
-        padding: rem(2) rem(7);
+        padding: rem(3) rem(8);
         border-radius: $radius-full;
 
         &.done {
@@ -786,21 +753,21 @@
             background: $color-success-bg;
         }
     }
+}
 
-    .vip-stats {
-        display: flex;
-        background: #FFFFFF;
-        border-radius: $radius-md;
-        border: 1px solid #DBEAFE;
-        margin-bottom: rem(14);
-        overflow: hidden;
-    }
+.vip-stats {
+    display: flex;
+    background: $color-white;
+    border-radius: $radius-md;
+    border: 1px solid $color-border;
+    margin-bottom: rem(14);
+    overflow: hidden;
 
     .vip-stat {
         flex: 1;
         text-align: center;
-        padding: rem(12) rem(4);
-        border-right: 1px solid #DBEAFE;
+        padding: rem(14) rem(4);
+        border-right: 1px solid $color-border;
 
         &:last-child {
             border-right: none;
@@ -808,34 +775,35 @@
     }
 
     .vip-stat-val {
-        font-size: rem(14);
+        font-size: rem(15);
         font-weight: 700;
         color: $color-text-primary;
-        margin-bottom: rem(3);
+        margin-bottom: rem(4);
     }
 
     .vip-stat-label {
         font-size: rem(10);
         color: $color-text-muted;
     }
+}
 
-    .vip-join-btn {
-        width: 100%;
-        height: rem(44);
-        background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
-        color: #fff;
-        border: none;
-        border-radius: $radius-md;
-        font-size: rem(14);
-        font-weight: 700;
-        cursor: pointer;
-        letter-spacing: 0.5px;
-        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
-        transition: $transition-fast;
+.vip-join-btn {
+    width: 100%;
+    height: rem(46);
+    background: $gradient-primary;
+    color: $color-white;
+    border: none;
+    border-radius: $radius-md;
+    font-size: rem(15);
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    box-shadow: $shadow-gold;
+    transition: $transition-fast;
 
-        &:active {
-            opacity: 0.85;
-            transform: scale(0.99);
-        }
+    &:active {
+        opacity: 0.9;
+        transform: translateY(1px);
     }
+}
 </style>
