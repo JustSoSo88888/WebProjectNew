@@ -7,15 +7,16 @@
         <div class="user-info">
           <div class="user-avatar">
             <svg viewBox="0 0 24 24" fill="none">
-              <path d="M12 2l8 4.5v9L12 20l-8-4.5v-9L12 2z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
-              <circle cx="12" cy="10" r="3" stroke="white" stroke-width="1.8"/>
+              <path d="M12 2l8 4.5v9L12 20l-8-4.5v-9L12 2z" stroke="white" stroke-width="1.8" stroke-linejoin="round" />
+              <circle cx="12" cy="10" r="3" stroke="white" stroke-width="1.8" />
             </svg>
           </div>
           <div>
             <div class="user-account">{{ userInfo.account }}</div>
             <div class="credit-row">
               <svg viewBox="0 0 24 24" fill="none" class="credit-icon">
-                <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" fill="rgba(255,255,255,0.9)"/>
+                <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z"
+                  fill="rgba(255,255,255,0.9)" />
               </svg>
               <span class="credit-label">信用评分</span>
               <span class="credit-val">{{ userInfo.creditScore }}</span>
@@ -24,9 +25,10 @@
         </div>
         <button class="record-btn" @click="goRecord">
           <svg viewBox="0 0 24 24" fill="none">
-            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
-            <rect x="9" y="3" width="6" height="4" rx="1" stroke="white" stroke-width="1.8"/>
-            <path d="M9 12h6M9 16h4" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" stroke="white"
+              stroke-width="1.8" stroke-linecap="round" />
+            <rect x="9" y="3" width="6" height="4" rx="1" stroke="white" stroke-width="1.8" />
+            <path d="M9 12h6M9 16h4" stroke="white" stroke-width="1.8" stroke-linecap="round" />
           </svg>
           理财记录
         </button>
@@ -63,26 +65,21 @@
       </div>
 
       <div class="product-list">
-        <div
-          v-for="item in products"
-          :key="item.id"
-          class="product-card"
-          @click="handleBuy(item)"
-        >
+        <div v-for="item in products" :key="item.id" class="product-card" @click="handleBuy(item)">
           <div class="product-top">
-            <img :src="item.image" :alt="item.name" class="product-img">
+            <img :src="item.image_url" :alt="item.name" class="product-img">
             <div class="product-meta">
-              <div class="product-name">{{ item.name }}</div>
+              <div class="product-name">{{ item.title }}</div>
               <div class="product-days">
                 <svg viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/>
-                  <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
+                  <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
                 </svg>
-                {{ item.days }} 天
+                {{ item.day_number }} 天
               </div>
               <div class="product-profit">
                 <span class="profit-label">日收益率</span>
-                <span class="profit-val">{{ item.dailyRate }}%</span>
+                <span class="profit-val">{{ item.daily_income_rate }}%</span>
               </div>
             </div>
           </div>
@@ -90,7 +87,7 @@
           <div class="product-bottom">
             <div class="product-stat">
               <span class="stat-label">最低存款</span>
-              <span class="stat-val">R${{ item.minDeposit }}</span>
+              <span class="stat-val" translate="no">R${{ item.price }}</span>
             </div>
             <div class="product-progress-wrap">
               <div class="progress-info">
@@ -109,10 +106,34 @@
 </template>
 
 <script setup>
- import { ref } from 'vue'
- import { navigateTo } from '#imports'
+import { ref, onMounted } from 'vue'
+import { navigateTo } from '#imports';
+import { mealList } from '~/api/meal';
+definePageMeta({ layout: 'default' })
+const nuxtApp = useNuxtApp()
+const $lang = nuxtApp.$lang
 
- definePageMeta({ layout: 'default' })
+onMounted(() => {
+  getMealList();
+})
+
+//理财列表
+const products = ref([])
+const getMealList = () => {
+  showLoading($lang('加载中'))
+  mealList({}).then(res => {
+    hideLoading();
+    if(res.success){
+      products.value = res.data.list
+    }else{
+      showMsg(res.message, 'fail')
+    }
+
+  }).catch(error => {
+    hideLoading();
+    showMsg(error.message, 'fail')
+  })
+}
 
 const userInfo = ref({
   account: 'user_8821',
@@ -122,44 +143,7 @@ const userInfo = ref({
   todayEarnings: '128.60',
 })
 
-const products = ref([
-  {
-    id: 1,
-    name: '稳健增利宝',
-    image: 'https://picsum.photos/seed/fin1/120/80',
-    days: 7,
-    dailyRate: 0.8,
-    minDeposit: '500',
-    progress: 72,
-  },
-  {
-    id: 2,
-    name: '蓝筹精选基金',
-    image: 'https://picsum.photos/seed/fin2/120/80',
-    days: 30,
-    dailyRate: 1.2,
-    minDeposit: '1,000',
-    progress: 45,
-  },
-  {
-    id: 3,
-    name: '科技成长计划',
-    image: 'https://picsum.photos/seed/fin3/120/80',
-    days: 90,
-    dailyRate: 1.8,
-    minDeposit: '5,000',
-    progress: 88,
-  },
-  {
-    id: 4,
-    name: '固收安心理财',
-    image: 'https://picsum.photos/seed/fin4/120/80',
-    days: 14,
-    dailyRate: 0.5,
-    minDeposit: '200',
-    progress: 30,
-  },
-])
+
 
 function goRecord() {
   navigateTo('/finance/record')
