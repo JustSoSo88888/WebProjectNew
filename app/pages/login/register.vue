@@ -150,8 +150,6 @@ const validate = () => {
 }
 
 onMounted(() => {
-  console.log('nuxtApp',nuxtApp);
-  
   if(route.query.code){
     window.localStorage.setItem('invite', route.query.code);
     form.inviteCode = route.query.code

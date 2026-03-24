@@ -37,8 +37,8 @@ instance.interceptors.response.use(
         if (!data.success) {
             if (data.code === 401 || data.code === 404 ||
                 data.message === 401 || data.message === 404) {
-                //   // token 失效，跳转登录
-                //   navigateTo('/login/login')
+                  // token 失效，跳转登录
+                  navigateTo('/login/login')
                 return
             }
             return data

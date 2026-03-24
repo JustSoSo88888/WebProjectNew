@@ -18,7 +18,7 @@ import { storage } from '~/utils/index'
 const appStore = useAppStore()
 const langList = computed(() => appStore.getLangList)
 const showLang = ref(false)
-const currentLang = ref(storage.get('locale') || 'en')
+const currentLang = ref(storage.get('locale') || 'pt')
 const currentLangData = computed(() => langList.value[currentLang.value])
 const currentLangIcon = computed(() => currentLangData.value?.icon)
 
