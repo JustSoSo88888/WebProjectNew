@@ -1,0 +1,33 @@
+//巴西语
+let pt = {
+    "登录": "Entrar",
+    "注册": "Cadastrar-se",
+    "欢迎开启您的专属旅程": "Bem-vindo à sua jornada exclusiva",
+    "手机号": "Número de telefone",
+    "密码": "Senha",
+    "没有账户": "Não tem uma conta?",
+    "已有账户": "Já tem uma conta?",
+    "请输入手机号": "Por favor, insira seu número de telefone",
+    "请输入密码": "Por favor, insira sua senha",
+    "请输入6到18位密码": "Por favor, insira uma senha entre 6 e 18 caracteres",
+    "登录成功": "Login realizado com sucesso",
+    "今天就开始您的专属旅程吧": "Comece sua jornada exclusiva hoje",
+    "请输入确认密码": "Por favor, insira a confirmação da senha",
+    "密码不一致请重新输入": "As senhas não coincidem, por favor insira novamente",
+    "请输入邀请码": "Por favor, insira o código de convite",
+    "邀请码": "Código de convite",
+    "确认密码": "Confirmar senha",
+    "添加到主屏幕，获得更好体验": "Adicione à tela inicial para uma melhor experiência",
+    "安装": "Instalar",
+    "建议使用Chrome": "Recomendado: usar o Chrome",
+    "使用Chrome浏览器以获得更好体验": "Use o navegador Chrome para uma melhor experiência",
+    "点击底部": "Toque na parte inferior",
+    "分享按钮": "Botão de compartilhamento",
+    "选择「添加到主屏幕」": "Selecione \"Adicionar à tela inicial\"",
+    "点击「添加」确认": "Toque em \"Adicionar\" para confirmar",
+    "添加到主屏幕": "Adicionar à tela inicial",
+    "注册成功": "Cadastro realizado com sucesso",
+    "知道了": "Entendi",
+}
+
+export default pt;

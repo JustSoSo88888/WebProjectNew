@@ -13,42 +13,26 @@ export default defineNuxtConfig({
 
     modules: [
         '@pinia/nuxt',
-        '@nuxtjs/i18n',
         '@vite-pwa/nuxt',
     ],
 
     build: {
         transpile: ['vant'],
     },
-    i18n: {
-        locales: [
-            {code: 'en', file: 'en.js', name: 'English'},
-            {code: 'es', file: 'es.js', name: 'Español'},
-        ],
-        defaultLocale: 'en',
-        langDir: './locales',
-        strategy: 'no_prefix',
-        detectBrowserLanguage: {
-            useCookie: true,
-            cookieKey: 'i18n_lang',
-            redirectOn: 'root',
-            alwaysRedirect: false,
-        },
-    },
     app: {
-        pageTransition: {name: 'slide-left', mode: 'out-in'},
+        pageTransition: { name: 'slide-left', mode: 'out-in' },
         // 全局 <head> 配置
         head: {
             title: 'Nova Travel',
             charset: 'utf-8',
             viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
             meta: [
-                {name: 'description', content: 'NovaTravel Application'},
-                {name: 'theme-color', content: '#ffffff'},
+                { name: 'description', content: 'NovaTravel Application' },
+                { name: 'theme-color', content: '#ffffff' },
             ],
             link: [
-                {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'},
-                {rel: 'manifest', href: '/manifest.webmanifest'},
+                { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+                { rel: 'manifest', href: '/manifest.webmanifest' },
             ],
             script: [
                 {
@@ -64,7 +48,7 @@ export default defineNuxtConfig({
     css: [
         '@/assets/scss/global.scss',
     ],
-    devtools: {enabled: true},
+    devtools: { enabled: true },
     vite: {
         css: {
             preprocessorOptions: {

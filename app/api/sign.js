@@ -3,12 +3,6 @@ import config from '~/config/index.js'
 import { storage } from '~/utils/index.js'
 import { decrypt } from '~/api/AES.js'
 
-// 读取 @nuxtjs/i18n 写入的 cookie（cookieKey: 'i18n_lang'）
-const getLocaleLang = () => {
-  if (typeof document === 'undefined') return 'en'
-  const match = document.cookie.match(/(?:^|; )i18n_lang=([^;]*)/)
-  return match ? decodeURIComponent(match[1]) : 'en'
-}
 
 const recursiveSort = (params) => {
   if (typeof params !== 'object' || params === null) return params
@@ -49,7 +43,7 @@ export const getLocalToken = () => {
 export const getSign = (params = {}) => {
   const { apiKey, secondApikey } = config
   const timestamp = Date.now()
-  params.lang = getLocaleLang()
+  params.lang = storage.get('locale') ? storage.get('locale') : 'pt';
   params.timestamp = timestamp
   params.token = getLocalToken()
   params.sign = ''

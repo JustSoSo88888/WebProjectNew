@@ -6,10 +6,10 @@
                 <img src="/logo.png" class="pwa-icon" alt="icon" />
                 <div class="pwa-info">
                     <div class="pwa-name">Nova Travel</div>
-                    <div class="pwa-desc">{{ $t('添加到主屏幕，获得更好体验') }}</div>
+                    <div class="pwa-desc">{{ $lang('添加到主屏幕，获得更好体验') }}</div>
                 </div>
                 <div class="pwa-actions">
-                    <button class="pwa-btn-install" @click="installPwa">{{ $t('安装') }}</button>
+                    <button class="pwa-btn-install" @click="installPwa">{{ $lang('安装') }}</button>
                     <button class="pwa-btn-close" @click="dismissBanner">✕</button>
                 </div>
             </div>
@@ -30,8 +30,8 @@
                     </svg>
                 </div>
                 <div class="pwa-info">
-                    <div class="pwa-name">{{ $t('建议使用Chrome') }}</div>
-                    <div class="pwa-desc">{{ $t('使用Chrome浏览器以获得更好体验') }}</div>
+                    <div class="pwa-name">{{ $lang('建议使用Chrome') }}</div>
+                    <div class="pwa-desc">{{ $lang('使用Chrome浏览器以获得更好体验') }}</div>
                 </div>
                 <button class="pwa-btn-close" @click="handleChromeClose">✕</button>
             </div>
@@ -41,37 +41,37 @@
         <van-popup v-model:show="showIosGuide" position="bottom" @close="handleIosGuideClose" round>
             <div class="ios-guide-popup">
                 <div class="ios-guide-title gradient-title-text size-bold size-16">
-                    {{ isIos() ? $t('添加到主屏幕') : $t('安装应用') }}
+                    {{ isIos() ? $lang('添加到主屏幕') : $lang('安装应用') }}
                 </div>
                 <div class="ios-guide-steps" v-if="isIos()">
                     <div class="ios-step">
                         <span class="ios-step-num">1</span>
-                        <span>{{ $t('点击底部') }} <span class="ios-share-icon">⎙</span> {{ $t('分享按钮') }}</span>
+                        <span>{{ $lang('点击底部') }} <span class="ios-share-icon">⎙</span> {{ $lang('分享按钮') }}</span>
                     </div>
                     <div class="ios-step">
                         <span class="ios-step-num">2</span>
-                        <span>{{ $t('选择「添加到主屏幕」') }}</span>
+                        <span>{{ $lang('选择「添加到主屏幕」') }}</span>
                     </div>
                     <div class="ios-step">
                         <span class="ios-step-num">3</span>
-                        <span>{{ $t('点击「添加」确认') }}</span>
+                        <span>{{ $lang('点击「添加」确认') }}</span>
                     </div>
                 </div>
                 <div class="ios-guide-steps" v-else>
                     <div class="ios-step">
                         <span class="ios-step-num">1</span>
-                        <span>{{ $t('点击浏览器右上角菜单') }} ⋮</span>
+                        <span>{{ $lang('点击浏览器右上角菜单') }} ⋮</span>
                     </div>
                     <div class="ios-step">
                         <span class="ios-step-num">2</span>
-                        <span>{{ $t('选择「添加到主屏幕」或「安装应用」') }}</span>
+                        <span>{{ $lang('选择「添加到主屏幕」或「安装应用」') }}</span>
                     </div>
                     <div class="ios-step">
                         <span class="ios-step-num">3</span>
-                        <span>{{ $t('点击「安装」确认') }}</span>
+                        <span>{{ $lang('点击「安装」确认') }}</span>
                     </div>
                 </div>
-                <button class="ios-guide-close" @click="handleIosGuideClose">{{ $t('知道了') }}</button>
+                <button class="ios-guide-close" @click="handleIosGuideClose">{{ $lang('知道了') }}</button>
             </div>
         </van-popup>
     </div>

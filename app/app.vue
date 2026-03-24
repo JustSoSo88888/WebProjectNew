@@ -6,6 +6,7 @@
 </template>
 
 <script setup>
+
 if (import.meta.client) {
   const setFontSize = () => {
     const d = document.documentElement

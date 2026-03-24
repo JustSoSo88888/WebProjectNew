@@ -12,19 +12,19 @@
 
       <!-- 注册卡片 -->
       <div class="login-card">
-        <h2>{{ $t('注册') }}</h2>
-        <p class="subtitle">{{ $t('今天就开始您的专属旅程吧') }}</p>
+        <h2>{{ $lang('注册') }}</h2>
+        <p class="subtitle">{{ $lang('今天就开始您的专属旅程吧') }}</p>
 
         <!-- 邮箱 -->
         <div class="field">
-          <label>{{ $t('手机号') }}</label>
+          <label>{{ $lang('手机号') }}</label>
           <div class="input-wrap" :class="{ focused: focus === 'phone', error: errors.phone }">
             <svg viewBox="0 0 24 24" fill="none">
               <rect x="5" y="2" width="14" height="20" rx="2" stroke="currentColor" stroke-width="1.5" />
               <path d="M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
             </svg>
             <span class="area-code" translate="no">+{{ areaCode }}</span>
-            <input v-model="form.phone" class="area-code-input" type="number" :placeholder="$t('请输入手机号')"
+            <input v-model="form.phone" class="area-code-input" type="number" :placeholder="$lang('请输入手机号')"
               @focus="focus = 'phone'" @blur="focus = ''" />
           </div>
           <span v-if="errors.phone" class="err-msg">{{ errors.phone }}</span>
@@ -32,13 +32,13 @@
 
         <!-- 密码 -->
         <div class="field">
-          <label>{{ $t('密码') }}</label>
+          <label>{{ $lang('密码') }}</label>
           <div class="input-wrap" :class="{ focused: focus === 'pwd', error: errors.password }">
             <svg viewBox="0 0 24 24" fill="none">
               <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5" />
               <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
             </svg>
-            <input v-model="form.password" :type="showPwd ? 'text' : 'password'" :placeholder="$t('请输入密码')"
+            <input v-model="form.password" :type="showPwd ? 'text' : 'password'" :placeholder="$lang('请输入密码')"
               @focus="focus = 'pwd'" @blur="focus = ''" />
             <button class="eye-btn" @click="showPwd = !showPwd">
               <svg v-if="!showPwd" viewBox="0 0 24 24" fill="none">
@@ -58,7 +58,7 @@
 
         <!-- 确认密码 -->
         <div class="field">
-          <label>{{ $t('确认密码') }}</label>
+          <label>{{ $lang('确认密码') }}</label>
           <div class="input-wrap" :class="{ focused: focus === 'confirm', error: errors.confirmPassword }">
             <svg viewBox="0 0 24 24" fill="none">
               <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5" />
@@ -66,7 +66,7 @@
               <path d="M9 16l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
                 stroke-linejoin="round" />
             </svg>
-            <input v-model="form.confirmPassword" :type="showConfirm ? 'text' : 'password'" :placeholder="$t('请输入确认密码')"
+            <input v-model="form.confirmPassword" :type="showConfirm ? 'text' : 'password'" :placeholder="$lang('请输入确认密码')"
               @focus="focus = 'confirm'" @blur="focus = ''" />
             <button class="eye-btn" @click="showConfirm = !showConfirm">
               <svg v-if="!showConfirm" viewBox="0 0 24 24" fill="none">
@@ -86,7 +86,7 @@
 
         <!-- 邀请码 -->
         <div class="field">
-          <label>{{ $t('邀请码') }}</label>
+          <label>{{ $lang('邀请码') }}</label>
           <div class="input-wrap" :class="{ focused: focus === 'invite', error: errors.inviteCode }">
             <svg viewBox="0 0 24 24" fill="none">
               <path d="M20 12V22H4V12" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
@@ -94,7 +94,7 @@
               <path d="M12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"
                 stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
             </svg>
-            <input v-model="form.inviteCode" type="text" :placeholder="$t('请输入邀请码')" @focus="focus = 'invite'"
+            <input v-model="form.inviteCode" type="text" :placeholder="$lang('请输入邀请码')" @focus="focus = 'invite'"
               @blur="focus = ''" />
           </div>
           <span v-if="errors.inviteCode" class="err-msg">{{ errors.inviteCode }}</span>
@@ -102,14 +102,14 @@
 
         <!-- 注册按钮 -->
         <button class="btn-primary" :disabled="loading" @click="handleRegister">
-          <span v-if="!loading">{{ $t('注册') }}</span>
+          <span v-if="!loading">{{ $lang('注册') }}</span>
           <span v-else class="dots"><i></i><i></i><i></i></span>
         </button>
 
         <!-- 登录链接 -->
         <div class="bottom-link">
-          <span>{{ $t('已有账户') }}</span>
-          <NuxtLink to="/login/login">{{ $t('登录') }}</NuxtLink>
+          <span>{{ $lang('已有账户') }}</span>
+          <NuxtLink to="/login/login">{{ $lang('登录') }}</NuxtLink>
         </div>
       </div>
     </div>
@@ -122,8 +122,10 @@ import { register, login } from '~/api/login';
 import { encrypt } from '~/api/AES.js';
 import { storage } from '../../utils/index';
 import md5 from 'js-md5';
-import LOGO from '../../../public/logo-transparent.png'
-const route = useRoute()
+import LOGO from '../../../public/logo-transparent.png';
+const route = useRoute();
+const nuxtApp = useNuxtApp()
+const $lang = nuxtApp.$lang
 
 definePageMeta({ layout: 'login' })
 const form = reactive({ phone: '', password: '', confirmPassword: '', inviteCode: '' })
@@ -138,16 +140,18 @@ const validate = () => {
   errors.phone = ''
   errors.password = ''
   errors.confirmPassword = ''
-  if (!form.phone) { errors.phone = $t('请输入手机号'); return false }
-  if (!form.password) { errors.password = $t('请输入密码'); return false }
-  if (form.password.length < 6 || form.password.length > 18) { errors.password = $t('请输入6到18位密码'); return false }
-  if (!form.confirmPassword) { errors.confirmPassword = $t('请输入确认密码'); return false }
-  if (form.password !== form.confirmPassword) { form.password = ''; form.confirmPassword = ''; errors.confirmPassword = $t('密码不一致请重新输入'); return false }
-  if (!form.inviteCode) { errors.inviteCode = $t('请输入邀请码'); return false }
+  if (!form.phone) { errors.phone = $lang('请输入手机号'); return false }
+  if (!form.password) { errors.password = $lang('请输入密码'); return false }
+  if (form.password.length < 6 || form.password.length > 18) { errors.password = $lang('请输入6到18位密码'); return false }
+  if (!form.confirmPassword) { errors.confirmPassword = $lang('请输入确认密码'); return false }
+  if (form.password !== form.confirmPassword) { form.password = ''; form.confirmPassword = ''; errors.confirmPassword = $lang('密码不一致请重新输入'); return false }
+  if (!form.inviteCode) { errors.inviteCode = $lang('请输入邀请码'); return false }
   return true
 }
 
 onMounted(() => {
+  console.log('nuxtApp',nuxtApp);
+  
   if(route.query.code){
     window.localStorage.setItem('invite', route.query.code);
     form.inviteCode = route.query.code
@@ -177,7 +181,7 @@ const handleRegister = async () => {
       login(params1).then(ret => {
         loading.value = false;
         if (ret.success) {
-          showMsg('注册成功', 'success')
+          showMsg($lang('注册成功'), 'success')
           setTimeout(() => {
             const token = encrypt(ret.data.token)
             storage.set('token', token)
