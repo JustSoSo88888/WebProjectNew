@@ -48,6 +48,10 @@
         </div>
         <div class="group-stats">
           <div class="group-stat">
+            <div class="group-stat-val" translate="no">0</div>
+            <div class="group-stat-label">注册人数</div>
+          </div>
+          <div class="group-stat">
             <div class="group-stat-val" translate="no">R$ {{ group.taskIncome }}</div>
             <div class="group-stat-label">任务收入</div>
           </div>
@@ -363,7 +367,7 @@ async function copyText(text, type) {
 
 .group-stats {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   padding: rem(12) rem(8);
 }
 
