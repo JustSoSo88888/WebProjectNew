@@ -97,7 +97,7 @@
                         <div class="earnings-item earnings-item--full">
                             <div class="earnings-label">总收入</div>
                             <div class="earnings-val earnings-val--green">R${{ currentEarnings.total
-                                }}</div>
+                            }}</div>
                         </div>
                     </div>
                 </Transition>
@@ -145,10 +145,10 @@ onMounted(() => {
 const userData = ref({})
 const init = () => {
     getBalanceData();
-    let user_data = storage.get('user_data') ? JSON.parse(storage.get('user_data')):null;
-    if(user_data){
+    let user_data = storage.get('user_data') ? JSON.parse(storage.get('user_data')) : null;
+    if (user_data) {
         userData.value = user_data
-        
+
     }
 }
 // 语言弹窗
@@ -168,9 +168,9 @@ const getBalanceData = () => {
     showLoading($lang('加载中'))
     getBalance({}).then(res => {
         hideLoading();
-        if(res.success){
+        if (res.success) {
             balance.value = res.data.amount
-        }else{
+        } else {
             showMsg(res.message, 'fail')
         }
     }).catch(error => {
@@ -310,6 +310,8 @@ const handleMenu = (item) => {
         $dialog.confirm({
             title: $lang('提示'),
             message: $lang('确认退出登录？'),
+            confirmText: $lang('确认'),
+            cancelText: $lang('取消')
         }).then(() => {
             showLoading($lang('加载中'))
             loginOut({}).then(res => {

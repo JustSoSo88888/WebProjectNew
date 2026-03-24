@@ -14,7 +14,7 @@ const DialogApi = {
         message: options.message || '',
         clickCancel: false,
         showCancel: false,
-        confirmText: options.confirmText || '确定',
+        confirmText: options.confirmText || 'Confirm',
         'onConfirm': () => {
           resolve({})
           render(null, container)
@@ -37,8 +37,8 @@ const DialogApi = {
         message: options.message || '',
         clickCancel: true,
         showCancel: true,
-        confirmText: options.confirmText || '确定',
-        cancelText: options.cancelText || '取消',
+        confirmText: options.confirmText || 'Confirm',
+        cancelText: options.cancelText || 'Cancel',
         'onConfirm': () => {
           resolve({})
           render(null, container)
