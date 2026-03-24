@@ -123,10 +123,10 @@ import { encrypt } from '~/api/AES.js';
 import { storage } from '../../utils/index';
 import md5 from 'js-md5';
 import LOGO from '../../../public/logo-transparent.png';
+
 const route = useRoute();
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
-
 definePageMeta({ layout: 'login' })
 const form = reactive({ phone: '', password: '', confirmPassword: '', inviteCode: '' })
 const errors = reactive({ phone: '', password: '', confirmPassword: '', inviteCode: '' })
