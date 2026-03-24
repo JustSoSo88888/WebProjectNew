@@ -12,7 +12,7 @@
             </svg>
           </div>
           <div>
-            <div class="user-account">{{ userInfo.account }}</div>
+            <div class="user-account">{{ userData.id }}</div>
             <div class="credit-row">
               <svg viewBox="0 0 24 24" fill="none" class="credit-icon">
                 <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z"
@@ -39,14 +39,14 @@
         <div class="wallet-label">钱包余额</div>
         <div class="wallet-amount">
           <span class="wallet-unit">R$</span>
-          <span class="wallet-num">{{ userInfo.balance }}</span>
+          <span class="wallet-num" translate="no">{{ balance }}</span>
         </div>
       </div>
 
       <!-- 收益统计 -->
       <div class="earnings-row">
         <div class="earning-item">
-          <div class="earning-val">R${{ userInfo.totalEarnings }}</div>
+          <div class="earning-val" translate="no">R${{ totalEarnings }}</div>
           <div class="earning-label">总收益</div>
         </div>
         <div class="earning-divider"></div>
@@ -106,26 +106,53 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import { navigateTo } from '#imports';
 import { mealList } from '~/api/meal';
+import { getBalance } from '~/api/member';
 definePageMeta({ layout: 'default' })
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
-
+const userData = ref({})
 onMounted(() => {
   getMealList();
+  getBalanceData();
+  let user_data = storage.get('user_data') ? JSON.parse(storage.get('user_data')) : null;
+  if (user_data) {
+    userData.value = user_data
+  }
 })
+
+//获取余额
+
+const balance = ref(0)
+const getBalanceData = () => {
+  showLoading($lang('加载中'))
+  getBalance({}).then(res => {
+    hideLoading();
+    if (res.success) {
+      balance.value = res.data.amount
+    } else {
+      showMsg(res.message, 'fail')
+    }
+  }).catch(error => {
+    hideLoading();
+    showMsg(error.message, 'fail')
+
+  })
+}
 
 //理财列表
 const products = ref([])
+const totalEarnings = ref(0)
 const getMealList = () => {
   showLoading($lang('加载中'))
   mealList({}).then(res => {
     hideLoading();
-    if(res.success){
+    if (res.success) {
       products.value = res.data.list
-    }else{
+      totalEarnings.value = res.data.total_income_amount
+    } else {
       showMsg(res.message, 'fail')
     }
 

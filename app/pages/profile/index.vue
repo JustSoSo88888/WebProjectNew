@@ -127,7 +127,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted ,reactive} from 'vue'
 import { navigateTo } from '#imports'
 import LangModal from '~/components/LangModal'
 import { getBalance, loginOut } from '~/api/member'
