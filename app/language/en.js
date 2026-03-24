@@ -28,7 +28,14 @@ let en = {
     '添加到主屏幕': 'Add to Home Screen',
     '注册成功': 'Registration successful',
     '知道了': 'Got it',
-    "选择语言":"Select language",
+    "选择语言": "Select language",
+    "提示": "Tips",
+    "登录超时，请重新登录": "Login timed out, please log in again",
+    "确认": "Confirm",
+    "取消": "Cancel",
+    "确认退出登录？":"Are you sure you want to log out?",
+    "退出成功":"Logout successful",
+    "加载中":"Loading",
 }
 
 export default en

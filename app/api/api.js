@@ -1,6 +1,8 @@
 import axios from 'axios'
 import config from '~/config/index.js'
 import { getSign } from '~/api/sign.js'
+import { navigateTo } from '#imports'
+import { loginOutDialog } from '~/utils/index'
 
 const requestUrl = config.debug ? config.mockUrl : config.baseUrl
 
@@ -11,6 +13,24 @@ const instance = axios.create({
         'Content-Type': 'application/json;charset=UTF-8',
     },
 })
+
+const getDialog = () => {
+  try {
+    const nuxtApp = useNuxtApp()
+    return nuxtApp.$dialog
+  } catch (e) {
+    return null
+  }
+}
+
+const getLang = () => {
+  try {
+    const nuxtApp = useNuxtApp()
+    return nuxtApp.$lang
+  } catch (e) {
+    return (key) => key
+  }
+}
 
 // 请求拦截
 instance.interceptors.request.use(
@@ -37,8 +57,20 @@ instance.interceptors.response.use(
         if (!data.success) {
             if (data.code === 401 || data.code === 404 ||
                 data.message === 401 || data.message === 404) {
-                  // token 失效，跳转登录
-                  navigateTo('/login/login')
+                const $dialog = getDialog()
+                const $lang = getLang()
+                if ($dialog) {
+                    $dialog.alert({
+                        title: $lang('提示'),
+                        message: $lang('登录超时，请重新登录'),
+                    }).then(() => {
+                        loginOutDialog()
+                        navigateTo('/login/login')
+                    })
+                } else {
+                    loginOutDialog()
+                    navigateTo('/login/login')
+                }
                 return
             }
             return data

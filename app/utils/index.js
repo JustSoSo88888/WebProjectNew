@@ -6,6 +6,15 @@ import {
   showSuccessToast,
   showFailToast,
 } from 'vant'
+const getLang = () => {
+  try {
+    const nuxtApp = useNuxtApp()
+    return nuxtApp.$lang
+  } catch (e) {
+    return (key) => key
+  }
+}
+
 
 // 本地存储
 export const storage = {
@@ -26,6 +35,13 @@ export const storage = {
     if (typeof localStorage === 'undefined') return
     localStorage.clear()
   },
+}
+
+export const loginOutDialog = () => {
+  storage.remove('user_id')
+  storage.remove('user_data')
+  storage.remove('session')
+  storage.remove('token')
 }
 
 // 格式化日期
@@ -65,7 +81,7 @@ export const throttle = (fn, interval = 300) => {
 
 // Vant Loading
 export const showLoading = (message) => {
-  message = message ?? $t('loading')
+  message = message ?? 'Loading'
   showLoadingToast({
     message,
     forbidClick: true,

@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="user-meta">
-                    <div class="user-account">{{ userInfo.account }}</div>
+                    <div class="user-account">{{ userData.id }}</div>
                     <div class="user-tags">
                         <span class="tag tag--credit">
                             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -25,7 +25,7 @@
                             </svg>
                             信用分 {{ userInfo.creditScore }}
                         </span>
-                        <span class="tag tag--level">Lv.{{ userInfo.level }}</span>
+                        <span class="tag tag--level">Lv.{{ userData.level }}</span>
                     </div>
                 </div>
                 <div class="header-actions">
@@ -52,12 +52,12 @@
             <div class="wallet-row">
                 <div class="wallet-item">
                     <div class="wallet-label">钱包余额</div>
-                    <div class="wallet-amount">{{ currencySymbol }}{{ userInfo.balance }}</div>
+                    <div class="wallet-amount" translate="no">R${{ balance }}</div>
                 </div>
                 <div class="wallet-divider"></div>
                 <div class="wallet-item">
                     <div class="wallet-label">保证金</div>
-                    <div class="wallet-amount wallet-amount--warning">{{ currencySymbol }}{{ userInfo.deposit }}</div>
+                    <div class="wallet-amount wallet-amount--warning">R${{ userInfo.deposit }}</div>
                 </div>
                 <div class="wallet-divider"></div>
                 <div class="wallet-item">
@@ -86,18 +86,18 @@
                     <div :key="activeTimeTab" class="earnings-grid">
                         <div class="earnings-item">
                             <div class="earnings-label">团队任务收入</div>
-                            <div class="earnings-val earnings-val--blue">{{ currencySymbol }}{{
+                            <div class="earnings-val earnings-val--blue">R${{
                                 currentEarnings.taskIncome }}</div>
                         </div>
                         <div class="earnings-item">
                             <div class="earnings-label">团队邀请收入</div>
-                            <div class="earnings-val earnings-val--purple">{{ currencySymbol }}{{
+                            <div class="earnings-val earnings-val--purple">R${{
                                 currentEarnings.inviteIncome }}</div>
                         </div>
                         <div class="earnings-item earnings-item--full">
                             <div class="earnings-label">总收入</div>
-                            <div class="earnings-val earnings-val--green">{{ currencySymbol }}{{ currentEarnings.total
-                            }}</div>
+                            <div class="earnings-val earnings-val--green">R${{ currentEarnings.total
+                                }}</div>
                         </div>
                     </div>
                 </Transition>
@@ -123,38 +123,64 @@
         <!-- ⑤ 语言切换弹窗 -->
         <LangModal v-model="showLang" v-model:currentLang="currentLang" @change="switchLang" />
 
-        <!-- ⑧ 退出登录确认弹窗 -->
-        <LogoutModal v-model="showLogout" @confirm="confirmLogout" />
-
     </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { navigateTo } from '#imports'
-import { useRoute } from 'vue-router'
-const route = useRoute()
 import LangModal from '~/components/LangModal'
-import LogoutModal from './components/LogoutModal'
-import { getBalance } from '~/api/member'
+import { getBalance, loginOut } from '~/api/member'
 import { storage } from '~/utils/index'
+const nuxtApp = useNuxtApp()
+const $lang = nuxtApp.$lang
+const $dialog = nuxtApp.$dialog
+
 
 definePageMeta({ layout: 'default' })
 onMounted(() => {
-    getBalanceData();
+    init();
 })
+//初始化
+const userData = ref({})
+const init = () => {
+    getBalanceData();
+    let user_data = storage.get('user_data') ? JSON.parse(storage.get('user_data')):null;
+    if(user_data){
+        userData.value = user_data
+        
+    }
+}
+// 语言弹窗
+const showLang = ref(false)
+const currentLang = ref(storage.get('locale') || 'pt')
+const switchLang = (lang) => {
+    if (currentLang.value == lang) return;
+    storage.set('locale', lang)
+    currentLang.value = lang
+    location.reload()
+}
 
+//获取余额
+
+const balance = ref(0)
 const getBalanceData = () => {
+    showLoading($lang('加载中'))
     getBalance({}).then(res => {
-
+        hideLoading();
+        if(res.success){
+            balance.value = res.data.amount
+        }else{
+            showMsg(res.message, 'fail')
+        }
     }).catch(error => {
+        hideLoading();
+        showMsg(error.message, 'fail')
 
     })
 }
 
-const currentLang = ref(storage.get('locale') || 'pt')
 
-const currencySymbol = 'R$'
 
 // 用户信息
 const userInfo = ref({
@@ -167,9 +193,7 @@ const userInfo = ref({
     levelDate: '2026-06-18',
 })
 
-// 弹窗状态
-const showLang = ref(false)
-const showLogout = ref(false)
+
 
 // 收益统计
 const activeTimeTab = ref('today')
@@ -198,14 +222,6 @@ const switchTab = (key, index) => {
     activeTimeTab.value = key
 }
 
-// 语言
-
-const switchLang = (lang) => {
-    if (currentLang.value == lang) return;
-    storage.set('locale', lang)
-    currentLang.value = lang
-    location.reload()
-}
 
 // 菜单
 const menuItems = [
@@ -291,7 +307,29 @@ const handleMenu = (item) => {
         return
     }
     if (item.action === 'logout') {
-        showLogout.value = true;
+        $dialog.confirm({
+            title: $lang('提示'),
+            message: $lang('确认退出登录？'),
+        }).then(() => {
+            showLoading($lang('加载中'))
+            loginOut({}).then(res => {
+                hideLoading();
+                if (res.success) {
+                    showMsg($lang('退出成功'), 'success')
+                    setTimeout(() => {
+                        loginOutDialog();
+                        navigateTo('/login/login');
+                    }, 1500)
+                } else {
+                    showMsg(res.message, 'fail')
+                }
+
+            }).catch(error => {
+                hideLoading();
+                showMsg(error.message, 'fail')
+            })
+        }).catch(() => {
+        })
         return
     }
     if (item.route) navigateTo(item.route)

@@ -28,7 +28,14 @@ let pt = {
     "添加到主屏幕": "Adicionar à tela inicial",
     "注册成功": "Cadastro realizado com sucesso",
     "知道了": "Entendi",
-    "选择语言":"Selecionar idioma",
+    "选择语言": "Selecionar idioma",
+    "提示": "Aviso",
+    "登录超时，请重新登录": "Sessão expirada, por favor faça login novamente",
+    "确认": "Confirmar",
+    "取消": "Cancelar",
+    "确认退出登录？":"Tem certeza de que deseja sair?",
+    "退出成功":"Saída realizada com sucesso",
+    "加载中":"Carregando",
 }
 
 export default pt;
