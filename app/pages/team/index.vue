@@ -24,31 +24,24 @@
 
     <!-- Tab 切换 -->
     <div class="tab-bar">
-      <button
-        v-for="tab in tabs"
-        :key="tab.key"
-        class="tab-item"
-        :class="{ 'tab-item--active': activeTab === tab.key }"
-        @click="activeTab = tab.key"
-      >
+      <button v-for="tab in tabs" :key="tab.key" class="tab-item" :class="{ 'tab-item--active': activeTab === tab.key }"
+        @click="activeTab = tab.key">
         {{ tab.label }}
       </button>
     </div>
 
     <!-- 团队分队面板 -->
     <div v-if="activeTab === 'team'" class="panel">
-      <div
-        v-for="group in teamGroups"
-        :key="group.name"
-        class="group-card"
-      >
+      <div v-for="group in teamGroups" :key="group.name" class="group-card">
         <div class="group-header">
           <span class="group-badge" :style="{ background: group.color }">{{ group.name }}</span>
           <span class="group-members">
             <svg viewBox="0 0 24 24" fill="none">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-              <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.8"/>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" />
+              <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.8" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" />
             </svg>
             {{ group.members }} 人
           </span>
@@ -78,8 +71,9 @@
           <span class="invite-field-val">{{ inviteInfo.code }}</span>
           <button class="copy-btn" @click="copyText(inviteInfo.code, 'code')">
             <svg viewBox="0 0 24 24" fill="none">
-              <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.8" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" />
             </svg>
             {{ copied === 'code' ? '已复制' : '复制' }}
           </button>
@@ -92,8 +86,9 @@
           <span class="invite-field-val invite-field-val--link">{{ inviteInfo.link }}</span>
           <button class="copy-btn" @click="copyText(inviteInfo.link, 'link')">
             <svg viewBox="0 0 24 24" fill="none">
-              <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.8" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" />
             </svg>
             {{ copied === 'link' ? '已复制' : '复制' }}
           </button>
@@ -109,18 +104,13 @@ import { ref, watch, nextTick, onMounted } from 'vue'
 import { showToast } from 'vant'
 import { useRoute } from 'vue-router'
 import QRCode from 'qrcode'
+import config from '~/config'
+import { storage } from '../../utils/index';
 
 definePageMeta({ layout: 'default' })
 
 const route = useRoute()
 const activeTab = ref('team')
-
-onMounted(() => {
-  if (route.query.tab) {
-    activeTab.value = route.query.tab
-  }
-})
-
 const tabs = [
   { key: 'team', label: '团队' },
   { key: 'invite', label: '邀请' },
@@ -166,12 +156,30 @@ const teamGroups = ref([
 ])
 
 const inviteInfo = ref({
-  code: 'SP88210',
-  link: 'https://sp.app/invite/SP88210',
+  code: '',
+  link: '',
 })
 
 const copied = ref('')
 const qrCanvas = ref(null)
+
+onMounted(() => {
+  init();
+})
+
+const init = () => {
+  if (route.query.tab) {
+    activeTab.value = route.query.tab;
+  }
+  const userData = storage.get('user_data') ? JSON.parse(storage.get('user_data')) : null;
+  if(userData){
+    inviteInfo.value.code = userData.invite_code
+    inviteInfo.value.link = config.frontUrl + '/login/register?code=' + userData.invite_code
+  }
+  
+}
+
+
 
 watch(activeTab, (val) => {
   if (val === 'invite') {

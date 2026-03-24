@@ -117,12 +117,13 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive ,onMounted} from 'vue';
 import { register, login } from '~/api/login';
 import { encrypt } from '~/api/AES.js';
 import { storage } from '../../utils/index';
 import md5 from 'js-md5';
 import LOGO from '../../../public/logo-transparent.png'
+const route = useRoute()
 
 definePageMeta({ layout: 'login' })
 const form = reactive({ phone: '', password: '', confirmPassword: '', inviteCode: '' })
@@ -145,6 +146,16 @@ const validate = () => {
   if (!form.inviteCode) { errors.inviteCode = $t('请输入邀请码'); return false }
   return true
 }
+
+onMounted(() => {
+  if(route.query.code){
+    window.localStorage.setItem('invite', route.query.code);
+    form.inviteCode = route.query.code
+  }else{
+    let inviteCode = window.localStorage.getItem('invite');
+    form.inviteCode = inviteCode
+  }
+})
 
 const handleRegister = async () => {
   if (!validate() || loading.value) return
