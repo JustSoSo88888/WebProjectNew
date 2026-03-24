@@ -6,12 +6,12 @@
       <div class="hero-title">我的团队</div>
       <div class="hero-stats">
         <div class="hero-stat">
-          <div class="hero-stat-val">{{ teamInfo.totalMembers }}</div>
+          <div class="hero-stat-val" translate="no">{{ teamData.total_sub_count }}</div>
           <div class="hero-stat-label">团队总人数</div>
         </div>
         <div class="hero-divider"></div>
         <div class="hero-stat">
-          <div class="hero-stat-val">R${{ teamInfo.totalIncome }}</div>
+          <div class="hero-stat-val" translate="no">R$ {{ teamData.total_award_amount }}</div>
           <div class="hero-stat-label">团队收入</div>
         </div>
         <div class="hero-divider"></div>
@@ -43,13 +43,17 @@
               <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.8"
                 stroke-linecap="round" />
             </svg>
-            {{ group.members }} 人
+            {{ group.number }} 人
           </span>
         </div>
         <div class="group-stats">
-          <div class="group-stat" v-for="stat in group.stats" :key="stat.label">
-            <div class="group-stat-val">R${{ stat.val }}</div>
-            <div class="group-stat-label">{{ stat.label }}</div>
+          <div class="group-stat">
+            <div class="group-stat-val" translate="no">R$ {{ group.taskIncome }}</div>
+            <div class="group-stat-label">任务收入</div>
+          </div>
+          <div class="group-stat">
+            <div class="group-stat-val" translate="no">R$ {{ group.referralIncome }}</div>
+            <div class="group-stat-label">推荐收入</div>
           </div>
         </div>
       </div>
@@ -106,8 +110,55 @@ import { useRoute } from 'vue-router'
 import QRCode from 'qrcode'
 import config from '~/config'
 import { storage } from '../../utils/index';
+import { basicData } from '~/api/member'
+const nuxtApp = useNuxtApp()
+const $lang = nuxtApp.$lang
 
 definePageMeta({ layout: 'default' })
+
+onMounted(() => {
+  init();
+})
+
+const init = () => {
+  if (route.query.tab) {
+    activeTab.value = route.query.tab;
+  }
+  const userData = storage.get('user_data') ? JSON.parse(storage.get('user_data')) : null;
+  if (userData) {
+    inviteInfo.value.code = userData.invite_code
+    inviteInfo.value.link = config.frontUrl + '/login/register?code=' + userData.invite_code
+  }
+  getBsicData();
+}
+
+const teamData = ref({})
+const getBsicData = () => {
+  showLoading($lang('加载中'))
+  basicData({}).then(res => {
+    hideLoading();
+    if (res.success) {
+      teamData.value = res.data;
+      teamGroups.value[0].taskIncome = 0//一级任务推荐收入
+      teamGroups.value[0].referralIncome = res.data.one_generation_award_amount
+      teamGroups.value[0].number = res.data.one_sub_count
+
+      teamGroups.value[1].taskIncome = 0//二级任务推荐收入
+      teamGroups.value[1].referralIncome = res.data.two_generation_award_amount
+      teamGroups.value[1].number = res.data.two_sub_count
+
+      teamGroups.value[2].taskIncome = 0//三级任务推荐收入
+      teamGroups.value[2].referralIncome = res.data.three_generation_award_amount
+      teamGroups.value[2].number = res.data.three_sub_count
+    } else {
+      showMsg(res.message, 'fail')
+    }
+  }).catch(error => {
+    hideLoading();
+    showMsg(error.message, 'fail')
+
+  })
+}
 
 const route = useRoute()
 const activeTab = ref('team')
@@ -126,32 +177,24 @@ const teamGroups = ref([
   {
     name: 'A队',
     color: 'linear-gradient(135deg, #d97706, #FBBF24)',
-    members: 52,
-    stats: [
-      { label: '注册会员', val: '52' },
-      { label: '任务收入', val: '18,200' },
-      { label: '推荐收入', val: '6,400' },
-    ],
+    number: 0,
+    taskIncome:0,
+    referralIncome:0,
+
   },
   {
     name: 'B队',
     color: 'linear-gradient(135deg, #b45309, #d97706)',
-    members: 43,
-    stats: [
-      { label: '注册会员', val: '43' },
-      { label: '任务收入', val: '14,560' },
-      { label: '推荐收入', val: '4,800' },
-    ],
+    number: 0,
+    taskIncome:0,
+    referralIncome:0,
   },
   {
     name: 'C队',
     color: 'linear-gradient(135deg, #059669, #34D399)',
-    members: 33,
-    stats: [
-      { label: '注册会员', val: '33' },
-      { label: '任务收入', val: '9,320' },
-      { label: '推荐收入', val: '2,400' },
-    ],
+    number: 0,
+    taskIncome:0,
+    referralIncome:0,
   },
 ])
 
@@ -163,21 +206,6 @@ const inviteInfo = ref({
 const copied = ref('')
 const qrCanvas = ref(null)
 
-onMounted(() => {
-  init();
-})
-
-const init = () => {
-  if (route.query.tab) {
-    activeTab.value = route.query.tab;
-  }
-  const userData = storage.get('user_data') ? JSON.parse(storage.get('user_data')) : null;
-  if(userData){
-    inviteInfo.value.code = userData.invite_code
-    inviteInfo.value.link = config.frontUrl + '/login/register?code=' + userData.invite_code
-  }
-  
-}
 
 
 
@@ -335,7 +363,7 @@ async function copyText(text, type) {
 
 .group-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   padding: rem(12) rem(8);
 }
 

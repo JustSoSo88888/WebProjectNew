@@ -10,3 +10,8 @@ export const getBalance = (params) => {
 export const loginOut = (params) => {
     return api.post('/member/login_out', params);
 }
+
+// 获取用户团队信息
+export const basicData = (params) => {
+    return api.post('/member/basic_data', params);
+}
