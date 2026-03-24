@@ -6,8 +6,8 @@ import api from './api';
  * @param params
  * @returns {Promise<unknown>}
  */
-export const emailLogin = (params) => {
-    return api.post('/login/login', params);
+export const register = (params) => {
+    return api.post('/login/register', params);
 }
 
 /**
@@ -15,6 +15,6 @@ export const emailLogin = (params) => {
  * @param params
  * @returns {Promise<unknown>}
  */
-export const emailRegister = (params) => {
-    return api.post('/login/register', params);
+export const login = (params) => {
+    return api.post('/login/login', params);
 }

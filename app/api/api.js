@@ -32,18 +32,18 @@ instance.interceptors.request.use(
 // 响应拦截
 instance.interceptors.response.use(
     (res) => {
-        console.log('res.data', res.data);
         const data = res.data
         if (data.success) return data;
         if (!data.success) {
-            if (!data) return Promise.reject(new Error('Empty response'))
             if (data.code === 401 || data.code === 404 ||
                 data.message === 401 || data.message === 404) {
                 //   // token 失效，跳转登录
                 //   navigateTo('/login/login')
                 return
             }
-        }11
+            return data
+
+        }
     },
     (err) => Promise.reject(err)
 )

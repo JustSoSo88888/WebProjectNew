@@ -84,7 +84,7 @@ export default defineNuxtConfig({
     // 开发服务器配置
     devServer: {
         host: 'localhost',
-        port: 3005,
+        port: 3090,
     },
     pwa: {
         registerType: 'autoUpdate',

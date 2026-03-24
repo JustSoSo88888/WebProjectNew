@@ -27,7 +27,6 @@
     width: 240px;
     height: 240px;
     background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
-    pointer-events: none;
     z-index: 0;
   }
 }
