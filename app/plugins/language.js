@@ -1,6 +1,7 @@
 import en from '../language/en'
 import pt from '../language/pt'
 import {storage} from '~/utils/index'
+import config from '~/config'
 
 const $ccLanguage = {
     en,
@@ -10,19 +11,19 @@ const $ccLanguage = {
 const langEvent = (text) => {
     let locale = storage.get('locale');
     if (!locale || locale == 'null') {
-        locale = 'pt'
+        locale = config.defaultLang
         storage.set('locale', locale);
     }
     let langs = $ccLanguage[locale];
-    let enLands = $ccLanguage['pt'];
+    let defaultLands = $ccLanguage[config.defaultLang];
     if (!langs) {
-        langs = $ccLanguage['pt']
+        langs = $ccLanguage[config.defaultLang]
     }
     if (langs[text]) {
         return langs[text];
     }
-    if (enLands[text]) {
-        return enLands[text];
+    if (defaultLands[text]) {
+        return defaultLands[text];
     }
     return '';
 }

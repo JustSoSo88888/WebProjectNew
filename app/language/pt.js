@@ -28,6 +28,7 @@ let pt = {
     "添加到主屏幕": "Adicionar à tela inicial",
     "注册成功": "Cadastro realizado com sucesso",
     "知道了": "Entendi",
+    "选择语言":"Selecionar idioma",
 }
 
 export default pt;

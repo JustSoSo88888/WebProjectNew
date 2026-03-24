@@ -28,6 +28,7 @@ let en = {
     '添加到主屏幕': 'Add to Home Screen',
     '注册成功': 'Registration successful',
     '知道了': 'Got it',
+    "选择语言":"Select language",
 }
 
 export default en

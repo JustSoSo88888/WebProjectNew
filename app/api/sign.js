@@ -43,7 +43,7 @@ export const getLocalToken = () => {
 export const getSign = (params = {}) => {
   const { apiKey, secondApikey } = config
   const timestamp = Date.now()
-  params.lang = storage.get('locale') ? storage.get('locale') : 'pt';
+  params.lang = storage.get('locale') ? storage.get('locale') : config.defaultLang;
   params.timestamp = timestamp
   params.token = getLocalToken()
   params.sign = ''
