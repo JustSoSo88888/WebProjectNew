@@ -32,7 +32,7 @@
                             <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
-                    <button class="tool-icon">
+                    <button class="tool-icon" @click="navigateTo('/chat')">
                         <van-icon name="service-o" size=".35rem" />
                     </button>
                 </div>

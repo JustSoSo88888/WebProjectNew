@@ -70,7 +70,8 @@ const pageTitleMap = {
     '/profile/setPassword': '设置密码',
     '/finance/record': '理财记录',
     '/finance/detail': '产品详情',
-    '/lucky': 'Lucky Turntable',
+    '/profile/lucky': '幸运转盘',
+    '/chat': '客服',
 }
 
 const pageTitle = computed(() => {
