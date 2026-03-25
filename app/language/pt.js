@@ -50,6 +50,23 @@ let pt = {
     "团队": "Equipo",
     "任务": "Tareas",
     "个人中心": "Perfil",
+    "退出登录": "Cerrar sesión",
+    "语言": "Idioma",
+    "设置": "Configuración",
+    "旧密码": "Senha antiga",
+    "新密码": "Nova senha",
+    "确认新密码": "Confirmar nova senha",
+    "修改登录密码": "Alterar senha de login",
+    "修改交易密码": "Alterar senha de transação",
+    "请输入旧密码": "Por favor, insira sua senha antiga",
+    "请输入新密码": "Por favor, insira uma nova senha",
+    "请输入确认新密码": "Por favor, confirme sua nova senha",
+    "新密码与确认密码不一致": "A nova senha e a confirmação não coincidem",
+    "交易密码必须为6位数字": "A senha de transação deve ter 6 dígitos",
+    "支付设置": "Configurações de pagamento",
+    "银行卡设置": "Configurações do cartão bancário",
+    "安全设置": "Configurações de segurança",
+    "密码修改成功":"Senha alterada com sucesso",
 }
 
 export default pt;

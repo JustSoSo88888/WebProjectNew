@@ -227,7 +227,7 @@ const switchTab = (key, index) => {
 const menuItems = [
     {
         key: 'settings',
-        label: '设置',
+        label: $lang('设置'),
         iconBg: 'linear-gradient(135deg,#EFF6FF,#DBEAFE)',
         icon: '<path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="#2563EB" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="#2563EB" stroke-width="1.8"/>',
         route: '/profile/setting',
@@ -286,14 +286,14 @@ const menuItems = [
     },
     {
         key: 'lang',
-        label: '语言切换',
+        label: $lang('语言'),
         iconBg: 'linear-gradient(135deg,#F5F3FF,#EDE9FE)',
         icon: '<circle cx="12" cy="12" r="10" stroke="#7C3AED" stroke-width="1.8"/><path d="M12 2c-2.5 3-4 5.5-4 10s1.5 7 4 10M12 2c2.5 3 4 5.5 4 10s-1.5 7-4 10M2 12h20" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round"/>',
         action: 'lang',
     },
     {
         key: 'logout',
-        label: '退出登录',
+        label: $lang('退出登录'),
         iconBg: 'linear-gradient(135deg,#FFF1F2,#FFE4E6)',
         icon: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
         action: 'logout',

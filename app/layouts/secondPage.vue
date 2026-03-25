@@ -62,7 +62,7 @@ const pageTitleMap = {
     '/profile/coupon': '卡券',
     '/profile/address': '地址管理',
     '/profile/address/addressAdd': '地址管理',
-    '/profile/setting': '设置',
+    '/profile/setting': $lang('设置'),
     '/profile/trade': '交易记录',
     '/profile/finance': '财务记录',
     '/profile/email': '邮箱',
