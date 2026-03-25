@@ -6,10 +6,13 @@ let socketInstance = null
 const EXCLUDED_ROUTES = ['login-login', 'login-register']
 const bus = new Map()
 
+
 export default defineNuxtPlugin(() => {
+    return
     const appStore = useAppStore()
+    console.log('appStore',appStore.getUnReadCount);
     
-    
+
     const router = useRouter()
 
     const getBus = () => bus
@@ -25,16 +28,16 @@ export default defineNuxtPlugin(() => {
         }
         for (const obj of objs) {
             if (obj.socket_type == 'private_message') {
-                console.log(appStore);
                 const currentRoute = router.currentRoute.value
                 const inChatPage = currentRoute.name === 'message-chat'
                 if (Number(obj.sender.receiver_id) !== Number(userId) && Number(obj.sender.user_id) !== Number(userId)) continue
                 if (Number(obj.sender.user_id) === Number(userId)) continue
                 if (inChatPage) continue
-
+                appStore.setUnReadCount(appStore.getUnReadCount + 1)
                 const eventBus = getBus()
                 const handlers = eventBus.get('new-private-message') || []
                 handlers.forEach(handler => handler({ content: obj }))
+                
             }
         }
     }

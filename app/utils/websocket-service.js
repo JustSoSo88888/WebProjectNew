@@ -15,7 +15,7 @@ export default class WebSocketService {
         let aes = encrypt(JSON.stringify(params),config.apiKey)
         str = encodeURIComponent(aes)
         let domain = config.debug ? config.mockSocketUrl : config.socketUrl;
-        this.url = domain + '?params=' + str;
+        this.url = 'wss://slotswapxservice.superproject.top/ws?params=GVmUSJm1oFrofaIGwfskECOfTvs60kA552P1sAdEDA9Wr73ulpfq56neYHTC7k4UiK6pZs3A0Zsm%2BYqK90egH2Zk%2FV2JLKx%2Fys2xx6BFt%2FFw3uKHL%2FVTGsE3p12P%2Fg3yJmm%2BcF3PyxfQK%2FPGJLFAGP%2F8tA1S%2F3jogiSOoZKeiKxa7uK8uiteCfKMGhkV8eAC3ocru%2BmQn00S2JNOI0uut%2FCoH%2By%2FQ5GNb5S7TP%2BQKAc%3D';
         this.websocket = null;
         this.reconnectInterval = options.reconnectInterval || 5000; // 5 seconds
         this.reconnectAttempts = 0;
@@ -75,7 +75,7 @@ export default class WebSocketService {
         this.websocket.onclose = (event) => {
             this.triggerEvent('close', event);
             this.stopHeartbeat();
-            let token = getStorage('token')
+            let token = storage.get('token')
             if (token && this.shouldReconnect && this.reconnectAttempts < this.maxReconnectAttempts) {
                 setTimeout(() => this.reconnect(), this.reconnectInterval);
             }
@@ -146,7 +146,7 @@ export default class WebSocketService {
                     console.log('WebSocket.OPEN',WebSocket.OPEN)
                     let message = {
                         socket_type:'heart_bit',// 消息类型  message: 聊天; heart_bit: 心跳包
-                        token:getStorage('token')
+                        token:storage.get('token')
                     };
                     let json = JSON.stringify(message);
                     _this.websocket.send(json);

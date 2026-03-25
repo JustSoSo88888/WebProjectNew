@@ -13,13 +13,15 @@ export const useAppStore = defineStore('app', {
     isPWAShow: true,
     localeLang: storage.get('locale') ? storage.get('locale') : config.defaultLang,
     langList: importLangImages(),
-    
+    unReadCount: 0,//客服未读消息
+
   }),
   getters: {
     getIsMobile: state => state.isMobile,
     getIsPWAShow: state => state.isPWAShow,
     getLocaleLang: state => state.localeLang,
     getLangList: state => state.langList,
+    getUnReadCount:state => state.unReadCount,
   },
   actions: {
     setIsPWAshow(val) {
@@ -27,6 +29,9 @@ export const useAppStore = defineStore('app', {
     },
     setIsMobile(val) {
       this.isMobile = val
+    },
+    setUnReadCount(value) {
+      this.unReadCount = value
     },
   },
 })
