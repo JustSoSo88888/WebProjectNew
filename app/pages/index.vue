@@ -20,7 +20,7 @@
                 <div class="brand">Nova Travel</div>
                 <div class="tools">
                     <button class="tool-icon" @click="showLang = true">
-                        <svg viewBox="0 0 24 24" fill="none">
+                        <svg viewBox="0 0 24 24" fill="none" class="lang-icon">
                             <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
                             <path d="M12 3c-2.5 3-4 5.5-4 9s1.5 6 4 9M12 3c2.5 3 4 5.5 4 9s-1.5 6-4 9M3 12h18"
                                 stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
@@ -28,15 +28,18 @@
                     </button>
                     <button class="tool-icon" @click="navigateTo('/profile/email')">
                         <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                                stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
+                    </button>
+                    <button class="tool-icon">
+                        <van-icon name="service-o" size=".35rem" />
                     </button>
                 </div>
             </div>
             <!-- 快捷操作卡片 -->
             <div class="quick-cards">
-                <button class="qc-item qc-recharge" @click="navigateTo('/recharge')">
+                <button class="qc-item qc-recharge" @click="navigateTo('/profile/recharge')">
                     <div class="qc-glow qc-glow--recharge"></div>
                     <div class="qc-icon">
                         <svg viewBox="0 0 24 24" fill="none">
@@ -49,7 +52,7 @@
                         <span class="qc-label">充值</span>
                     </div>
                 </button>
-                <button class="qc-item qc-withdraw" @click="navigateTo('/withdrawal')">
+                <button class="qc-item qc-withdraw" @click="navigateTo('/profile/withdrawal')">
                     <div class="qc-glow qc-glow--withdraw"></div>
                     <div class="qc-icon">
                         <svg viewBox="0 0 24 24" fill="none">
@@ -447,6 +450,11 @@ const getAwardLog = () => {
         color: $color-white;
         cursor: pointer;
         transition: $transition-fast;
+
+        .lang-icon {
+            width: rem(22);
+            height: rem(22);
+        }
 
         svg {
             width: rem(18);

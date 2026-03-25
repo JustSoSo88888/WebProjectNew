@@ -29,14 +29,14 @@
                     </div>
                 </div>
                 <div class="header-actions">
-                    <button class="action-btn action-btn--recharge" @click="navigateTo('/recharge')" aria-label="充值">
+                    <button class="action-btn action-btn--recharge" @click="navigateTo('/profile/recharge')" aria-label="充值">
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="M12 5v14M5 12l7-7 7 7" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                         充值
                     </button>
-                    <button class="action-btn action-btn--withdraw" @click="navigateTo('/withdrawal')" aria-label="提现">
+                    <button class="action-btn action-btn--withdraw" @click="navigateTo('/profile/withdrawal')" aria-label="提现">
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="M12 19V5M5 12l7 7 7-7" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
@@ -258,7 +258,7 @@ const menuItems = [
         label: '幸运大转盘',
         iconBg: 'linear-gradient(135deg,#FFF1F2,#FFE4E6)',
         icon: '<circle cx="12" cy="12" r="10" stroke="#DC2626" stroke-width="1.8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="3" stroke="#DC2626" stroke-width="1.8"/>',
-        route: '/lucky',
+        route: '/profile/lucky',
         badge: 'NEW',
     },
     {
