@@ -6,6 +6,8 @@ import { loginOutDialog } from '~/utils/index'
 
 const requestUrl = config.debug ? config.mockUrl : config.baseUrl
 
+let showLogoutDialog = false
+
 const instance = axios.create({
     baseURL: requestUrl,
     timeout: 30000,
@@ -59,15 +61,18 @@ instance.interceptors.response.use(
                 data.message === 401 || data.message === 404) {
                 const $dialog = getDialog()
                 const $lang = getLang()
-                if ($dialog) {
+                if ($dialog && !showLogoutDialog) {
+                    showLogoutDialog = true
                     $dialog.alert({
                         title: $lang('提示'),
                         message: $lang('登录超时，请重新登录'),
                     }).then(() => {
+                        showLogoutDialog = false
                         loginOutDialog()
                         navigateTo('/login/login')
                     })
                 } else {
+                    showLogoutDialog = false
                     loginOutDialog()
                     navigateTo('/login/login')
                 }

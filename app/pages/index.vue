@@ -10,6 +10,11 @@
                 </van-swipe-item>
             </van-swipe>
 
+            <!-- 公告轮播 -->
+            <div class="hero-notice">
+                <NoticeMarquee :list="awardList" />
+            </div>
+
             <!-- 顶部工具栏 -->
             <div class="top-bar">
                 <div class="brand">Nova Travel</div>
@@ -36,7 +41,8 @@
                     <div class="qc-icon">
                         <svg viewBox="0 0 24 24" fill="none">
                             <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" />
-                            <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
                         </svg>
                     </div>
                     <div class="qc-content">
@@ -47,7 +53,8 @@
                     <div class="qc-glow qc-glow--withdraw"></div>
                     <div class="qc-icon">
                         <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M12 2v13M7 7l5-5 5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M12 2v13M7 7l5-5 5 5" stroke="currentColor" stroke-width="2.5"
+                                stroke-linecap="round" stroke-linejoin="round" />
                             <path d="M5 17h14v3H5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
                         </svg>
                     </div>
@@ -59,7 +66,8 @@
                     <div class="qc-glow qc-glow--profit"></div>
                     <div class="qc-icon">
                         <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M12 2l3 7h7l-5.5 4.5 2 7.5-6.5-4.5-6.5 4.5 2-7.5L2 9h7l3-7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                            <path d="M12 2l3 7h7l-5.5 4.5 2 7.5-6.5-4.5-6.5 4.5 2-7.5L2 9h7l3-7z" stroke="currentColor"
+                                stroke-width="2" stroke-linejoin="round" />
                         </svg>
                     </div>
                     <div class="qc-content">
@@ -68,7 +76,6 @@
                 </button>
             </div>
         </div>
-
 
 
         <!-- 功能菜单 -->
@@ -170,6 +177,7 @@ import img3 from '@/assets/img/index/3.jpg'
 import img4 from '@/assets/img/index/4.jpg'
 import activity from '@/assets/img/activity/activity.jpg'
 import activity1 from '@/assets/img/activity/activity1.jpg'
+import { awardLog } from '~/api/system'
 
 definePageMeta({
     layout: 'default',
@@ -177,8 +185,8 @@ definePageMeta({
     layoutTransition: false
 })
 
-const noticeX = ref(0)
-let noticeTimer = null
+const nuxtApp = useNuxtApp()
+const $lang = nuxtApp.$lang
 
 const bannerList = [img1, img2, img3, img4]
 const activityList = [activity, activity1]
@@ -323,15 +331,29 @@ function previewActivity(index) {
 }
 
 onMounted(() => {
-    noticeTimer = setInterval(() => {
-        noticeX.value -= 0.8
-        if (noticeX.value < -800) noticeX.value = 0
-    }, 16)
+    getAwardLog()
 })
 
 onUnmounted(() => {
-    if (noticeTimer) clearInterval(noticeTimer)
 })
+
+//邀请收益列表
+const awardList = ref([])
+const getAwardLog = () => {
+    showLoading($lang('加载中'))
+    awardLog({ page: 1, pageSize: 10 }).then(res => {
+        hideLoading();
+        if (res.success) {
+            awardList.value = [...res.data.rows, ...res.data.rows]
+        } else {
+            showMsg(res.message, 'fail')
+        }
+
+    }).catch(error => {
+        hideLoading();
+        showMsg(error.message, 'fail')
+    })
+}
 </script>
 
 <style scoped lang="scss">
@@ -348,6 +370,15 @@ onUnmounted(() => {
     position: relative;
     height: rem(480);
     overflow: hidden;
+}
+
+.hero-notice {
+    position: absolute;
+    top: rem(60);
+    left: 0;
+    right: 0;
+    z-index: 3;
+    padding: 0 rem(16);
 }
 
 .hero-swipe {
