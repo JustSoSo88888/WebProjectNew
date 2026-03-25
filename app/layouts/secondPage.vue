@@ -63,6 +63,8 @@ const pageTitleMap = {
     '/profile/setting': '设置',
     '/profile/trade': '交易记录',
     '/profile/finance': '财务记录',
+    '/profile/email': '邮箱',
+    '/profile/email/details': '邮箱详情',
     '/recharge': '充值',
     '/withdrawal': '提现',
     '/withdrawal/setPassword': '设置密码',

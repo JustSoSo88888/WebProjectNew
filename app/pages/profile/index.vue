@@ -274,7 +274,7 @@ const menuItems = [
         label: '信息',
         iconBg: 'linear-gradient(135deg,#EFF6FF,#DBEAFE)',
         icon: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#2563EB" stroke-width="1.8" stroke-linejoin="round"/>',
-        route: '/message',
+        route: '/profile/email',
         badge: '5',
     },
     {

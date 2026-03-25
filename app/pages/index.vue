@@ -19,14 +19,14 @@
             <div class="top-bar">
                 <div class="brand">Nova Travel</div>
                 <div class="tools">
-                    <button class="tool-icon">
+                    <button class="tool-icon" @click="showLang = true">
                         <svg viewBox="0 0 24 24" fill="none">
                             <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
                             <path d="M12 3c-2.5 3-4 5.5-4 9s1.5 6 4 9M12 3c2.5 3 4 5.5 4 9s-1.5 6-4 9M3 12h18"
                                 stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
                         </svg>
                     </button>
-                    <button class="tool-icon">
+                    <button class="tool-icon" @click="navigateTo('/profile/email')">
                         <svg viewBox="0 0 24 24" fill="none">
                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
                                 stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
@@ -163,7 +163,7 @@
                 </div>
             </div>
         </div>
-
+        <LangModal v-model="showLang" v-model:currentLang="currentLang" @change="handleLangChange" />
     </div>
 </template>
 
@@ -171,13 +171,16 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { showImagePreview } from 'vant'
 import { navigateTo } from '#imports'
-import img1 from '@/assets/img/index/1.jpg'
-import img2 from '@/assets/img/index/2.jpg'
-import img3 from '@/assets/img/index/3.jpg'
-import img4 from '@/assets/img/index/4.jpg'
-import activity from '@/assets/img/activity/activity.jpg'
-import activity1 from '@/assets/img/activity/activity1.jpg'
 import { awardLog } from '~/api/system'
+import LangModal from '~/components/LangModal.vue'
+const currentLang = ref(storage.get('locale') || 'pt')
+const showLang = ref(false)
+const handleLangChange = (lang) => {
+    if (currentLang.value == lang) return;
+    storage.set('locale', lang)
+    currentLang.value = lang
+    location.reload()
+}
 
 definePageMeta({
     layout: 'default',
@@ -188,8 +191,16 @@ definePageMeta({
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
 
-const bannerList = [img1, img2, img3, img4]
-const activityList = [activity, activity1]
+const bannerList = [
+    new URL('../assets/img/index/1.jpg', import.meta.url),
+    new URL('../assets/img/index/2.jpg', import.meta.url),
+    new URL('../assets/img/index/3.jpg', import.meta.url),
+    new URL('../assets/img/index/4.jpg', import.meta.url),
+]
+const activityList = [
+    new URL('../assets/img//activity/activity.jpg', import.meta.url),
+    new URL('../assets/img//activity/activity1.jpg', import.meta.url),
+]
 
 const menuItems = [
     {
