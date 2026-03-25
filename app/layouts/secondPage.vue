@@ -54,6 +54,8 @@
  import { useRoute, navigateTo } from '#imports'
 
  const route = useRoute()
+ const nuxtApp = useNuxtApp()
+const $lang = nuxtApp.$lang
 
 const pageTitleMap = {
     '/profile/wallet': '银行卡管理',
@@ -67,7 +69,7 @@ const pageTitleMap = {
     '/profile/email/details': '邮箱详情',
     '/profile/recharge': '充值',
     '/profile/withdrawal': '提现',
-    '/profile/setPassword': '设置密码',
+    '/profile/setPassword': $lang('设置交易密码'),
     '/finance/record': '理财记录',
     '/finance/detail': '产品详情',
     '/profile/lucky': '幸运转盘',

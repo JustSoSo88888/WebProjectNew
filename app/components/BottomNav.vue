@@ -51,6 +51,8 @@
 
 <script setup>
 import { useRoute } from 'vue-router'
+const nuxtApp = useNuxtApp()
+const $lang = nuxtApp.$lang
 
 const route = useRoute()
 
@@ -60,11 +62,11 @@ const isActive = (path) => {
 }
 
 const navItems = [
-  { name: 'home',    label: '首页',    path: '/' },
-  { name: 'finance', label: '理财',    path: '/finance' },
-  { name: 'team',    label: '团队',    path: '/team' },
-  { name: 'task',    label: '任务',    path: '/task' },
-  { name: 'profile', label: '个人中心', path: '/profile' },
+  { name: 'home',    label: $lang('首页'),    path: '/' },
+  { name: 'finance', label: $lang('理财'),    path: '/finance' },
+  { name: 'team',    label: $lang('团队'),    path: '/team' },
+  { name: 'task',    label: $lang('任务'),    path: '/task' },
+  { name: 'profile', label: $lang('个人中心'), path: '/profile' },
 ]
 </script>
 

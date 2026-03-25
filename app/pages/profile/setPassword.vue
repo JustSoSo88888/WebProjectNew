@@ -1,66 +1,35 @@
 <template>
     <div class="set-password-page">
         <div class="form-section">
-            <div class="form-title">设置支付密码</div>
-            <div class="form-desc">请设置6位数字支付密码，用于提现验证</div>
+            <div class="form-title">{{ $lang('设置交易密码') }}</div>
+            <div class="form-desc">{{ $lang('请设置6位数字交易密码') }}</div>
 
             <!-- Password Input -->
             <div class="password-group">
-                <div class="password-label">支付密码</div>
+                <div class="password-label">{{ $lang('交易密码') }}</div>
                 <div class="password-inputs">
-                    <input
-                        v-for="(_, index) in 6"
-                        :key="index"
-                        :ref="el => setPasswordRef(el, index)"
-                        type="tel"
-                        maxlength="1"
-                        inputmode="numeric"
-                        pattern="[0-9]*"
-                        class="password-digit"
-                        :class="{ active: password[index], filled: password[index] }"
-                        @input="onPasswordInput(index)"
-                        @keydown="onPasswordKeydown($event, index)"
-                        @focus="onPasswordFocus(index)"
-                    />
+                    <input v-for="(_, index) in 6" :key="index" :ref="el => setPasswordRef(el, index)" type="tel"
+                        maxlength="1" inputmode="numeric" pattern="[0-9]*" class="password-digit"
+                        :class="{ active: password[index], filled: password[index] }" @input="onPasswordInput(index)"
+                        @keydown="onPasswordKeydown($event, index)" @focus="onPasswordFocus(index)" />
                 </div>
             </div>
 
             <!-- Confirm Password -->
             <div class="password-group">
-                <div class="password-label">确认密码</div>
+                <div class="password-label">{{ $lang('确认密码') }}</div>
                 <div class="password-inputs">
-                    <input
-                        v-for="(_, index) in 6"
-                        :key="'confirm-' + index"
-                        :ref="el => setConfirmRef(el, index)"
-                        type="tel"
-                        maxlength="1"
-                        inputmode="numeric"
-                        pattern="[0-9]*"
-                        class="password-digit"
+                    <input v-for="(_, index) in 6" :key="'confirm-' + index" :ref="el => setConfirmRef(el, index)"
+                        type="tel" maxlength="1" inputmode="numeric" pattern="[0-9]*" class="password-digit"
                         :class="{ active: confirmPassword[index], filled: confirmPassword[index] }"
-                        @input="onConfirmInput(index)"
-                        @keydown="onConfirmKeydown($event, index)"
-                        @focus="onConfirmFocus(index)"
-                    />
+                        @input="onConfirmInput(index)" @keydown="onConfirmKeydown($event, index)"
+                        @focus="onConfirmFocus(index)" />
                 </div>
             </div>
 
             <!-- Submit Button -->
-            <button 
-                class="submit-btn" 
-                :disabled="!canSubmit || isLoading"
-                @click="handleSubmit"
-            >
-                {{ isLoading ? '提交中...' : '确认设置' }}
-            </button>
-
-            <!-- Cancel Button -->
-            <button 
-                class="cancel-btn" 
-                @click="handleCancel"
-            >
-                取消
+            <button class="submit-btn" :disabled="!canSubmit || isLoading" @click="handleSubmit">
+                {{ isLoading ? $lang('提交中') : $lang('确认设置') }}
             </button>
         </div>
     </div>
@@ -70,8 +39,10 @@
 import { ref, computed } from 'vue'
 import { showToast } from 'vant'
 import { navigateTo } from '#imports'
-
+import { setPayPassword } from '~/api/member'
 definePageMeta({ layout: 'second-page' })
+const nuxtApp = useNuxtApp()
+const $lang = nuxtApp.$lang
 
 const password = ref(['', '', '', '', '', ''])
 const confirmPassword = ref(['', '', '', '', '', ''])
@@ -99,7 +70,7 @@ const onPasswordInput = (index) => {
     const input = passwordInputs[index]
     const value = input.value.replace(/\D/g, '')
     input.value = value
-    
+
     if (value) {
         password.value[index] = value
         if (index < 5) {
@@ -130,7 +101,7 @@ const onConfirmInput = (index) => {
     const input = confirmInputs[index]
     const value = input.value.replace(/\D/g, '')
     input.value = value
-    
+
     if (value) {
         confirmPassword.value[index] = value
         if (index < 5) {
@@ -157,37 +128,41 @@ const onConfirmFocus = (index) => {
     }
 }
 
-const handleSubmit = async () => {
+const handleSubmit =  () => {
     if (passwordStr.value.length !== 6) {
-        showToast('请输入6位支付密码')
+        showToast($lang('请输入6位支付密码'))
         return
     }
 
     if (confirmStr.value.length !== 6) {
-        showToast('请确认支付密码')
+        showToast($lang('请输入确认密码'))
         return
     }
 
     if (passwordStr.value !== confirmStr.value) {
-        showToast('两次输入的密码不一致')
+        showToast($lang('两次输入的密码不一致'))
         return
     }
 
     isLoading.value = true
-
-    try {
-        await new Promise(resolve => setTimeout(resolve, 1500))
-        
-        showToast('支付密码设置成功')
-        
-        setTimeout(() => {
-            navigateTo(-1)
-        }, 1000)
-    } catch (error) {
-        showToast('设置失败，请重试')
-    } finally {
-        isLoading.value = false
+    let params = {
+        pay_password: passwordStr.value,
+        confirm_password: confirmStr.value
     }
+    setPayPassword(params).then(res => {
+        isLoading.value = false
+        if (res.success) {
+            showToast($lang('支付密码设置成功'))
+            setTimeout(() => {
+                history.back()
+            }, 1000)
+        } else {
+            showToast(res.message, fail)
+        }
+    }).catch(error => {
+        isLoading.value = false
+        showToast(error.message, fail)
+    })
 }
 
 const handleCancel = () => {
