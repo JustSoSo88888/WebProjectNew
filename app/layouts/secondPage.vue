@@ -71,6 +71,10 @@ const pageTitleMap = {
     '/finance/record': '理财记录',
     '/finance/detail': '产品详情',
     '/profile/lucky': '幸运转盘',
+    '/profile/news': '新闻',
+    '/profile/aboutUs': '关于我们',
+    '/profile/article': '收益',
+    '/profile/help': '帮助',
     '/chat': '客服',
 }
 

@@ -8,11 +8,12 @@
                 :class="{ 'is-self': msg.isSelf }"
             >
                 <img v-if="!msg.isSelf" src="https://api.dicebear.com/7.x/bottts/svg?seed=service" class="avatar" alt="客服" />
+                <img v-if="msg.isSelf" src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" class="avatar" alt="用户" />
                 <div class="bubble">
                     <div class="bubble-content">{{ msg.content }}</div>
                     <div class="bubble-time">{{ msg.time }}</div>
                 </div>
-                <img v-if="msg.isSelf" src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" class="avatar" alt="用户" />
+                
             </div>
         </div>
 

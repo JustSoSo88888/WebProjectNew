@@ -66,29 +66,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- 账户设置 -->
-            <div class="settings-group">
-                <div class="group-title">账户设置</div>
-                <div class="setting-item logout-item" @click="confirmLogout">
-                    <div class="item-info">
-                        <div class="item-icon logout-icon">
-                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"
-                                      stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                      stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <span class="item-label">退出登录</span>
-                    </div>
-                    <div class="item-action">
-                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                  stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                </div>
-            </div>
         </div>
 
 
@@ -96,8 +73,6 @@
         <!-- Password Modal (Trade/Login) -->
         <PasswordModal v-model="showPasswordModal" :type="passwordType" @submit="savePassword" />
 
-        <!-- Logout Confirmation -->
-        <LogoutModal v-model="showLogoutConfirm" @confirm="handleLogout" />
     </div>
 </template>
 
@@ -105,14 +80,12 @@
     import {ref} from 'vue'
     import {navigateTo} from '#imports'
     import PasswordModal from './components/PasswordModal.vue'
-    import LogoutModal from './components/LogoutModal.vue'
 
     definePageMeta({ layout: 'second-page' })
 
     const showPasswordModal = ref(false)
     const passwordType = ref('trade')
     const passwordForm = ref({ oldPassword: '', newPassword: '', confirmPassword: '' })
-    const showLogoutConfirm = ref(false)
 
     const openPasswordModal = (type) => {
         passwordType.value = type
@@ -136,12 +109,6 @@
 
     const confirmLogout = () => {
         showLogoutConfirm.value = true
-    }
-
-    const handleLogout = () => {
-        showLogoutConfirm.value = false
-        console.log('Logging out...')
-        navigateTo('/login/login')
     }
 </script>
 
