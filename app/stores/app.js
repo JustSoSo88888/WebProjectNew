@@ -12,7 +12,8 @@ export const useAppStore = defineStore('app', {
     isMobile: false,
     isPWAShow: true,
     localeLang: storage.get('locale') ? storage.get('locale') : config.defaultLang,
-    langList: importLangImages()
+    langList: importLangImages(),
+    
   }),
   getters: {
     getIsMobile: state => state.isMobile,

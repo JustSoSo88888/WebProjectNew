@@ -11,11 +11,15 @@ const config = {
   apiKey: 'SocgBG7E5uSYS0N9yiEyIvIO8cZf9Dpk',//签名Key
   secondApikey: 'LH7BhZKuFMAMoBoRu3eM3SMtUzOgoRMw',//签名key1
   //默认语言
-  defaultLang:'pt',
+  defaultLang: 'pt',
   // 是否启用 DevTools 检测（禁止用户打开 F12）
   // true: 生产环境生效，检测到 devtools 打开时跳转空白页
   // false: 关闭检测（开发调试时设为 false）
   enableDevtoolsDetector: false,
+
+  // wss 长连接配置-客服
+  socketUrl: 'wss://servicewss.slotjztilwdmw.shop/ws',
+  mockSocketUrl: 'wss://slotswapxservice.superproject.top/ws',
 }
 
 export default config
