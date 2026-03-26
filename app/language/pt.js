@@ -96,6 +96,10 @@ let pt = {
     "关于我们": "Sobre nós",
     "手册": "Manual",
     "帮助": "Ajuda",
+    "总充值": "Depósito total",
+    "总提现": "Saque total",
+    "注册时间": "Data de registro",
+    "团队详情": "Detalhes da equipe",
 }
 
 export default pt;

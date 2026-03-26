@@ -35,3 +35,8 @@ export const tradingRecord = (params) => {
 export const getCoinAddress = (params) => {
     return api.post('/member/get_coin_address', params);
 }
+
+// 获取用户团队信息
+export const teamList = (params) => {
+    return api.post('/member/team_list', params);
+}

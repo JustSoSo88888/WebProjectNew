@@ -32,7 +32,7 @@
 
     <!-- 团队分队面板 -->
     <div v-if="activeTab === 'team'" class="panel">
-      <div v-for="group in teamGroups" :key="group.name" class="group-card">
+      <div v-for="group in teamGroups" :key="group.name" class="group-card" @click="navigateTo({path:'/team/details',query: {title: group.name,deep:group.deep}})">
         <div class="group-header">
           <span class="group-badge" :style="{ background: group.color }">{{ group.name }}</span>
           <span class="group-members">
@@ -115,6 +115,7 @@ import QRCode from 'qrcode'
 import config from '~/config'
 import { storage } from '../../utils/index';
 import { basicData } from '~/api/member'
+import { navigateTo } from '#imports'
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
 
@@ -184,6 +185,7 @@ const teamGroups = ref([
     number: 0,
     taskIncome:0,
     referralIncome:0,
+    deep:1,
 
   },
   {
@@ -192,6 +194,7 @@ const teamGroups = ref([
     number: 0,
     taskIncome:0,
     referralIncome:0,
+    deep:2,
   },
   {
     name: 'C队',
@@ -199,6 +202,7 @@ const teamGroups = ref([
     number: 0,
     taskIncome:0,
     referralIncome:0,
+    deep:3,
   },
 ])
 
