@@ -89,6 +89,13 @@ let en = {
     "暂无数据": "No data",
     "下拉即可刷新": "Pull down to refresh",
     "释放即可刷新": "Release to refresh",
+    "兑换码": "Redemption Code",
+    "奖励": "Reward",
+    "收益": "Earnings",
+    "新闻": "News",
+    "关于我们": "About Us",
+    "手册": "Manual",
+    "帮助": "Help",
 }
 
 export default en

@@ -14,23 +14,18 @@
 
             <div class="grid-container">
                 <div class="grid-wrapper">
-                    <div 
-                        v-for="(item, index) in gridItemsWithPlaceholder" 
-                        :key="index" 
-                        class="grid-item"
-                        :class="{ 
-                            active: activeIndex === index, 
-                            winner: winnerIndex === index,
-                            clickable: !isSpinning && chances > 0,
-                            'is-center': index === 4
-                        }"
-                    >
+                    <div v-for="(item, index) in gridItemsWithPlaceholder" :key="index" class="grid-item" :class="{
+                        active: activeIndex === index,
+                        winner: winnerIndex === index,
+                        clickable: !isSpinning && chances > 0,
+                        'is-center': index === 4
+                    }">
                         <template v-if="item && index !== 4">
                             <div class="item-icon">{{ item.icon }}</div>
                             <div class="item-name">{{ item.name }}</div>
                         </template>
                     </div>
-                    
+
                     <div class="center-btn" :class="{ disabled: isSpinning || chances <= 0 }" @click="startDraw">
                         <van-loading v-if="isSpinning" color="#fff" size="24px" />
                         <span v-else>{{ isSpinning ? '抽奖中...' : (chances > 0 ? '开始' : '无次数') }}</span>
@@ -58,7 +53,8 @@
                 </div>
             </div>
 
-            <van-popup v-model:show="showPrizeModal" position="center" class="prize-modal" round :close-on-click-overlay="false">
+            <van-popup v-model:show="showPrizeModal" position="center" class="prize-modal" round
+                :close-on-click-overlay="false">
                 <div class="prize-modal-content">
                     <div class="prize-bg">
                         <div class="prize-glow"></div>
@@ -80,7 +76,7 @@
 import { showToast } from 'vant'
 import { getLuckyConfig, doLuckyDraw, getLuckyRecords } from '~/api/lucky'
 
-definePageMeta({ 
+definePageMeta({
     layout: 'second-page',
     pageTransition: { name: 'slide-left', mode: 'out-in' },
     layoutTransition: false
@@ -188,14 +184,14 @@ const startDraw = async () => {
             const interval = setInterval(() => {
                 current++
                 activeIndex.value = prizeToGridIndex[current % 8]
-                
+
                 if (current >= totalSteps) {
                     clearInterval(interval)
                     winnerIndex.value = gridIndex
                     activeIndex.value = -1
                     isSpinning.value = false
                     drawLoading.value = false
-                    
+
                     setTimeout(() => {
                         showPrizeModal.value = true
                         fetchRecords()
@@ -261,6 +257,7 @@ onMounted(async () => {
 .chances-text {
     font-size: rem(14);
     color: rgba(255, 255, 255, 0.6);
+
     strong {
         color: #d97706;
         font-weight: 600;
@@ -289,7 +286,7 @@ onMounted(async () => {
 .grid-item {
     width: rem(88);
     height: rem(88);
-    background: linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
     border-radius: rem(12);
     display: flex;
     flex-direction: column;
@@ -362,9 +359,17 @@ onMounted(async () => {
 }
 
 @keyframes winnerPulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.08); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 .records-section {
@@ -467,8 +472,17 @@ onMounted(async () => {
 }
 
 @keyframes glowPulse {
-    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.15);
+    }
 }
 
 .prize-icon {
@@ -478,8 +492,13 @@ onMounted(async () => {
 }
 
 @keyframes bounce {
-    from { transform: translateY(0); }
-    to { transform: translateY(-8px); }
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-8px);
+    }
 }
 
 .prize-amount-wrapper {
@@ -508,11 +527,12 @@ onMounted(async () => {
 }
 
 @keyframes countUp {
-    from { 
+    from {
         opacity: 0;
         transform: translateY(16px) scale(0.5);
     }
-    to { 
+
+    to {
         opacity: 1;
         transform: translateY(0) scale(1);
     }

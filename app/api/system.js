@@ -24,3 +24,8 @@ export const updatePassword = (params) => {
 export const getServiceUrl = (params) => {
     return api.post('/system/getServiceUrl', params);
 }
+
+//说明文本
+export const getCustomContentByKey = (params) => {
+    return api.post('/system/get_custom_content_by_key', params);
+}

@@ -264,7 +264,7 @@ const goToDetail = () => {
     background: none;
     border: none;
     font-size: rem(13);
-    color: #9CA3AF;
+    color: #256de9;
     cursor: pointer;
     padding: rem(4);
 

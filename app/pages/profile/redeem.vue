@@ -8,13 +8,13 @@
                     <template v-if="list.length > 0">
                         <div class="redeem-item" v-for="(item, index) in list" :key="index">
                             <div>
-                                <div>兑换码</div>
+                                <div>{{ $lang('兑换码') }}</div>
                                 <div class="mt-10 redeem-code">
                                     {{ item.code }}
                                 </div>
                             </div>
                             <div class="redeem-amount-box">
-                                <div>奖励</div>
+                                <div>{{ $lang('奖励') }}</div>
                                 <div class="redeem-amount" translate="no">+R$ {{ parseFloat(item.amount) }}</div>
                             </div>
                         </div>

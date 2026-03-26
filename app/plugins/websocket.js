@@ -8,11 +8,8 @@ const bus = new Map()
 
 
 export default defineNuxtPlugin(() => {
-    return
+    // return
     const appStore = useAppStore()
-    console.log('appStore',appStore.getUnReadCount);
-    
-
     const router = useRouter()
 
     const getBus = () => bus

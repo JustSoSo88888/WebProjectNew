@@ -63,6 +63,10 @@ const pageTitleMap = {
     '/profile/setting': $lang('设置'),
     '/profile/trade': $lang('交易记录'),
     '/profile/redeem': $lang('现金礼物记录'),
+    '/profile/news': $lang('新闻'),
+    '/profile/aboutUs': $lang('关于我们'),
+    '/profile/article': $lang('收益'),
+    '/profile/help': $lang('帮助'),
     '/profile/coupon': '卡券',
     '/profile/address': '地址管理',
     '/profile/address/addressAdd': '地址管理',
@@ -74,10 +78,6 @@ const pageTitleMap = {
     '/finance/record': '理财记录',
     '/finance/detail': '产品详情',
     '/profile/lucky': '幸运转盘',
-    '/profile/news': '新闻',
-    '/profile/aboutUs': '关于我们',
-    '/profile/article': '收益',
-    '/profile/help': '帮助',
     '/chat': '客服',
 }
 
@@ -114,7 +114,7 @@ const goBack = () => {
         &__content {
             height: 100%;
             overflow-y: auto;
-            padding-top: rem(50); // 为固定头部留出空间
+            padding-top: rem(56); // 为固定头部留出空间
         }
     }
 

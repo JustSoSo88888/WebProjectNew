@@ -74,7 +74,7 @@
                         </svg>
                     </div>
                     <div class="qc-content">
-                        <span class="qc-label">收益</span>
+                        <span class="qc-label">{{ $lang('收益') }}</span>
                     </div>
                 </button>
             </div>
@@ -212,13 +212,13 @@ const activityList = [
 
 const menuItems = [
     {
-        label: '新闻',
+        label: $lang('新闻'),
         bg: '#EFF6FF',
         icon: '<path d="M4 6h16M4 10h16M4 14h10" stroke="#2563EB" stroke-width="1.8" stroke-linecap="round"/>',
         path:'/profile/news'
     },
     {
-        label: '关于我们',
+        label: $lang('关于我们'),
         bg: '#F5F3FF',
         icon: '<circle cx="12" cy="12" r="9" stroke="#7C3AED" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round"/>',
         path:'/profile/aboutUs'
@@ -242,7 +242,7 @@ const menuItems = [
         path:'/team?tab=invite'
     },
     {
-        label: '手册',
+        label: $lang('手册'),
         bg: '#F0F9FF',
         icon: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="#0284C7" stroke-width="1.8" stroke-linecap="round"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="#0284C7" stroke-width="1.8" stroke-linejoin="round"/>',
         path:'/profile/help'

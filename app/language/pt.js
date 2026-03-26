@@ -89,6 +89,13 @@ let pt = {
     "暂无数据": "Nenhum dado disponível",
     "下拉即可刷新": "Puxe para atualizar",
     "释放即可刷新": "Solte para atualizar",
+    "兑换码": "Código de resgate",
+    "奖励": "Recompensa",
+    "收益": "Ganhos",
+    "新闻": "Notícias",
+    "关于我们": "Sobre nós",
+    "手册": "Manual",
+    "帮助": "Ajuda",
 }
 
 export default pt;

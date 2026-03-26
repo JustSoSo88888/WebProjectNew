@@ -1,32 +1,29 @@
 <template>
     <div class="chat-page">
         <div class="chat-list">
-            <div
-                v-for="(msg, index) in messages"
-                :key="index"
-                class="chat-item"
-                :class="{ 'is-self': msg.isSelf }"
-            >
-                <img v-if="!msg.isSelf" src="https://api.dicebear.com/7.x/bottts/svg?seed=service" class="avatar" alt="客服" />
-                <img v-if="msg.isSelf" src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" class="avatar" alt="用户" />
+            <div v-for="(msg, index) in messagesList" :key="index" class="chat-item" :class="{ 'is-self': userData.id == item.user_id }">
+                <img v-if="!userData.id == item.user_id" src="https://api.dicebear.com/7.x/bottts/svg?seed=service" class="avatar" />
+                <img v-if="userData.id == item.user_id" src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" class="avatar" />
                 <div class="bubble">
-                    <div class="bubble-content">{{ msg.content }}</div>
-                    <div class="bubble-time">{{ msg.time }}</div>
+                    <div class="bubble-content" v-html="item.content"></div>
                 </div>
-                
+
             </div>
         </div>
 
         <div class="chat-input">
             <button class="input-btn">
                 <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" stroke="currentColor"
+                        stroke-width="1.8" stroke-linejoin="round" />
                 </svg>
             </button>
-            <input v-model="inputText" type="text" class="input-field" placeholder="请输入内容..." @keyup.enter="sendMessage" />
-            <button class="send-btn" :disabled="!inputText.trim()" @click="sendMessage">
+            <input v-model="inputText" type="text" class="input-field" placeholder="请输入内容..."
+                @keyup.enter="sendMessage" />
+            <button class="send-btn" @click="sendMessage">
                 <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </button>
         </div>
@@ -34,64 +31,69 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { getAgentId, updateMessageIsRead, messageList } from '~/api/chat'
+const { $socket, $createSocket, $destroySocket, $bus } = useNuxtApp()
 
 definePageMeta({ layout: 'second-page' })
-
+onMounted(() => {
+    handleGetAgentId();
+    userData.value = storage.get('user_data') ? JSON.parse(storage.get('user_data')) : {}
+})
+const userData = ref({})
+const toUserId = ref(0)
 const inputText = ref('')
+const messagesList = ref([])
+const handleGetAgentId = () => {
+    getAgentId({}).then(res => {
+        if (res.sccess) {
+            toUserId.value = res.data
+        }
+    })
+}
 
-const messages = ref([
-    {
-        content: '您好，请问有什么可以帮助您的？',
-        time: '10:00',
-        isSelf: false
-    },
-    {
-        content: '你好，我想咨询一下关于账户的问题',
-        time: '10:01',
-        isSelf: true
-    },
-    {
-        content: '好的，请问您遇到什么具体问题呢？',
-        time: '10:02',
-        isSelf: false
-    },
-    {
-        content: '我的账户无法登录了，显示密码错误',
-        time: '10:03',
-        isSelf: true
-    },
-    {
-        content: '您可以尝试点击"忘记密码"进行重置，或者联系我们的客服团队获取帮助',
-        time: '10:04',
-        isSelf: false
-    },
-    {
-        content: '您可以尝试点击"忘记密码"进行重置，或者联系我们的客服团队获取帮助',
-        time: '10:04',
-        isSelf: false
-    },
-    {
-        content: '您可以尝试点击"忘记密码"进行重置，或者联系我们的客服团队获取帮助',
-        time: '10:04',
-        isSelf: false
-    },
-    {
-        content: '您可以尝试点击"忘记密码"进行重置，或者联系我们的客服团队获取帮助',
-        time: '10:05',
-        isSelf: false
+const socketMessageHandler = (event) => {
+    try {
+        const objs = JSON.parse(event.data);
+        for (const obj of objs) {
+            if (obj.socket_type !== 'private_message' && obj.socket_type !== 'message' && obj.socket_type !== 'join') continue;
+            if (
+                (Number(obj.sender.receiver_id) === Number(this.user_id) ||
+                    Number(obj.sender.user_id) === Number(this.user_id)) &&
+                (Number(obj.sender.receiver_id) === Number(this.to_user_id)
+                    || Number(obj.sender.user_id) === Number(this.to_user_id))
+            ) {
+                const messageId = obj.message_id;
+                const isExist = messagesList.value.findIndex(item => item.id == messageId);
+                if (isExist === -1) {
+                    const messageObj = { ...obj.sender };
+                    messageObj.content = obj.content;
+                    messageObj.socket_type = obj.socket_type;
+                    messageObj.receiver_id = obj.sender.receiver_id;
+                    messageObj.id = messageId;
+                    messagesList.value.push(messageObj)
+                }
+            }
+        }
+    } catch (e) {
+
     }
-])
+    $socket()?.on('message', socketMessageHandler());
+}
+
+
 
 const sendMessage = () => {
-    if (!inputText.value.trim()) return
-    
-    messages.value.push({
-        content: inputText.value,
-        time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
-        isSelf: true
-    })
-    
+    let params = {
+        user_id: userData.value.id,
+        name: userData.value.nickname,
+        head_image: userData.value.head_image,
+        receiver_id: toUserId.value,
+        attributes: {}
+    }
+    console.log(params);
+
+    $socket().send(params, '123123213')
     inputText.value = ''
 }
 </script>
