@@ -76,6 +76,7 @@ let pt = {
     "请输入账户号码": "Por favor, insira o número da conta",
     "编辑": "Editar",
     "提交": "Enviar",
+    "交易记录":"Histórico de Transações",
 }
 
 export default pt;

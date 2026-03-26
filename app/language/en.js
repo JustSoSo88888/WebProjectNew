@@ -76,6 +76,7 @@ let en = {
     "请输入账户号码": "Please enter the account number",
     "编辑": "Edit",
     "提交": "Submit",
+    "交易记录":"Transaction History",
 }
 
 export default en

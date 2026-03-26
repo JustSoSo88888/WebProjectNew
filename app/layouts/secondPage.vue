@@ -59,17 +59,17 @@ const $lang = nuxtApp.$lang
 
 const pageTitleMap = {
     '/profile/bankInfo': $lang('银行卡信息'),
+    '/profile/setPassword': $lang('设置交易密码'),
+    '/profile/setting': $lang('设置'),
+    '/profile/trade': $lang('交易记录'),
     '/profile/coupon': '卡券',
     '/profile/address': '地址管理',
     '/profile/address/addressAdd': '地址管理',
-    '/profile/setting': $lang('设置'),
-    '/profile/trade': '交易记录',
     '/profile/finance': '财务记录',
     '/profile/email': '邮箱',
     '/profile/email/details': '邮箱详情',
     '/profile/recharge': '充值',
     '/profile/withdrawal': '提现',
-    '/profile/setPassword': $lang('设置交易密码'),
     '/finance/record': '理财记录',
     '/finance/detail': '产品详情',
     '/profile/lucky': '幸运转盘',
@@ -93,7 +93,7 @@ const pageTitle = computed(() => {
         }
     }
     
-    return '详情'
+    return ''
 })
 
 const goBack = () => {

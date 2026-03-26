@@ -25,3 +25,8 @@ export const hasSetPayPassword = (params) => {
 export const setPayPassword = (params) => {
     return api.post('/member/set_pay_password', params);
 }
+
+// 交易记录列表
+export const tradingRecord = (params) => {
+    return api.post('/member/trading_record', params);
+}
