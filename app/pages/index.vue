@@ -371,7 +371,9 @@ const getAwardLog = () => {
     awardLog({ page: 1, pageSize: 10 }).then(res => {
         hideLoading();
         if (res.success) {
-            awardList.value = [...res.data.rows, ...res.data.rows]
+            if(res.data.rows && res.data.rows.length > 0){
+                awardList.value = [...res.data.rows, ...res.data.rows]
+            }
         } else {
             showMsg(res.message, 'fail')
         }

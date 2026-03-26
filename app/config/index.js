@@ -6,10 +6,10 @@ const config = {
   //正式api
   baseUrl: '',
   //测试api
-  mockUrl: 'https://puduapi.superproject.top/api',
+  mockUrl: 'https://ntapi.xgdlandlink.shop/api',
   frontUrl: typeof window !== 'undefined' ? window.location.origin : '',//本地地址
-  apiKey: 'SocgBG7E5uSYS0N9yiEyIvIO8cZf9Dpk',//签名Key
-  secondApikey: 'LH7BhZKuFMAMoBoRu3eM3SMtUzOgoRMw',//签名key1
+  apiKey: 'U8cyOAq7NetJYM8tgZyDuIxrHkuMCLxR',//签名Key
+  secondApikey: 'elnrwwrfcr3c1imfXKgP9eA2qqnHFOvS',//签名key1
   //默认语言
   defaultLang: 'pt',
   // 是否启用 DevTools 检测（禁止用户打开 F12）
