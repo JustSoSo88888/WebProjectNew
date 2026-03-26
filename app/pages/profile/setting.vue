@@ -5,7 +5,7 @@
             <!-- 银行卡设置 -->
             <div class="settings-group">
                 <div class="group-title">{{ $lang('支付设置') }}</div>
-                <div class="setting-item" @click="navigateTo('/profile/wallet')">
+                <div class="setting-item" @click="navigateTo('/profile/bankInfo')">
                     <div class="item-info">
                         <div class="item-icon wallet-icon">
                             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">

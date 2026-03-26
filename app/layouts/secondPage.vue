@@ -58,7 +58,7 @@
 const $lang = nuxtApp.$lang
 
 const pageTitleMap = {
-    '/profile/wallet': '银行卡管理',
+    '/profile/bankInfo': $lang('银行卡信息'),
     '/profile/coupon': '卡券',
     '/profile/address': '地址管理',
     '/profile/address/addressAdd': '地址管理',

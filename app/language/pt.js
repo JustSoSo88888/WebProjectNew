@@ -66,7 +66,16 @@ let pt = {
     "支付设置": "Configurações de pagamento",
     "银行卡设置": "Configurações do cartão bancário",
     "安全设置": "Configurações de segurança",
-    "密码修改成功":"Senha alterada com sucesso",
+    "密码修改成功": "Senha alterada com sucesso",
+    "银行卡信息": "Informações do Cartão Bancário",
+    "姓名": "Nome",
+    "请输入姓名": "Por favor, insira o nome",
+    "银行账户": "Conta Bancária",
+    "请选择银行账户": "Por favor, selecione uma conta bancária",
+    "账户号码": "Número da Conta",
+    "请输入账户号码": "Por favor, insira o número da conta",
+    "编辑": "Editar",
+    "提交": "Enviar",
 }
 
 export default pt;

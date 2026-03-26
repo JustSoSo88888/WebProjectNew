@@ -66,7 +66,16 @@ let en = {
     "支付设置": "Payment settings",
     "银行卡设置": "Bank card settings",
     "安全设置": "Security settings",
-    "密码修改成功":"Password changed successfully",
+    "密码修改成功": "Password changed successfully",
+    "银行卡信息": "Bank Card Information",
+    "姓名": "Name",
+    "请输入姓名": "Please enter your name",
+    "银行账户": "Bank Account",
+    "请选择银行账户": "Please select a bank account",
+    "账户号码": "Account Number",
+    "请输入账户号码": "Please enter the account number",
+    "编辑": "Edit",
+    "提交": "Submit",
 }
 
 export default en
