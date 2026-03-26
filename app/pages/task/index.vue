@@ -63,6 +63,7 @@
         v-for="task in filteredTasks"
         :key="task.id"
         class="task-card"
+        @click="navigateTo({path:'/task/details',query:{id:task.id}})"
       >
         <img :src="task.image" :alt="task.name" class="task-img" loading="lazy" />
         <div class="task-body">
@@ -100,11 +101,12 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed ,onMounted} from 'vue'
 import img1 from '@/assets/img/index/1.jpg'
 import img2 from '@/assets/img/index/2.jpg'
 import img3 from '@/assets/img/index/3.jpg'
 import img4 from '@/assets/img/index/4.jpg'
+import { navigateTo } from '#imports'
 
 definePageMeta({ layout: 'default' })
 
