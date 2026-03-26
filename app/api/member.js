@@ -30,3 +30,8 @@ export const setPayPassword = (params) => {
 export const tradingRecord = (params) => {
     return api.post('/member/trading_record', params);
 }
+
+// 获取充值信息获取
+export const getCoinAddress = (params) => {
+    return api.post('/member/get_coin_address', params);
+}

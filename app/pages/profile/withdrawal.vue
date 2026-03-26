@@ -89,30 +89,6 @@
             <p>银行将在0至72小时内完成转账，请您耐心等待。</p>
         </div>
 
-        <!-- Set Password Modal -->
-        <van-popup 
-            v-model:show="showSetPasswordModal" 
-            position="center" 
-            round
-            class="center-popup"
-        >
-            <div class="modal-content">
-                <div class="modal-icon">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-                        <circle cx="12" cy="14" r="2" fill="currentColor" opacity="0.3"/>
-                        <path d="M12 12v2M10 14h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div class="modal-title">请先设置支付密码</div>
-                <div class="modal-desc">为了保障您的资金安全，提现前需要先设置支付密码</div>
-                <div class="modal-actions">
-                    <button class="modal-btn modal-btn--cancel" @click="onCancelSetPassword">取消</button>
-                    <button class="modal-btn modal-btn--confirm" @click="goToSetPassword">去设置</button>
-                </div>
-            </div>
-        </van-popup>
-
         <!-- Success Modal -->
         <van-popup 
             v-model:show="showSuccessModal" 
@@ -155,7 +131,6 @@ const customAmount = ref('')
 const password = ref('')
 const hasSetPassword = ref(true)
 
-const showSetPasswordModal = ref(true)
 const showSuccessModal = ref(false)
 
 const actualAmount = computed(() => {
@@ -178,10 +153,6 @@ const onCustomInput = () => {
 }
 
 const handleSubmit = () => {
-    if (!hasSetPassword.value) {
-        showSetPasswordModal.value = true
-        return
-    }
 
     const amount = selectedAmount.value || parseFloat(customAmount.value)
     if (amount < minAmount.value) {
@@ -197,15 +168,7 @@ const handleSubmit = () => {
     showSuccessModal.value = true
 }
 
-const goToSetPassword = () => {
-    showSetPasswordModal.value = false
-    navigateTo('/withdrawal/setPassword')
-}
 
-const onCancelSetPassword = () => {
-    showSetPasswordModal.value = false
-    window.history.back()
-}
 </script>
 
 <style scoped lang="scss">
