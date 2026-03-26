@@ -178,6 +178,7 @@ import { navigateTo } from '#imports'
 import { awardLog } from '~/api/system'
 import LangModal from '~/components/LangModal.vue'
 import RedeemModal from '~/components/RedeemModal.vue'
+import { messageUnreadCount } from '~/api/chat'
 
 const currentLang = ref(storage.get('locale') || 'pt')
 const showLang = ref(false)
@@ -364,11 +365,18 @@ const handleMenu = (path) => {
 
 onMounted(() => {
     getAwardLog()
+    getMessageUnreadCount();
 })
 
 onUnmounted(() => {
 })
 
+//获取未读消息
+const getMessageUnreadCount = () => {
+    messageUnreadCount({}).then(res => {
+
+    })
+}
 //邀请收益列表
 const awardList = ref([])
 const getAwardLog = () => {
