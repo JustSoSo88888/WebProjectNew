@@ -76,7 +76,19 @@ let pt = {
     "请输入账户号码": "Por favor, insira o número da conta",
     "编辑": "Editar",
     "提交": "Enviar",
-    "交易记录":"Histórico de Transações",
+    "交易记录": "Histórico de Transações",
+    "现金礼物": "Presente em Dinheiro",
+    "请输入兑换码领取现金奖励": "Por favor, insira o código de resgate para receber recompensas em dinheiro",
+    "请输入兑换码": "Por favor, insira o código de resgate",
+    "立即兑换": "Resgatar Agora",
+    "查看详情": "Ver Detalhes",
+    "兑换成功": "Resgate Concluído",
+    "我知道了": "Entendi",
+    "现金礼物记录": "Histórico de Presentes em Dinheiro",
+    "没有更多了": "Não há mais dados",
+    "暂无数据": "Nenhum dado disponível",
+    "下拉即可刷新": "Puxe para atualizar",
+    "释放即可刷新": "Solte para atualizar",
 }
 
 export default pt;

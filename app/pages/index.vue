@@ -167,6 +167,7 @@
             </div>
         </div>
         <LangModal v-model="showLang" v-model:currentLang="currentLang" @change="handleLangChange" />
+        <RedeemModal v-model="showRedeem" />
     </div>
 </template>
 
@@ -176,8 +177,11 @@ import { showImagePreview } from 'vant'
 import { navigateTo } from '#imports'
 import { awardLog } from '~/api/system'
 import LangModal from '~/components/LangModal.vue'
+import RedeemModal from '~/components/RedeemModal.vue'
+
 const currentLang = ref(storage.get('locale') || 'pt')
 const showLang = ref(false)
+const showRedeem = ref(false)
 const handleLangChange = (lang) => {
     if (currentLang.value == lang) return;
     storage.set('locale', lang)
@@ -219,7 +223,7 @@ const menuItems = [
         path:'/profile/aboutUs'
     },
     {
-        label: '現金贈禮',
+        label: $lang('现金礼物'),
         bg: '#FFF7ED',
         icon: '<path d="M20 12v10H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" stroke="#D97706" stroke-width="1.6" stroke-linejoin="round"/>',
         path:'gift'
@@ -352,6 +356,7 @@ function previewActivity(index) {
 
 const handleMenu = (path) => {
     if(path === 'gift'){
+        showRedeem.value = true
         return
     }
     navigateTo(path)

@@ -76,7 +76,19 @@ let en = {
     "请输入账户号码": "Please enter the account number",
     "编辑": "Edit",
     "提交": "Submit",
-    "交易记录":"Transaction History",
+    "交易记录": "Transaction History",
+    "现金礼物": "Cash Gift",
+    "请输入兑换码领取现金奖励": "Please enter the redemption code to claim cash rewards",
+    "请输入兑换码": "Please enter the redemption code",
+    "立即兑换": "Redeem Now",
+    "查看详情": "View Details",
+    "兑换成功": "Redemption Successful",
+    "我知道了": "Got it",
+    "现金礼物记录": "Cash Gift History",
+    "没有更多了": "No more data",
+    "暂无数据": "No data",
+    "下拉即可刷新": "Pull down to refresh",
+    "释放即可刷新": "Release to refresh",
 }
 
 export default en

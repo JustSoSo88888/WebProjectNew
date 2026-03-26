@@ -19,7 +19,7 @@ const config = {
 
   // wss 长连接配置-客服
   socketUrl: 'wss://servicewss.slotjztilwdmw.shop/ws',
-  mockSocketUrl: 'wss://slotswapxservice.superproject.top/ws',
+  mockSocketUrl: 'wss://ntservice.xgdlandlink.shop/ws',
 }
 
 export default config

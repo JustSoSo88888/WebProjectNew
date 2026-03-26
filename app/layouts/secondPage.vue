@@ -62,6 +62,7 @@ const pageTitleMap = {
     '/profile/setPassword': $lang('设置交易密码'),
     '/profile/setting': $lang('设置'),
     '/profile/trade': $lang('交易记录'),
+    '/profile/redeem': $lang('现金礼物记录'),
     '/profile/coupon': '卡券',
     '/profile/address': '地址管理',
     '/profile/address/addressAdd': '地址管理',
