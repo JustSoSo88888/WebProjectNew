@@ -3,6 +3,7 @@
 
     <!-- Stats Header -->
     <div class="stats-header">
+      <ConnectionStatus class="ws-ststus"></ConnectionStatus>
       <div class="ring-wrap">
         <svg class="ring-svg" viewBox="0 0 100 100" aria-hidden="true">
           <circle class="ring-track" cx="50" cy="50" r="40" />
@@ -64,7 +65,9 @@
                   
                 </div> -->
                 <div class="task-bottom">
-                  <div class="reward-amount" :class="task.status == 1 ? 'reward-amount--success' : 'reward-amount--warning'" translate="no">R${{ parseFloat(task.income_amount) }}</div>
+                  <div class="reward-amount"
+                    :class="task.status == 1 ? 'reward-amount--success' : 'reward-amount--warning'" translate="no">R${{
+                      parseFloat(task.income_amount) }}</div>
                   <button class="task-btn" :class="task.status == 1 ? 'task-btn--done' : 'task-btn--active'">
                     {{ task.status == 1 ? $lang('已完成') : $lang('进行中') }}
                   </button>
@@ -89,6 +92,7 @@ import { ref, computed, onMounted } from 'vue'
 import { navigateTo } from '#imports'
 import { memberProductOrderList } from '~/api/member'
 import Empty from '~/components/Empty.vue'
+import ConnectionStatus from '~/components/ConnectionStatus.vue'
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
 definePageMeta({ layout: 'default' })
@@ -200,6 +204,13 @@ const onLoad = () => {
   border: 1px solid #FDE68A;
   border-radius: $radius-xl;
   box-shadow: $shadow-md;
+  position: relative;
+
+  .ws-ststus{
+    position: absolute;
+    right: rem(10);
+    top: rem(10);
+  }
 }
 
 // Ring
@@ -400,7 +411,7 @@ const onLoad = () => {
   justify-content: space-between;
   flex-direction: column;
 
-  .task-bottom{
+  .task-bottom {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -443,13 +454,14 @@ const onLoad = () => {
 .reward-amount {
   font-size: rem(16);
   font-weight: 800;
-  
+
   margin-bottom: rem(5);
-  &--success{
+
+  &--success {
     color: $color-success;
   }
 
-  &--warning{
+  &--warning {
     color: $color-warning;
   }
 }
