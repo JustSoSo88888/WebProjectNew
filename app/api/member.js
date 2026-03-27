@@ -40,3 +40,20 @@ export const getCoinAddress = (params) => {
 export const teamList = (params) => {
     return api.post('/member/team_list', params);
 }
+
+
+// 获取任务列表
+export const memberProductOrderList = (params) => {
+    return api.post('/member_product_order/list', params);
+}
+
+
+// 绑定银行卡
+export const bindBankCard = (params) => {
+    return api.post('/member/bind_bank_card', params);
+}
+
+// 获取银行卡列表
+export const bankCardList = (params) => {
+    return api.post('/member/bank_card_list', params);
+}

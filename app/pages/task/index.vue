@@ -6,12 +6,8 @@
       <div class="ring-wrap">
         <svg class="ring-svg" viewBox="0 0 100 100" aria-hidden="true">
           <circle class="ring-track" cx="50" cy="50" r="40" />
-          <circle
-            class="ring-progress"
-            cx="50" cy="50" r="40"
-            :stroke-dasharray="`${progressArc} ${circumference}`"
-            stroke-dashoffset="0"
-          />
+          <circle class="ring-progress" cx="50" cy="50" r="40" :stroke-dasharray="`${progressArc} ${circumference}`"
+            stroke-dashoffset="0" />
           <defs>
             <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#d97706" />
@@ -45,13 +41,8 @@
 
     <!-- Tabs -->
     <div class="tabs">
-      <button
-        v-for="tab in tabs"
-        :key="tab.key"
-        class="tab-btn"
-        :class="{ active: activeTab === tab.key }"
-        @click="activeTab = tab.key"
-      >
+      <button v-for="tab in tabs" :key="tab.key" class="tab-btn" :class="{ active: activeTab === tab.key }"
+        @click="activeTab = tab.key">
         {{ tab.label }}
         <span v-if="tab.count > 0" class="tab-badge">{{ tab.count }}</span>
       </button>
@@ -59,12 +50,8 @@
 
     <!-- Task List -->
     <div class="task-list">
-      <div
-        v-for="task in filteredTasks"
-        :key="task.id"
-        class="task-card"
-        @click="navigateTo({path:'/task/details',query:{id:task.id}})"
-      >
+      <div v-for="task in filteredTasks" :key="task.id" class="task-card"
+        @click="navigateTo({ path: '/task/details', query: { id: task.id } })">
         <img :src="task.image" :alt="task.name" class="task-img" loading="lazy" />
         <div class="task-body">
           <div class="task-name">{{ task.name }}</div>
@@ -80,18 +67,17 @@
             {{ task.completedAt }}
           </div>
         </div>
-        <button
-          class="task-btn"
-          :class="task.status === 'completed' ? 'task-btn--done' : 'task-btn--active'"
-          :aria-label="task.status === 'completed' ? '任务已完成' : '任务进行中'"
-        >
+        <button class="task-btn" :class="task.status === 'completed' ? 'task-btn--done' : 'task-btn--active'"
+          :aria-label="task.status === 'completed' ? '任务已完成' : '任务进行中'">
           {{ task.status === 'completed' ? '已完成' : '进行中' }}
         </button>
       </div>
 
       <div v-if="filteredTasks.length === 0" class="empty-state">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          <path
+            d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"
+            stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
         <span>暂无任务</span>
       </div>
@@ -101,14 +87,25 @@
 </template>
 
 <script setup>
-import { ref, computed ,onMounted} from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import img1 from '@/assets/img/index/1.jpg'
 import img2 from '@/assets/img/index/2.jpg'
 import img3 from '@/assets/img/index/3.jpg'
 import img4 from '@/assets/img/index/4.jpg'
 import { navigateTo } from '#imports'
+import { memberProductOrderList } from '~/api/member'
 
 definePageMeta({ layout: 'default' })
+
+onMounted(() => {
+  handleMemberProductOrderList()
+})
+
+const handleMemberProductOrderList = () => {
+  memberProductOrderList({ page: 1, rows: 10 }).then(res => {
+
+  })
+}
 
 const activeTab = ref('inprogress')
 
@@ -135,13 +132,13 @@ const progressPct = computed(() =>
 
 const tabs = computed(() => [
   { key: 'inprogress', label: '进行中', count: inProgressCount.value },
-  { key: 'all',        label: '全部',   count: totalCount.value },
-  { key: 'completed',  label: '完成',   count: completedCount.value },
+  { key: 'all', label: '全部', count: totalCount.value },
+  { key: 'completed', label: '完成', count: completedCount.value },
 ])
 
 const filteredTasks = computed(() => {
   if (activeTab.value === 'inprogress') return tasks.value.filter(t => t.status === 'inprogress')
-  if (activeTab.value === 'completed')  return tasks.value.filter(t => t.status === 'completed')
+  if (activeTab.value === 'completed') return tasks.value.filter(t => t.status === 'completed')
   return tasks.value
 })
 </script>
@@ -237,8 +234,13 @@ const filteredTasks = computed(() => {
   color: $color-text-primary;
   line-height: 1;
 
-  &--blue  { color: $color-primary; }
-  &--green { color: $color-success; }
+  &--blue {
+    color: $color-primary;
+  }
+
+  &--green {
+    color: $color-success;
+  }
 }
 
 .stat-label {
@@ -415,7 +417,9 @@ const filteredTasks = computed(() => {
     color: $color-primary;
     border: 1.5px solid rgba(217, 119, 6, 0.25);
 
-    &:active { background: #FDE68A; }
+    &:active {
+      background: #FDE68A;
+    }
   }
 
   &--done {
@@ -423,7 +427,9 @@ const filteredTasks = computed(() => {
     color: $color-success;
     border: 1.5px solid rgba(5, 150, 105, 0.25);
 
-    &:active { background: #D1FAE5; }
+    &:active {
+      background: #D1FAE5;
+    }
   }
 }
 
