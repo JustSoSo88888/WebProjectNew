@@ -8,28 +8,29 @@
                 <img v-if="userData.id == msg.user_id" src="https://api.dicebear.com/7.x/avataaars/svg?seed=user"
                     class="avatar" />
                 <div class="bubble">
-                    <div class="bubble-content" v-html="msg.content"></div>
+                    <div class="bubble-content" v-html="msg.content" @click="handleMessageClick"></div>
                 </div>
 
             </div>
         </div>
 
         <div class="chat-input">
-            <button class="input-btn">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" stroke="currentColor"
-                        stroke-width="1.8" stroke-linejoin="round" />
-                </svg>
-            </button>
-            <input v-model="inputText" type="text" class="input-field" placeholder="请输入内容..."
-                @keyup.enter="sendMessage" />
-            <button class="send-btn" @click="sendMessage">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-            </button>
+            <div class="input-box">
+                <input v-model="inputText" type="text" class="input-field" placeholder="请输入内容..."
+                    @keyup.enter="sendMessage" />
+                <button class="send-btn" @click="sendMessage">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+            <van-icon name="photo-o" class="img-icon" size="0.7rem" @click="openFileInput" />
         </div>
+        <input ref="file" style="display: none" type="file" accept=".png,.jpg,.jpeg,.gif" @change="handleFileChange">
+
+        <ImageUploadPreview v-model="isShowImagePopup" :file="uploadFile" @success="onUploadSuccess"
+            @cancel="onUploadCancel" />
     </div>
 </template>
 
@@ -38,6 +39,7 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { getAgentId, updateMessageIsRead, messageList } from '~/api/chat'
 const { $socket, $createSocket, $destroySocket, $bus } = useNuxtApp()
 import { useAppStore } from '~/stores/app.js'
+import { showImagePreview } from 'vant'
 
 const appStore = useAppStore()
 
@@ -45,10 +47,13 @@ definePageMeta({ layout: 'second-page' })
 onMounted(() => {
     handleGetAgentId();
     userData.value = storage.get('user_data') ? JSON.parse(storage.get('user_data')) : {}
+    handleUpdateMessageIsRead();
+    appStore.setUnReadCount(0)
 })
 onBeforeUnmount(() => {
     $socket()?.off('message', socketMessageHandler)
     appStore.setUnReadCount(0)
+    handleUpdateMessageIsRead()
 })
 const userData = ref({})
 const toUserId = ref(0)
@@ -61,6 +66,19 @@ const handleGetAgentId = () => {
             $socket()?.off('message', socketMessageHandler)
             $socket()?.on('message', socketMessageHandler)
         }
+    })
+}
+
+const handleMessageClick = (event) => {
+    if (event.target.classList.contains("clickable-img")) {
+        showImagePreview({ images: [event.target.src] })
+    }
+    
+}
+
+const handleUpdateMessageIsRead = () => {
+    updateMessageIsRead({ chat_user_id: toUserId.value }).then(res => {
+
     })
 }
 
@@ -96,19 +114,59 @@ const socketMessageHandler = (event) => {
 }
 
 
+const file = ref(null)
+const uploadFile = ref(null)
+const isShowImagePopup = ref(false)
+const openFileInput = () => {
+    file.value.click()
+
+}
+
+const handleFileChange = (event) => {
+    const fileList = event.target.files
+    if (fileList.length > 0) {
+        const f = fileList[0]
+        if (!f.type.match(/^image\/(png|jpe?g|gif)$/)) {
+            showMsg($lang("请上传 .png, .jpg, .jpeg 或 .gif 格式的图片"), 'fail')
+            return
+        }
+        uploadFile.value = f
+        isShowImagePopup.value = true
+    }
+}
 
 const sendMessage = () => {
-    let params = {
+    if (!inputText.value.trim()) return
+    const params = {
         user_id: userData.value.id,
         name: userData.value.nickname,
         head_image: userData.value.head_image,
         receiver_id: toUserId.value,
         attributes: {}
     }
-    console.log(params);
-
-    $socket().send(params, '123123213')
+    $socket().send(params, inputText.value)
     inputText.value = ''
+}
+
+const onUploadSuccess = (imageUrl) => {
+    const params = {
+        user_id: userData.value.id,
+        name: userData.value.nickname,
+        head_image: userData.value.head_image,
+        receiver_id: toUserId.value,
+        attributes: {}
+    }
+    $socket().send(params, `<div><img class="p-5 clickable-img" style='max-width: 180px' src='${imageUrl}'>`)
+    resetFileInput()
+}
+
+const onUploadCancel = () => {
+    resetFileInput()
+}
+
+const resetFileInput = () => {
+    uploadFile.value = null
+    if (file.value) file.value.value = ''
 }
 </script>
 
@@ -182,15 +240,21 @@ const sendMessage = () => {
 .chat-input {
     position: fixed;
     bottom: 0;
-    left: 0;
+    left: calc(50% - rem(187.5));
     right: 0;
     display: flex;
+    width: rem(375);
     align-items: center;
     gap: rem(10);
     padding: rem(12) rem(16);
     padding-bottom: calc(rem(12) + env(safe-area-inset-bottom));
     background: #fff;
     border-top: 1px solid $color-border;
+
+    .img-icon {
+        color: $color-primary;
+        cursor: pointer;
+    }
 }
 
 .input-btn {
@@ -214,23 +278,30 @@ const sendMessage = () => {
     }
 }
 
-.input-field {
-    flex: 1;
-    height: rem(36);
-    padding: 0 rem(12);
-    background: $color-bg-page;
-    border: none;
-    border-radius: $radius-lg;
-    font-size: rem(14);
-    outline: none;
+.input-box {
+    position: relative;
+    width: 100%;
 
-    &::placeholder {
-        color: $color-text-muted;
+    .input-field {
+        flex: 1;
+        height: rem(36);
+        padding: 0 rem(12);
+        background: $color-bg-page;
+        border: none;
+        border-radius: $radius-lg;
+        font-size: rem(14);
+        outline: none;
+        width: 100%;
+
+        &::placeholder {
+            color: $color-text-muted;
+        }
     }
 }
 
+
 .send-btn {
-    width: rem(36);
+    width: rem(50);
     height: rem(36);
     display: flex;
     align-items: center;
@@ -239,6 +310,9 @@ const sendMessage = () => {
     border-radius: $radius-md;
     color: #fff;
     flex-shrink: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
 
     svg {
         width: rem(18);

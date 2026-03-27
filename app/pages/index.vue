@@ -383,7 +383,7 @@ const getMessageUnreadCount = () => {
     getAgentId({}).then(res => {
         if (res.success) {
             messageUnreadCount({chat_user_id:res.data}).then(res => {
-                appStore.setUnReadCount(appStore.getUnReadCount + Number(res.data))
+                appStore.setUnReadCount(appStore.getUnReadCount + Number(res.data.total))
             })
         }
     })

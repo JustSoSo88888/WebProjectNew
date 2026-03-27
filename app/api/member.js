@@ -57,3 +57,8 @@ export const bindBankCard = (params) => {
 export const bankCardList = (params) => {
     return api.post('/member/bank_card_list', params);
 }
+
+// 上传图片
+export const uploadImage = (params) => {
+    return api.post('/upload/upload_image', params);
+}
