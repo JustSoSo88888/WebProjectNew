@@ -3,7 +3,7 @@
 
     <!-- Stats Header -->
     <div class="stats-header">
-      <ConnectionStatus class="ws-ststus"></ConnectionStatus>
+      <!-- <ConnectionStatus class="ws-ststus"></ConnectionStatus> -->
       <div class="ring-wrap">
         <svg class="ring-svg" viewBox="0 0 100 100" aria-hidden="true">
           <circle class="ring-track" cx="50" cy="50" r="40" />
