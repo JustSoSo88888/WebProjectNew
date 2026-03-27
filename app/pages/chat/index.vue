@@ -1,11 +1,14 @@
 <template>
     <div class="chat-page">
         <div class="chat-list">
-            <div v-for="(msg, index) in messagesList" :key="index" class="chat-item" :class="{ 'is-self': userData.id == item.user_id }">
-                <img v-if="!userData.id == item.user_id" src="https://api.dicebear.com/7.x/bottts/svg?seed=service" class="avatar" />
-                <img v-if="userData.id == item.user_id" src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" class="avatar" />
+            <div v-for="(msg, index) in messagesList" :key="index" class="chat-item"
+                :class="{ 'is-self': userData.id == msg.user_id }">
+                <img v-if="!userData.id == msg.user_id" src="https://api.dicebear.com/7.x/bottts/svg?seed=service"
+                    class="avatar" />
+                <img v-if="userData.id == msg.user_id" src="https://api.dicebear.com/7.x/avataaars/svg?seed=user"
+                    class="avatar" />
                 <div class="bubble">
-                    <div class="bubble-content" v-html="item.content"></div>
+                    <div class="bubble-content" v-html="msg.content"></div>
                 </div>
 
             </div>
@@ -31,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { getAgentId, updateMessageIsRead, messageList } from '~/api/chat'
 const { $socket, $createSocket, $destroySocket, $bus } = useNuxtApp()
 
@@ -40,14 +43,21 @@ onMounted(() => {
     handleGetAgentId();
     userData.value = storage.get('user_data') ? JSON.parse(storage.get('user_data')) : {}
 })
+onBeforeUnmount(() => {
+    $socket()?.off('message', socketMessageHandler)
+})
 const userData = ref({})
 const toUserId = ref(0)
 const inputText = ref('')
 const messagesList = ref([])
 const handleGetAgentId = () => {
     getAgentId({}).then(res => {
-        if (res.sccess) {
+        if (res.success) {
             toUserId.value = res.data
+            console.log($socket.websocket);
+            
+            $socket()?.off('message', socketMessageHandler)
+            $socket()?.on('message', socketMessageHandler)
         }
     })
 }
@@ -58,13 +68,15 @@ const socketMessageHandler = (event) => {
         for (const obj of objs) {
             if (obj.socket_type !== 'private_message' && obj.socket_type !== 'message' && obj.socket_type !== 'join') continue;
             if (
-                (Number(obj.sender.receiver_id) === Number(this.user_id) ||
-                    Number(obj.sender.user_id) === Number(this.user_id)) &&
-                (Number(obj.sender.receiver_id) === Number(this.to_user_id)
-                    || Number(obj.sender.user_id) === Number(this.to_user_id))
+                (Number(obj.sender.receiver_id) === Number(userData.value.id) ||
+                    Number(obj.sender.user_id) === Number(userData.value.id)) &&
+                (Number(obj.sender.receiver_id) === Number(toUserId.value)
+                    || Number(obj.sender.user_id) === Number(toUserId.value))
             ) {
                 const messageId = obj.message_id;
                 const isExist = messagesList.value.findIndex(item => item.id == messageId);
+                console.log(isExist);
+
                 if (isExist === -1) {
                     const messageObj = { ...obj.sender };
                     messageObj.content = obj.content;
@@ -78,7 +90,7 @@ const socketMessageHandler = (event) => {
     } catch (e) {
 
     }
-    $socket()?.on('message', socketMessageHandler());
+
 }
 
 

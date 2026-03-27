@@ -6,27 +6,6 @@
 </template>
 
 <script setup>
-// import { storage } from '~/utils/index'
-
-// const { $socket, $createSocket, $destroySocket, $bus } = useNuxtApp()
-
-// const userId = storage.get('user_id')
-
-// onMounted(() => {
-//   if (userId) {
-//     $createSocket(userId)
-//   }
-
-//   const handlers = $bus().get('new-private-message') || []
-//   handlers.push((data) => {
-//     console.log('收到新消息:', data)
-//   })
-//   $bus().set('new-private-message', handlers)
-// })
-
-// onUnmounted(() => {
-//   $destroySocket()
-// })
 if (import.meta.client) {
   const setFontSize = () => {
     const d = document.documentElement
