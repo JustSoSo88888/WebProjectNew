@@ -3,10 +3,15 @@
         <div class="loading-overlay" v-if="loading">
             <van-loading type="spinner" color="#ffd700" size="40px" />
         </div>
-
         <template v-else>
             <div class="lucky-header">
-                <h1 class="page-title">Lucky Draw</h1>
+                <div class="header-top">
+                    <h1 class="page-title">Lucky Draw</h1>
+                    <div class="records-entry">
+                        <van-icon name="orders-o" size="20" />
+                        <span>记录</span>
+                    </div>
+                </div>
                 <div class="chances-wrap">
                     <span class="chances-text">剩余次数: <strong>{{ chances }}</strong></span>
                 </div>
@@ -21,14 +26,14 @@
                         'is-center': index === 4
                     }">
                         <template v-if="item && index !== 4">
-                            <div class="item-icon">{{ item.icon }}</div>
-                            <div class="item-name">{{ item.name }}</div>
+                            <div class="item-icon">💵</div>
+                            <div class="item-name" translate="no">{{ item.title }}</div>
                         </template>
                     </div>
 
                     <div class="center-btn" :class="{ disabled: isSpinning || chances <= 0 }" @click="startDraw">
                         <van-loading v-if="isSpinning" color="#fff" size="24px" />
-                        <span v-else>{{ isSpinning ? '抽奖中...' : (chances > 0 ? '开始' : '无次数') }}</span>
+                        <span v-else>{{ isSpinning ? '抽奖中...' : '开始' }}</span>
                     </div>
                 </div>
             </div>
@@ -73,15 +78,47 @@
 </template>
 
 <script setup>
-import { showToast } from 'vant'
-import { getLuckyConfig, doLuckyDraw, getLuckyRecords } from '~/api/lucky'
-
+import { ref, onMounted } from 'vue'
+import { getLuckyConfig, doLuckyDraw, getLuckyRecords } from '~/api/lucky';
+import { getMemberInfo ,turntableConfig } from '~/api/turntable';
+import { navigateTo } from '#imports'
 definePageMeta({
     layout: 'second-page',
     pageTransition: { name: 'slide-left', mode: 'out-in' },
     layoutTransition: false
 })
 
+onMounted(() => {
+    handleGetMemberInfo()
+    handleTurntableConfig()
+})
+//获取转盘次数
+const handleGetMemberInfo = () => {
+    getMemberInfo({}).then(res => {
+
+    }).catch(error => {
+
+    })
+}
+
+//获取转盘配置
+const handleTurntableConfig = () => {
+    turntableConfig({}).then(res => {
+        loading.value = false
+        if(res.success){
+            prizes.value = res.data
+        }else{
+            showMsg(res.message, 'fail')
+        }
+
+    }).catch(error => {
+        loading.value = false
+        showMsg(error.message, 'fail')
+    })
+}
+
+const nuxtApp = useNuxtApp()
+const $lang = nuxtApp.$lang
 const loading = ref(true)
 const drawLoading = ref(false)
 const recordsLoading = ref(false)
@@ -95,37 +132,12 @@ const wonAmount = ref(0)
 const records = ref([])
 const scrollContainer = ref(null)
 
+
 const gridItems = computed(() => {
     let items = []
     if (prizes.value.length >= 8) {
         items = prizes.value.slice(0, 8)
-    } else if (prizes.value.length > 0) {
-        items = [...prizes.value]
-        const defaultPrizes = [
-            { icon: '💰', name: 'R$50' },
-            { icon: '💵', name: 'R$100' },
-            { icon: '🎁', name: 'R$20' },
-            { icon: '🪙', name: 'R$200' },
-            { icon: '💎', name: 'R$80' },
-            { icon: '🏆', name: 'R$150' },
-            { icon: '⭐', name: 'R$10' },
-            { icon: '🌟', name: 'R$30' },
-        ]
-        for (let i = items.length; i < 8; i++) {
-            items.push(defaultPrizes[i] || { icon: '❓', name: 'R$0' })
-        }
-    } else {
-        items = [
-            { icon: '💰', name: 'R$50' },
-            { icon: '💵', name: 'R$100' },
-            { icon: '🎁', name: 'R$20' },
-            { icon: '🪙', name: 'R$200' },
-            { icon: '💎', name: 'R$80' },
-            { icon: '🏆', name: 'R$150' },
-            { icon: '⭐', name: 'R$10' },
-            { icon: '🌟', name: 'R$30' },
-        ]
-    }
+    } 
     return items
 })
 
@@ -137,33 +149,6 @@ const gridItemsWithPlaceholder = computed(() => {
     return items
 })
 
-const fetchConfig = async () => {
-    try {
-        const res = await getLuckyConfig()
-        if (res.success) {
-            prizes.value = res.data.prizes || []
-            chances.value = res.data.chances ?? 0
-        }
-    } catch (error) {
-        console.error('Failed to fetch config:', error)
-    } finally {
-        loading.value = false
-    }
-}
-
-const fetchRecords = async () => {
-    recordsLoading.value = true
-    try {
-        const res = await getLuckyRecords()
-        if (res.success) {
-            records.value = res.data.list || []
-        }
-    } catch (error) {
-        console.error('Failed to fetch records:', error)
-    } finally {
-        recordsLoading.value = false
-    }
-}
 
 const startDraw = async () => {
     if (isSpinning.value || chances.value <= 0 || drawLoading.value) return
@@ -207,9 +192,6 @@ const startDraw = async () => {
     }
 }
 
-onMounted(async () => {
-    await Promise.all([fetchConfig(), fetchRecords()])
-})
 </script>
 
 <style scoped lang="scss">
@@ -235,14 +217,21 @@ onMounted(async () => {
 
 .lucky-header {
     text-align: center;
-    padding: rem(20) 0;
+    padding-top: rem(20);
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: rem(12);
 }
 
 .page-title {
     font-size: rem(24);
     font-weight: 600;
     color: #fff;
-    margin: 0 0 rem(16);
+    margin: 0;
 }
 
 .chances-wrap {
@@ -261,6 +250,25 @@ onMounted(async () => {
     strong {
         color: #d97706;
         font-weight: 600;
+    }
+}
+
+.records-entry {
+    display: flex;
+    align-items: center;
+    gap: rem(4);
+    padding: rem(6) rem(12);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: rem(16);
+    font-size: rem(13);
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:active {
+        transform: scale(0.96);
+        background: rgba(255, 255, 255, 0.1);
     }
 }
 
@@ -317,7 +325,7 @@ onMounted(async () => {
 }
 
 .item-icon {
-    font-size: rem(28);
+    font-size: rem(32);
     margin-bottom: rem(4);
 }
 
