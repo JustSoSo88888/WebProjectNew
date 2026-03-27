@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref, computed} from 'vue';
+import { ref, computed } from 'vue';
 import { tradingRecord } from '~/api/member';
 import Empty from '~/components/Empty.vue';
 import ScrollTab from '~/components/ScrollTab.vue';
@@ -119,11 +119,8 @@ const onLoad = () => {
         finished.value = true
         loading.value = false;
         hideLoading();
-        console.log(error);
-        
         showMsg(error.message, 'fail')
     })
-
 }
 
 </script>

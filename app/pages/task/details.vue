@@ -6,11 +6,11 @@
 
             <div class="claim-btn" :class="{ 'claim-btn--disabled': !finished }" @click="finished && claimReward()">
                 <span v-if="!finished" class="btn-text">{{ countdown }}s</span>
-                <span v-else>立即领取</span>
+                <span v-else>{{ $lang('立即领取') }}</span>
                 <div v-if="finished" class="btn-shine"></div>
             </div>
 
-            <div v-if="showSuccess" class="success-modal" @click="showSuccess = false">
+            <div v-if="showSuccess" class="success-modal" @click="closeShow">
                 <div class="success-card">
                     <div class="particles">
                         <span v-for="i in 12" :key="i" class="particle" :style="{ '--delay': i * 0.1 + 's' }"></span>
@@ -24,12 +24,12 @@
                             </svg>
                         </div>
                     </div>
-                    <div class="success-text">恭喜获得</div>
+                    <div class="success-text">{{ $lang('恭喜获得') }}</div>
                     <div class="success-amount">
                         <span class="currency">R$</span>
-                        <span class="value">50</span>
+                        <span class="value">{{ incomeAmount }}</span>
                     </div>
-                    <div class="success-desc">奖励已发放到您的账户</div>
+                    <div class="success-desc">{{ $lang('奖励已发放到您的账户') }}</div>
                 </div>
             </div>
         </div>
@@ -38,6 +38,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { navigateTo } from '#imports'
+import { getOrderIncome } from '~/api/product'
 
 definePageMeta({
     layout: 'second-page',
@@ -45,15 +47,21 @@ definePageMeta({
     layoutTransition: false
 })
 
+const nuxtApp = useNuxtApp()
+const $lang = nuxtApp.$lang
+
 const videoRef = ref(null)
-const videoSrc = new URL('~/assets/video/bgvideo.mp4', import.meta.url).href
+const videoSrc = ref('')
 const finished = ref(false)
-const countdown = ref(5)
+const countdown = ref()
+const orderId = ref(0)
 const showSuccess = ref(false)
+const appStore = useAppStore()
+const incomeAmount = ref(0)
 let timer = null
 
 const onVideoPlay = () => {
-    if (!finished.value && countdown.value === 5) {
+    if (!finished.value) {
         timer = setInterval(() => {
             countdown.value--
             if (countdown.value <= 0) {
@@ -64,13 +72,64 @@ const onVideoPlay = () => {
     }
 }
 
+const closeShow = () => {
+    showSuccess.value = false
+    history.back()
+}
+
 const claimReward = () => {
-    showSuccess.value = true
+
+    showLoading($lang('加载中'))
+    getOrderIncome({ order_id: orderId.value }).then(res => {
+        hideLoading();
+        if (res.success) {
+            showSuccess.value = true
+        } else {
+            showMsg(res.message, 'fail')
+        }
+
+    }).catch(error => {
+        hideLoading();
+        showMsg(error.message, 'fail')
+    })
 }
 
 onMounted(() => {
-    if (videoRef.value) {
-        videoRef.value.play()
+    const data = appStore.getTaskData
+    if (Object.keys(data).length > 0) {
+        console.log(data);
+        videoSrc.value = data.video_url
+        countdown.value = data.watch_seconds
+        orderId.value = data.id
+        incomeAmount.value = data.income_amount
+        // Handle video playback with proper event handling
+        if (videoRef.value) {
+            const playVideo = () => {
+                videoRef.value.play().catch(e => {
+                    console.log('Play failed:', e);
+                    // If play fails due to interruption, try again after delay
+                    if (e.name === 'AbortError') {
+                        setTimeout(() => {
+                            videoRef.value.play().catch(e => console.log('Retry play failed:', e));
+                        }, 300);
+                    }
+                });
+            };
+
+            // If video is already loaded, play immediately
+            if (videoRef.value.readyState >= 2) {
+                playVideo();
+            } else {
+                // Wait for video to be ready
+                const onCanPlay = () => {
+                    videoRef.value.removeEventListener('canplay', onCanPlay);
+                    playVideo();
+                };
+                videoRef.value.addEventListener('canplay', onCanPlay, { once: true });
+            }
+        }
+    } else {
+        history.back()
     }
 })
 </script>
@@ -92,8 +151,8 @@ onMounted(() => {
 }
 
 .claim-btn {
-    position: absolute;
-    bottom: rem(100);
+    position: fixed;
+    bottom: rem(10);
     left: 50%;
     transform: translateX(-50%);
     padding: rem(14) rem(40);
@@ -104,7 +163,7 @@ onMounted(() => {
     cursor: pointer;
     overflow: hidden;
     transition: all 0.3s ease;
-    min-width: rem(200);
+    min-width: rem(270);
     text-align: center;
 
     &--disabled {
@@ -366,5 +425,6 @@ onMounted(() => {
     margin-top: rem(8);
     position: relative;
     z-index: 1;
+    text-align: center;
 }
 </style>

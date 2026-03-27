@@ -8,7 +8,6 @@ const bus = new Map()
 
 
 export default defineNuxtPlugin(() => {
-    // return
     const appStore = useAppStore()
     const router = useRouter()
 
@@ -34,9 +33,15 @@ export default defineNuxtPlugin(() => {
                 const eventBus = getBus()
                 const handlers = eventBus.get('new-private-message') || []
                 handlers.forEach(handler => handler({ content: obj }))
-                
             }
         }
+    }
+
+    const attachStatusHandlers = () => {
+        if (!socketInstance) return
+        socketInstance.on('open', () => appStore.setSocketStatus('connected'))
+        socketInstance.on('close', () => appStore.setSocketStatus('disconnected'))
+        socketInstance.on('error', () => appStore.setSocketStatus('disconnected'))
     }
 
     const attachHandler = () => {
@@ -48,8 +53,10 @@ export default defineNuxtPlugin(() => {
 
     const createSocket = (userId) => {
         if (socketInstance) socketInstance.close()
+        appStore.setSocketStatus('connecting')
         socketInstance = new WebSocketService(userId)
         attachHandler()
+        attachStatusHandlers()
         return socketInstance
     }
 
@@ -61,16 +68,29 @@ export default defineNuxtPlugin(() => {
             socketInstance.close()
             socketInstance = null
         }
+        appStore.setSocketStatus('disconnected')
+    }
+
+    const reconnect = () => {
+        const token = storage.get('token')
+        const userId = storage.get('user_id')
+        if (!token || !userId) return
+        createSocket(userId)
     }
 
     router.afterEach((to) => {
-        if (EXCLUDED_ROUTES.includes(to.name)) return
+        if (EXCLUDED_ROUTES.includes(to.name)) {
+            destroySocket()
+            return
+        }
         const token = storage.get('token')
         const userId = storage.get('user_id')
         if (!token || !userId) return
         if (!socketInstance) {
+            appStore.setSocketStatus('connecting')
             socketInstance = new WebSocketService(userId)
             attachHandler()
+            attachStatusHandlers()
         }
     })
 
@@ -79,6 +99,7 @@ export default defineNuxtPlugin(() => {
             createSocket,
             socket: getSocket,
             destroySocket,
+            reconnect,
             bus: getBus
         }
     }

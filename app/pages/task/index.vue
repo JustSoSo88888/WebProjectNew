@@ -6,8 +6,7 @@
       <div class="ring-wrap">
         <svg class="ring-svg" viewBox="0 0 100 100" aria-hidden="true">
           <circle class="ring-track" cx="50" cy="50" r="40" />
-          <circle class="ring-progress" cx="50" cy="50" r="40" :stroke-dasharray="`${progressArc} ${circumference}`"
-            stroke-dashoffset="0" />
+          <circle class="ring-progress" cx="50" cy="50" r="40" :stroke-dasharray="`${progressArc} ${circumference}`" stroke-dashoffset="0" />
           <defs>
             <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#d97706" />
@@ -16,25 +15,24 @@
           </defs>
         </svg>
         <div class="ring-center">
-          <div class="ring-pct">{{ progressPct }}%</div>
-          <div class="ring-sub">完成率</div>
+          <div class="ring-pct">{{progressPct}}%</div>
         </div>
       </div>
 
       <div class="stats-info">
         <div class="stat-item">
-          <div class="stat-val stat-val--blue">{{ inProgressCount }}</div>
-          <div class="stat-label">进行中</div>
+          <div class="stat-val stat-val--blue">{{ todayUndoneCount }}</div>
+          <div class="stat-label">{{ $lang('进行中') }}</div>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-          <div class="stat-val stat-val--green">{{ completedCount }}</div>
-          <div class="stat-label">已完成</div>
+          <div class="stat-val stat-val--green">{{ todayCompletedCount }}</div>
+          <div class="stat-label">{{ $lang('已完成') }}</div>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
           <div class="stat-val">{{ totalCount }}</div>
-          <div class="stat-label">全部任务</div>
+          <div class="stat-label">{{ $lang('全部') }}</div>
         </div>
       </div>
     </div>
@@ -42,45 +40,40 @@
     <!-- Tabs -->
     <div class="tabs">
       <button v-for="tab in tabs" :key="tab.key" class="tab-btn" :class="{ active: activeTab === tab.key }"
-        @click="activeTab = tab.key">
+        @click="handleTab(tab.key)">
         {{ tab.label }}
-        <span v-if="tab.count > 0" class="tab-badge">{{ tab.count }}</span>
       </button>
     </div>
 
     <!-- Task List -->
     <div class="task-list">
-      <div v-for="task in filteredTasks" :key="task.id" class="task-card"
-        @click="navigateTo({ path: '/task/details', query: { id: task.id } })">
-        <img :src="task.image" :alt="task.name" class="task-img" loading="lazy" />
-        <div class="task-body">
-          <div class="task-name">{{ task.name }}</div>
-          <div class="task-reward">
-            <span class="reward-label">收益</span>
-            <span class="reward-amount">+R${{ task.reward }}</span>
-          </div>
-          <div v-if="task.status === 'completed'" class="task-time">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" />
-              <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-            </svg>
-            {{ task.completedAt }}
-          </div>
-        </div>
-        <button class="task-btn" :class="task.status === 'completed' ? 'task-btn--done' : 'task-btn--active'"
-          :aria-label="task.status === 'completed' ? '任务已完成' : '任务进行中'">
-          {{ task.status === 'completed' ? '已完成' : '进行中' }}
-        </button>
-      </div>
+      <van-pull-refresh :pulling-text="$lang('下拉即可刷新') + '...'" :loosing-text="$lang('释放即可刷新') + '...'"
+        :loading-text="$lang('加载中') + '...'" v-model="refreshing" @refresh="onRefresh">
+        <van-list v-model:loading="loading" :finished="finished" :loading-text="$lang('加载中')"
+          :finished-text="list.length > 0 ? $lang('没有更多了') : ''" @load="onLoad">
+          <template v-if="list.length > 0">
+            <div v-for="task in list" :key="task.id" class="task-card"
+              @click="toDetails(task)">
+              <img :src="task.image_url" class="task-img" loading="lazy" />
+              <div class="task-body">
+                <div class="task-name">{{ task.product_name }}</div>
+                <div class="task-reward">
+                  <span class="reward-label">{{ $lang('收益') }}</span>
+                  <span class="reward-amount" translate="no">+R${{ parseFloat(task.income_amount) }}</span>
+                </div>
+              </div>
+              <button class="task-btn" :class="task.status == 1 ? 'task-btn--done' : 'task-btn--active'">
+                {{ task.status == 1 ? $lang('已完成') : $lang('进行中') }}
+              </button>
+            </div>
+          </template>
+          <template v-else>
+            <Empty></Empty>
+          </template>
+        </van-list>
+      </van-pull-refresh>
 
-      <div v-if="filteredTasks.length === 0" class="empty-state">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path
-            d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"
-            stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        <span>暂无任务</span>
-      </div>
+
     </div>
 
   </div>
@@ -88,59 +81,100 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import img1 from '@/assets/img/index/1.jpg'
-import img2 from '@/assets/img/index/2.jpg'
-import img3 from '@/assets/img/index/3.jpg'
-import img4 from '@/assets/img/index/4.jpg'
 import { navigateTo } from '#imports'
 import { memberProductOrderList } from '~/api/member'
-
+import Empty from '~/components/Empty.vue'
+const nuxtApp = useNuxtApp()
+const $lang = nuxtApp.$lang
 definePageMeta({ layout: 'default' })
+const appStore = useAppStore()
 
-onMounted(() => {
-  handleMemberProductOrderList()
-})
-
-const handleMemberProductOrderList = () => {
-  memberProductOrderList({ page: 1, rows: 10 }).then(res => {
-
-  })
-}
-
-const activeTab = ref('inprogress')
-
-const tasks = ref([
-  { id: 1, name: '完成品牌推广视频拍摄', reward: '320.00', image: img1, status: 'inprogress', completedAt: null },
-  { id: 2, name: '社交媒体内容创作任务', reward: '180.00', image: img2, status: 'inprogress', completedAt: null },
-  { id: 3, name: '产品评测文章撰写', reward: '250.00', image: img3, status: 'completed', completedAt: '2026-03-17 14:32' },
-  { id: 4, name: '直播带货推广活动', reward: '500.00', image: img4, status: 'completed', completedAt: '2026-03-16 09:15' },
-  { id: 5, name: '新品试用体验报告', reward: '150.00', image: img1, status: 'inprogress', completedAt: null },
-  { id: 6, name: '用户调研问卷填写', reward: '80.00', image: img2, status: 'completed', completedAt: '2026-03-15 18:44' },
+const loading = ref(false)
+const finished = ref(false)
+const refreshing = ref(false)
+const page = ref(1)
+const rows = ref(20)
+const list = ref([])
+const activeTab = ref(0)
+const totalCount = ref(0)
+const todayUndoneCount = ref(0)
+const todayCompletedCount = ref(0) 
+const tabs = computed(() => [
+  { key: 0, label: $lang('进行中') },
+  { key: '', label: $lang('全部') },
+  { key: 1, label: $lang('完成') },
 ])
 
-const inProgressCount = computed(() => tasks.value.filter(t => t.status === 'inprogress').length)
-const completedCount = computed(() => tasks.value.filter(t => t.status === 'completed').length)
-const totalCount = computed(() => tasks.value.length)
+const toDetails = (task) => {
+  if(task.status == 1) return
+  appStore.setTaskData(task)
+  navigateTo('/task/details')
+}
 
 const circumference = 2 * Math.PI * 40
 const progressArc = computed(() =>
-  totalCount.value === 0 ? 0 : (completedCount.value / totalCount.value) * circumference
+  totalCount.value === 0 ? 0 : (todayCompletedCount.value / totalCount.value) * circumference
 )
 const progressPct = computed(() =>
-  totalCount.value === 0 ? 0 : Math.round((completedCount.value / totalCount.value) * 100)
+  totalCount.value === 0 ? 0 : Math.round((todayCompletedCount.value / totalCount.value) * 100)
 )
 
-const tabs = computed(() => [
-  { key: 'inprogress', label: '进行中', count: inProgressCount.value },
-  { key: 'all', label: '全部', count: totalCount.value },
-  { key: 'completed', label: '完成', count: completedCount.value },
-])
+const handleTab = (key) => {
+  activeTab.value = key
+  onRefresh()
+}
 
-const filteredTasks = computed(() => {
-  if (activeTab.value === 'inprogress') return tasks.value.filter(t => t.status === 'inprogress')
-  if (activeTab.value === 'completed') return tasks.value.filter(t => t.status === 'completed')
-  return tasks.value
-})
+const onRefresh = () => {
+  finished.value = false;
+  page.value = 1;
+  loading.value = true;
+  onLoad();
+}
+
+const onLoad = () => {
+  let param = {
+    page: page.value,
+    rows: rows.value,
+    status: activeTab.value
+  }
+  showLoading($lang('加载中'))
+  memberProductOrderList(param).then(res => {
+    hideLoading();
+    refreshing.value = false
+    if (res.success) {
+      
+      todayUndoneCount.value = res.data.today_undone_count || 0
+      todayCompletedCount.value = res.data.today_completed_count || 0
+      totalCount.value = res.data.today_undone_count + res.data.today_completed_count
+      const dataList = res.data.rows || []
+      if (page.value <= 1) {
+        list.value = dataList
+      } else {
+        list.value = [...list.value, ...dataList]
+      }
+      if (dataList.length >= rows.value) {
+        page.value++
+      } else {
+        finished.value = true
+      }
+
+    } else {
+      showMsg(res.message, 'fail')
+      finished.value = true
+    }
+    loading.value = false
+  }).catch(error => {
+    finished.value = true
+    loading.value = false;
+    hideLoading();
+    showMsg(error.message, 'fail')
+  })
+}
+
+
+
+
+
 </script>
 
 <style scoped lang="scss">
@@ -226,6 +260,7 @@ const filteredTasks = computed(() => {
   flex-direction: column;
   align-items: center;
   gap: rem(4);
+  flex: 1;
 }
 
 .stat-val {
@@ -328,6 +363,7 @@ const filteredTasks = computed(() => {
   border: 1px solid $color-border;
   border-radius: $radius-lg;
   box-shadow: $shadow-sm;
+  margin-bottom: rem(10);
   cursor: pointer;
   transition: $transition-fast;
 

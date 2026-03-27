@@ -13,15 +13,18 @@ export const useAppStore = defineStore('app', {
     isPWAShow: true,
     localeLang: storage.get('locale') ? storage.get('locale') : config.defaultLang,
     langList: importLangImages(),
-    unReadCount: 0,//客服未读消息
-
+    unReadCount: 0,
+    socketStatus: 'disconnected',
+    taskData:{},
   }),
   getters: {
     getIsMobile: state => state.isMobile,
     getIsPWAShow: state => state.isPWAShow,
     getLocaleLang: state => state.localeLang,
     getLangList: state => state.langList,
-    getUnReadCount:state => state.unReadCount,
+    getUnReadCount: state => state.unReadCount,
+    getSocketStatus: state => state.socketStatus,
+    getTaskData:state => state.taskData,
   },
   actions: {
     setIsPWAshow(val) {
@@ -33,5 +36,11 @@ export const useAppStore = defineStore('app', {
     setUnReadCount(value) {
       this.unReadCount = value
     },
+    setSocketStatus(status) {
+      this.socketStatus = status
+    },
+    setTaskData(status){
+      this.taskData = status
+    }
   },
 })

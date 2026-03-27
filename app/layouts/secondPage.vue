@@ -33,6 +33,7 @@
                         <path d="M9 12h6M9 16h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
                     </svg>
                 </button>
+                <ConnectionStatus />
             </div>
         </div>
 
@@ -69,7 +70,7 @@ const pageTitleMap = {
     '/profile/recharge': '充值',
     '/profile/withdrawal': '提现',
     '/team/details': $lang('团队详情'),
-    '/task/details': '任务详情',
+    '/task/details': $lang('任务详情'),
     '/finance/record': '理财记录',
     '/finance/detail': '产品详情',
     '/profile/lucky': $lang('幸运转盘'),

@@ -111,6 +111,19 @@ let en = {
     "收下奖励": "Claim Reward",
     "记录": "Records",
     "我的奖励":"My Rewards",
+    "在线": "Online",
+    "连接中": "Connecting",
+    "离线": "Offline",
+    "进行中": "In Progress",
+    "已完成": "Completed",
+    "全部": "All",
+    "收益": "Earnings",
+    "进行中": "In Progress",
+    "完成": "Completed",
+    "立即领取": "Claim Now",
+    "恭喜获得": "Congratulations",
+    "奖励已发放到您的账户": "The reward has been credited to your account",
+    "任务详情":"Task Details",
 }
 
 export default en

@@ -111,6 +111,19 @@ let pt = {
     "收下奖励": "Receber Recompensa",
     "记录": "Registros",
     "我的奖励":"Minhas Recompensas",
+    "在线": "Online",
+    "连接中": "Conectando",
+    "离线": "Offline",
+    "进行中": "Em andamento",
+    "已完成": "Concluído",
+    "全部": "Todos",
+    "收益": "Ganhos",
+    "进行中": "Em andamento",
+    "完成": "Concluído",
+    "立即领取": "Receber agora",
+    "恭喜获得": "Parabéns",
+    "奖励已发放到您的账户": "A recompensa foi creditada na sua conta",
+    "任务详情":"Detalhes da Tarefa",
 }
 
 export default pt;
