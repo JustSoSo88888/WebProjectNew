@@ -37,6 +37,9 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { getAgentId, updateMessageIsRead, messageList } from '~/api/chat'
 const { $socket, $createSocket, $destroySocket, $bus } = useNuxtApp()
+import { useAppStore } from '~/stores/app.js'
+
+const appStore = useAppStore()
 
 definePageMeta({ layout: 'second-page' })
 onMounted(() => {
@@ -45,6 +48,7 @@ onMounted(() => {
 })
 onBeforeUnmount(() => {
     $socket()?.off('message', socketMessageHandler)
+    appStore.setUnReadCount(0)
 })
 const userData = ref({})
 const toUserId = ref(0)
@@ -54,8 +58,6 @@ const handleGetAgentId = () => {
     getAgentId({}).then(res => {
         if (res.success) {
             toUserId.value = res.data
-            console.log($socket.websocket);
-            
             $socket()?.off('message', socketMessageHandler)
             $socket()?.on('message', socketMessageHandler)
         }

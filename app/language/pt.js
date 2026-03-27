@@ -124,6 +124,7 @@ let pt = {
     "恭喜获得": "Parabéns",
     "奖励已发放到您的账户": "A recompensa foi creditada na sua conta",
     "任务详情":"Detalhes da Tarefa",
+    "图片":"Image",
 }
 
 export default pt;

@@ -5,12 +5,14 @@
         </div>
         <BottomNav/>
         <PwaInstallPrompt/>
+        <MsgPopup></MsgPopup>
     </div>
 </template>
 
 <script setup>
 import { ref,onMounted } from 'vue'; 
 import { hasSetPayPassword } from '~/api/member';
+import MsgPopup from '~/components/MsgPopup.vue';
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
 const $dialog = nuxtApp.$dialog

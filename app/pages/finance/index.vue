@@ -61,9 +61,7 @@
     <div class="product-section">
       <div class="section-header">
         <span class="section-title">理财产品</span>
-        <span class="section-count">{{ products.length }} 个产品</span>
       </div>
-
       <div class="product-list">
         <div v-for="item in products" :key="item.id" class="product-card" @click="handleBuy(item)">
           <div class="product-top">
@@ -91,10 +89,13 @@
             </div>
             <div class="product-progress-wrap">
               <div class="progress-info">
-                <span class="progress-pct">{{ item.progress }}%</span>
+                <span class="progress-pct">{{ item.total_amount == 0 ? 100 : ((item.surplus_amount / item.total_amount) *
+                  100) }}%</span>
               </div>
               <div class="progress-bar">
-                <div class="progress-fill" :style="{ width: item.progress + '%' }"></div>
+                <div class="progress-fill"
+                  :style="{ width: (parseFloat(item.surplus_amount) / parseFloat(item.total_amount) * 100) + '%' }">
+                </div>
               </div>
             </div>
           </div>

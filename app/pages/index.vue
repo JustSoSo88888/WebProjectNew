@@ -28,12 +28,16 @@
                     </button>
                     <button class="tool-icon" @click="navigateTo('/profile/email')">
                         <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                            <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </button>
                     <button class="tool-icon" @click="navigateTo('/chat')">
                         <van-icon name="service-o" size=".35rem" />
+                        <span class="dot" v-if="appStore.getUnReadCount > 0">{{ appStore.getUnReadCount }}</span>
                     </button>
                 </div>
             </div>
@@ -178,7 +182,10 @@ import { navigateTo } from '#imports'
 import { awardLog } from '~/api/system'
 import LangModal from '~/components/LangModal.vue'
 import RedeemModal from '~/components/RedeemModal.vue'
-import { messageUnreadCount } from '~/api/chat'
+import { messageUnreadCount, getAgentId } from '~/api/chat'
+import { useAppStore } from '~/stores/app.js'
+
+const appStore = useAppStore()
 
 const currentLang = ref(storage.get('locale') || 'pt')
 const showLang = ref(false)
@@ -215,37 +222,37 @@ const menuItems = [
         label: $lang('新闻'),
         bg: '#EFF6FF',
         icon: '<path d="M4 6h16M4 10h16M4 14h10" stroke="#2563EB" stroke-width="1.8" stroke-linecap="round"/>',
-        path:'/profile/news'
+        path: '/profile/news'
     },
     {
         label: $lang('关于我们'),
         bg: '#F5F3FF',
         icon: '<circle cx="12" cy="12" r="9" stroke="#7C3AED" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round"/>',
-        path:'/profile/aboutUs'
+        path: '/profile/aboutUs'
     },
     {
         label: $lang('现金礼物'),
         bg: '#FFF7ED',
         icon: '<path d="M20 12v10H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" stroke="#D97706" stroke-width="1.6" stroke-linejoin="round"/>',
-        path:'gift'
+        path: 'gift'
     },
     {
         label: $lang('幸运转盘'),
         bg: '#FFF1F2',
         icon: '<circle cx="12" cy="12" r="9" stroke="#DC2626" stroke-width="1.8"/><path d="M12 3v9l6 3" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round"/>',
-        path:'/profile/lucky'
+        path: '/profile/lucky'
     },
     {
         label: '邀请',
         bg: '#F0FDF4',
         icon: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="#059669" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#059669" stroke-width="1.8"/><path d="M19 8v6M22 11h-6" stroke="#059669" stroke-width="1.8" stroke-linecap="round"/>',
-        path:'/team?tab=invite'
+        path: '/team?tab=invite'
     },
     {
         label: $lang('手册'),
         bg: '#F0F9FF',
         icon: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="#0284C7" stroke-width="1.8" stroke-linecap="round"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="#0284C7" stroke-width="1.8" stroke-linejoin="round"/>',
-        path:'/profile/help'
+        path: '/profile/help'
     },
 ]
 
@@ -356,7 +363,7 @@ function previewActivity(index) {
 }
 
 const handleMenu = (path) => {
-    if(path === 'gift'){
+    if (path === 'gift') {
         showRedeem.value = true
         return
     }
@@ -373,9 +380,14 @@ onUnmounted(() => {
 
 //获取未读消息
 const getMessageUnreadCount = () => {
-    messageUnreadCount({}).then(res => {
-
+    getAgentId({}).then(res => {
+        if (res.success) {
+            messageUnreadCount({chat_user_id:res.data}).then(res => {
+                appStore.setUnReadCount(appStore.getUnReadCount + Number(res.data))
+            })
+        }
     })
+
 }
 //邀请收益列表
 const awardList = ref([])
@@ -384,7 +396,7 @@ const getAwardLog = () => {
     awardLog({ page: 1, pageSize: 10 }).then(res => {
         hideLoading();
         if (res.success) {
-            if(res.data.rows && res.data.rows.length > 0){
+            if (res.data.rows && res.data.rows.length > 0) {
                 awardList.value = [...res.data.rows, ...res.data.rows]
             }
         } else {
@@ -478,6 +490,21 @@ const getAwardLog = () => {
         color: $color-white;
         cursor: pointer;
         transition: $transition-fast;
+        position: relative;
+
+        .dot{
+            position: absolute;
+            right: rem(-5);
+            top: rem(-5);
+            border-radius: 50%;
+            aspect-ratio: 1/1;
+            width: rem(20);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: rem(12);
+            background: $color-danger;
+        }
 
         .lang-icon {
             width: rem(22);

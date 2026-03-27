@@ -124,6 +124,7 @@ let en = {
     "恭喜获得": "Congratulations",
     "奖励已发放到您的账户": "The reward has been credited to your account",
     "任务详情":"Task Details",
+    "图片":"Image",
 }
 
 export default en

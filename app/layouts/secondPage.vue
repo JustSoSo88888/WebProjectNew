@@ -40,12 +40,14 @@
         <div class="second-page__content">
             <NuxtPage />
         </div>
+        <MsgPopup></MsgPopup>
     </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
 import { useRoute, navigateTo } from '#imports'
+import MsgPopup from '~/components/MsgPopup.vue'
 
 const route = useRoute()
 const nuxtApp = useNuxtApp()
