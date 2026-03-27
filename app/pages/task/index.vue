@@ -6,7 +6,8 @@
       <div class="ring-wrap">
         <svg class="ring-svg" viewBox="0 0 100 100" aria-hidden="true">
           <circle class="ring-track" cx="50" cy="50" r="40" />
-          <circle class="ring-progress" cx="50" cy="50" r="40" :stroke-dasharray="`${progressArc} ${circumference}`" stroke-dashoffset="0" />
+          <circle class="ring-progress" cx="50" cy="50" r="40" :stroke-dasharray="`${progressArc} ${circumference}`"
+            stroke-dashoffset="0" />
           <defs>
             <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#d97706" />
@@ -15,7 +16,7 @@
           </defs>
         </svg>
         <div class="ring-center">
-          <div class="ring-pct">{{progressPct}}%</div>
+          <div class="ring-pct">{{ progressPct }}%</div>
         </div>
       </div>
 
@@ -52,19 +53,23 @@
         <van-list v-model:loading="loading" :finished="finished" :loading-text="$lang('加载中')"
           :finished-text="list.length > 0 ? $lang('没有更多了') : ''" @load="onLoad">
           <template v-if="list.length > 0">
-            <div v-for="task in list" :key="task.id" class="task-card"
-              @click="toDetails(task)">
-              <img :src="task.image_url" class="task-img" loading="lazy" />
+            <div v-for="task in list" :key="task.id" class="task-card" @click="toDetails(task)">
+              <div class="task-img-box">
+                <img :src="task.image_url" class="task-img" />
+              </div>
               <div class="task-body">
                 <div class="task-name">{{ task.product_name }}</div>
-                <div class="task-reward">
+                <!-- <div class="task-reward">
                   <span class="reward-label">{{ $lang('收益') }}</span>
-                  <span class="reward-amount" translate="no">+R${{ parseFloat(task.income_amount) }}</span>
+                  
+                </div> -->
+                <div class="task-bottom">
+                  <div class="reward-amount" :class="task.status == 1 ? 'reward-amount--success' : 'reward-amount--warning'" translate="no">R${{ parseFloat(task.income_amount) }}</div>
+                  <button class="task-btn" :class="task.status == 1 ? 'task-btn--done' : 'task-btn--active'">
+                    {{ task.status == 1 ? $lang('已完成') : $lang('进行中') }}
+                  </button>
                 </div>
               </div>
-              <button class="task-btn" :class="task.status == 1 ? 'task-btn--done' : 'task-btn--active'">
-                {{ task.status == 1 ? $lang('已完成') : $lang('进行中') }}
-              </button>
             </div>
           </template>
           <template v-else>
@@ -98,7 +103,7 @@ const list = ref([])
 const activeTab = ref(0)
 const totalCount = ref(0)
 const todayUndoneCount = ref(0)
-const todayCompletedCount = ref(0) 
+const todayCompletedCount = ref(0)
 const tabs = computed(() => [
   { key: 0, label: $lang('进行中') },
   { key: '', label: $lang('全部') },
@@ -106,7 +111,7 @@ const tabs = computed(() => [
 ])
 
 const toDetails = (task) => {
-  if(task.status == 1) return
+  if (task.status == 1) return
   appStore.setTaskData(task)
   navigateTo('/task/details')
 }
@@ -142,7 +147,7 @@ const onLoad = () => {
     hideLoading();
     refreshing.value = false
     if (res.success) {
-      
+
       todayUndoneCount.value = res.data.today_undone_count || 0
       todayCompletedCount.value = res.data.today_completed_count || 0
       totalCount.value = res.data.today_undone_count + res.data.today_completed_count
@@ -348,16 +353,12 @@ const onLoad = () => {
 
 // ── Task List ─────────────────────────────────────────────
 .task-list {
-  display: flex;
-  flex-direction: column;
-  gap: rem(10);
   padding: 0 rem(14);
 }
 
 .task-card {
   display: flex;
-  align-items: center;
-  gap: rem(12);
+  align-items: stretch;
   padding: rem(12);
   background: #FFFFFF;
   border: 1px solid $color-border;
@@ -366,27 +367,45 @@ const onLoad = () => {
   margin-bottom: rem(10);
   cursor: pointer;
   transition: $transition-fast;
+  box-sizing: border-box;
 
   &:active {
     background: $color-bg-hover;
   }
 }
 
-.task-img {
+.task-img-box {
   flex-shrink: 0;
-  width: rem(64);
-  height: rem(64);
-  border-radius: $radius-md;
-  object-fit: cover;
-  background: $color-gray-100;
+  height: rem(100);
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  display: flex;
+  border-radius: rem(10);
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+
+  .task-img {
+    width: 100%;
+    height: auto;
+  }
 }
 
+
 .task-body {
-  flex: 1;
-  min-width: 0;
+  width: rem(133);
   display: flex;
+  margin-left: rem(10);
+  box-sizing: border-box;
+  justify-content: space-between;
   flex-direction: column;
-  gap: rem(5);
+
+  .task-bottom{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
 }
 
 .task-name {
@@ -399,6 +418,11 @@ const onLoad = () => {
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
+  width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  box-sizing: border-box;
 }
 
 .task-reward {
@@ -417,9 +441,17 @@ const onLoad = () => {
 }
 
 .reward-amount {
-  font-size: rem(14);
+  font-size: rem(16);
   font-weight: 800;
-  color: $color-warning;
+  
+  margin-bottom: rem(5);
+  &--success{
+    color: $color-success;
+  }
+
+  &--warning{
+    color: $color-warning;
+  }
 }
 
 .task-time {
@@ -440,6 +472,7 @@ const onLoad = () => {
 .task-btn {
   flex-shrink: 0;
   height: rem(34);
+  width: 100%;
   padding: 0 rem(14);
   border-radius: $radius-full;
   font-size: rem(12);
@@ -466,26 +499,6 @@ const onLoad = () => {
     &:active {
       background: #D1FAE5;
     }
-  }
-}
-
-// Empty
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: rem(10);
-  padding: rem(60) 0;
-  color: $color-text-muted;
-
-  svg {
-    width: rem(40);
-    height: rem(40);
-    opacity: 0.4;
-  }
-
-  span {
-    font-size: rem(13);
   }
 }
 </style>
