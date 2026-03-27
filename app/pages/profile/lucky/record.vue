@@ -3,7 +3,24 @@
         <van-pull-refresh :pulling-text="$lang('下拉即可刷新') + '...'" :loosing-text="$lang('释放即可刷新') + '...'"
             :loading-text="$lang('加载中') + '...'" v-model="refreshing" @refresh="onRefresh">
             <van-list v-model:loading="loading" :finished="finished" :loading-text="$lang('加载中')"
-                :finished-text="list.length > 0 ? $lang('没有更多了') : $lang('暂无数据')" @load="onLoad">
+                :finished-text="list.length > 0 ? $lang('没有更多了') : $lang('暂无数据')" class="list" @load="onLoad">
+                <template v-if="list.length > 0">
+                    <div class="list-item" v-for="(item,index) in list" :key="index">
+                        <div>
+                            <div class="title">{{ $lang('时间') }}</div>
+                            <div>{{ item.create_time }}</div>
+                        </div>
+                        <div class="rigit">
+                            <div class="title">{{ $lang('奖励') }}</div>
+                            <div translate="no" class="amount">+ R${{ parseFloat(item.number) }}</div>
+                        </div>
+                        
+                        
+                    </div>
+                </template>
+                <template v-else>
+                    <Empty></Empty>
+                </template>
             </van-list>
         </van-pull-refresh>
     </div>
@@ -31,7 +48,7 @@ const loading = ref(false)
 const finished = ref(false)
 const refreshing = ref(false)
 const page = ref(1)
-const rows = ref(20)
+const rows = ref(10)
 const list = ref([])
 
 const onLoad = () => {
@@ -51,7 +68,7 @@ const onLoad = () => {
                 list.value = [...list.value, ...dataList]
             }
             if (dataList.length >= rows.value) {
-                page++
+                page.value++
             } else {
                 finished.value = true
             }
@@ -63,7 +80,9 @@ const onLoad = () => {
         loading.value = false
     }).catch(error => {
         finished.value = true
-        loading = false;
+        loading.value = false;
+        console.log(error);
+        
         hideLoading();
         showMsg(error.message, 'fail')
     })
@@ -78,4 +97,38 @@ const onRefresh = () => {
 </script>
 
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.list {
+    padding-top: rem(10);
+    box-sizing: border-box;
+    .list-item {
+        padding: rem(16);
+        border-bottom: rem(1) solid $color-border-light;
+        font-size: rem(14);
+        background: #fff;
+        border-radius: rem(10);
+        margin: 0 rem(10) rem(10);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        .rigit{
+            text-align: right;
+        }
+
+        .title{
+            margin-bottom: rem(5);
+            font-size: rem(12);
+            color: $color-text-muted;
+        }
+        .amount{
+            font-weight: bold;
+            color: $color-success;
+        }
+    }
+}
+</style>

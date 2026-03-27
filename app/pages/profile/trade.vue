@@ -105,7 +105,7 @@ const onLoad = () => {
                 list.value = [...list.value, ...dataList]
             }
             if (dataList.length >= rows.value) {
-                page++
+                page.value++
             } else {
                 finished.value = true
             }
@@ -117,8 +117,10 @@ const onLoad = () => {
         loading.value = false
     }).catch(error => {
         finished.value = true
-        loading = false;
+        loading.value = false;
         hideLoading();
+        console.log(error);
+        
         showMsg(error.message, 'fail')
     })
 

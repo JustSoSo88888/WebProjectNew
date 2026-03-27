@@ -28,7 +28,7 @@ export const turntableOpen = (params) => {
  * 转盘记录
  * **/
 export const orderList = (params) => {
-    return api.post('/api/turntable/order_list', params);
+    return api.post('/turntable/order_list', params);
 }
 
 
