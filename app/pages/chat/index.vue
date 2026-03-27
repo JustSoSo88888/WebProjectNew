@@ -1,17 +1,22 @@
 <template>
     <div class="chat-page">
-        <div class="chat-list">
-            <div v-for="(msg, index) in messagesList" :key="index" class="chat-item"
-                :class="{ 'is-self': userData.id == msg.user_id }">
-                <img v-if="!userData.id == msg.user_id" src="https://api.dicebear.com/7.x/bottts/svg?seed=service"
-                    class="avatar" />
-                <img v-if="userData.id == msg.user_id" src="https://api.dicebear.com/7.x/avataaars/svg?seed=user"
-                    class="avatar" />
-                <div class="bubble">
-                    <div class="bubble-content" v-html="msg.content" @click="handleMessageClick"></div>
+        <div ref="chatListRef" class="chat-list" @scroll="handleScroll">
+            <div class="chat-list-inner">
+                <van-loading v-if="loading" class="loading-tip" size="20" />
+                <div v-for="(msg, index) in messagesList" :key="msg.id || index" class="chat-item"
+                    :class="{ 'is-self': userData.id == msg.user_id }">
+                    <img v-if="userData.id != msg.user_id" src="https://api.dicebear.com/7.x/bottts/svg?seed=service"
+                        class="avatar" />
+                    <img v-if="userData.id == msg.user_id" src="https://api.dicebear.com/7.x/avataaars/svg?seed=user"
+                        class="avatar" />
+                    <div class="bubble" v-html="msg.content" @click="handleMessageClick"></div>
                 </div>
-
             </div>
+        </div>
+
+        <div v-if="unreadCount > 0" class="unread-tip" @click="goToBottom">
+            <van-icon name="arrow-down" />
+            <span>{{ unreadCount }}条新消息</span>
         </div>
 
         <div class="chat-input">
@@ -35,7 +40,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { getAgentId, updateMessageIsRead, messageList } from '~/api/chat'
 const { $socket, $createSocket, $destroySocket, $bus } = useNuxtApp()
 import { useAppStore } from '~/stores/app.js'
@@ -44,36 +49,102 @@ import { showImagePreview } from 'vant'
 const appStore = useAppStore()
 
 definePageMeta({ layout: 'second-page' })
+
+const chatListRef = ref(null)
+const userData = ref({})
+const toUserId = ref(0)
+const inputText = ref('')
+const messagesList = ref([])
+const loading = ref(false)
+const page = ref(1)
+const rows = 20
+const finished = ref(false)
+const isAtBottom = ref(true)
+const unreadCount = ref(0)
+
 onMounted(() => {
-    handleGetAgentId();
+    handleGetAgentId()
     userData.value = storage.get('user_data') ? JSON.parse(storage.get('user_data')) : {}
-    handleUpdateMessageIsRead();
+    handleUpdateMessageIsRead()
     appStore.setUnReadCount(0)
 })
+
 onBeforeUnmount(() => {
     $socket()?.off('message', socketMessageHandler)
     appStore.setUnReadCount(0)
     handleUpdateMessageIsRead()
 })
-const userData = ref({})
-const toUserId = ref(0)
-const inputText = ref('')
-const messagesList = ref([])
+
 const handleGetAgentId = () => {
     getAgentId({}).then(res => {
         if (res.success) {
             toUserId.value = res.data
+            loadMessages(true)
             $socket()?.off('message', socketMessageHandler)
             $socket()?.on('message', socketMessageHandler)
         }
     })
 }
 
+const loadMessages = async (isInit = false) => {
+    if (loading.value || finished.value) return
+    loading.value = true
+    try {
+        const res = await messageList({ page: page.value, rows })
+        if (res.success) {
+            const data = res.data.rows || []
+            if (data.length < rows) finished.value = true
+            const list = data.map(item => ({
+                id: item.id,
+                user_id: item.sender_id,
+                name: item.sender_nickname,
+                head_image: item.sender_head_image,
+                receiver_id: item.receiver_id,
+                content: item.content,
+                create_time: item.create_time,
+                socket_type: item.socket_type
+            }))
+            if (isInit) {
+                messagesList.value = list.reverse()
+            } else {
+                const oldScrollTop = chatListRef.value?.scrollTop || 0
+                messagesList.value = [...list.reverse(), ...messagesList.value]
+                await nextTick()
+                // column-reverse 下保持滚动位置
+                if (chatListRef.value) chatListRef.value.scrollTop = oldScrollTop
+            }
+            page.value++
+        }
+    } finally {
+        loading.value = false
+    }
+}
+
+const handleScroll = () => {
+    if (!chatListRef.value) return
+    const { scrollTop, scrollHeight, clientHeight } = chatListRef.value
+    isAtBottom.value = Math.abs(scrollTop) < 50
+    if (isAtBottom.value) unreadCount.value = 0
+    const maxScroll = scrollHeight - clientHeight
+    if (Math.abs(scrollTop) >= maxScroll - 50 && !loading.value && !finished.value) {
+        loadMessages()
+    }
+}
+
+const scrollToBottom = () => {
+    if (chatListRef.value) chatListRef.value.scrollTop = 0
+}
+
+const goToBottom = () => {
+    scrollToBottom()
+    unreadCount.value = 0
+}
+
 const handleMessageClick = (event) => {
     if (event.target.classList.contains("clickable-img")) {
         showImagePreview({ images: [event.target.src] })
     }
-    
+
 }
 
 const handleUpdateMessageIsRead = () => {
@@ -82,34 +153,36 @@ const handleUpdateMessageIsRead = () => {
     })
 }
 
-const socketMessageHandler = (event) => {
+const socketMessageHandler = async (event) => {
     try {
-        const objs = JSON.parse(event.data);
+        const objs = JSON.parse(event.data)
         for (const obj of objs) {
-            if (obj.socket_type !== 'private_message' && obj.socket_type !== 'message' && obj.socket_type !== 'join') continue;
+            if (obj.socket_type !== 'private_message' && obj.socket_type !== 'message' && obj.socket_type !== 'join') continue
             if (
                 (Number(obj.sender.receiver_id) === Number(userData.value.id) ||
                     Number(obj.sender.user_id) === Number(userData.value.id)) &&
                 (Number(obj.sender.receiver_id) === Number(toUserId.value)
                     || Number(obj.sender.user_id) === Number(toUserId.value))
             ) {
-                const messageId = obj.message_id;
-                const isExist = messagesList.value.findIndex(item => item.id == messageId);
-                console.log(isExist);
-
+                const messageId = obj.message_id
+                const isExist = messagesList.value.findIndex(item => item.id == messageId)
                 if (isExist === -1) {
-                    const messageObj = { ...obj.sender };
-                    messageObj.content = obj.content;
-                    messageObj.socket_type = obj.socket_type;
-                    messageObj.receiver_id = obj.sender.receiver_id;
-                    messageObj.id = messageId;
+                    const messageObj = { ...obj.sender }
+                    messageObj.content = obj.content
+                    messageObj.socket_type = obj.socket_type
+                    messageObj.receiver_id = obj.sender.receiver_id
+                    messageObj.id = messageId
                     messagesList.value.push(messageObj)
+                    if (isAtBottom.value) {
+                        await nextTick()
+                        scrollToBottom()
+                    } else {
+                        unreadCount.value++
+                    }
                 }
             }
         }
-    } catch (e) {
-
-    }
+    } catch (e) { }
 
 }
 
@@ -185,8 +258,18 @@ const resetFileInput = () => {
     padding-bottom: rem(80);
     box-sizing: border-box;
     display: flex;
+    flex-direction: column-reverse;
+}
+
+.chat-list-inner {
+    display: flex;
     flex-direction: column;
     gap: rem(16);
+}
+
+.loading-tip {
+    align-self: center;
+    padding: rem(10) 0;
 }
 
 .chat-item {
@@ -201,10 +284,7 @@ const resetFileInput = () => {
         .bubble {
             background: $color-primary;
             color: #fff;
-
-            .bubble-time {
-                color: rgba(255, 255, 255, 0.7);
-            }
+            border: none;
         }
     }
 }
@@ -218,16 +298,30 @@ const resetFileInput = () => {
 }
 
 .bubble {
-    background: #fff;
+    background: #f5f5f5;
     border-radius: rem(12);
     padding: rem(10) rem(12);
-    box-shadow: $shadow-sm;
-}
-
-.bubble-content {
+    border: 1px solid #e0e0e0;
     font-size: rem(14);
     line-height: 1.5;
     word-break: break-word;
+}
+
+.unread-tip {
+    position: fixed;
+    bottom: rem(80);
+    right: rem(20);
+    background: $color-primary;
+    color: #fff;
+    padding: rem(8) rem(12);
+    border-radius: rem(20);
+    display: flex;
+    align-items: center;
+    gap: rem(4);
+    font-size: rem(12);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    box-sizing: border-box;
 }
 
 .bubble-time {
