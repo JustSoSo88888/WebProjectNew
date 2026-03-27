@@ -6,7 +6,7 @@
       <van-pull-refresh :pulling-text="$lang('下拉即可刷新') + '...'" :loosing-text="$lang('释放即可刷新') + '...'"
         :loading-text="$lang('加载中') + '...'" v-model="refreshing" @refresh="onRefresh">
         <van-list v-model:loading="loading" :finished="finished" :loading-text="$lang('加载中')"
-          :finished-text="members.length > 0 ? $lang('没有更多了') : $lang('暂无数据')" @load="onLoad">
+          :finished-text="members.length > 0 ? $lang('没有更多了') : ''" @load="onLoad">
           <template v-if="members.length > 0">
             <div v-for="(item, index) in members" :key="index" class="member-card">
               <div class="member-row">

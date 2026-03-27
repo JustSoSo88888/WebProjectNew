@@ -3,7 +3,7 @@
         <van-pull-refresh :pulling-text="$lang('下拉即可刷新') + '...'" :loosing-text="$lang('释放即可刷新') + '...'"
             :loading-text="$lang('加载中') + '...'" v-model="refreshing" @refresh="onRefresh">
             <van-list v-model:loading="loading" :finished="finished" :loading-text="$lang('加载中')"
-                :finished-text="list.length > 0 ? $lang('没有更多了') : $lang('暂无数据')" class="list" @load="onLoad">
+                :finished-text="list.length > 0 ? $lang('没有更多了') : ''" class="list" @load="onLoad">
                 <template v-if="list.length > 0">
                     <div class="list-item" v-for="(item,index) in list" :key="index">
                         <div>
