@@ -13,7 +13,7 @@
                         <div class="item-main">
                             <span class="col-type">{{ 123 }}</span>
                             <span class="col-amount" :class="item.change_type == 1 ? 'positive' : 'negative'">
-                                {{ item.change_type == 1 ? '+' : '-' }}R${{ item.amount }}
+                                {{ item.change_type == 1 ? '+' : '-' }}R${{ parseFloat(item.amount) }}
                             </span>
                         </div>
                         <div class="item-footer">

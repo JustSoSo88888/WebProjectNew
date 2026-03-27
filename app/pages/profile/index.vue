@@ -255,7 +255,7 @@ const menuItems = [
     },
     {
         key: 'lucky',
-        label: '幸运大转盘',
+        label: $lang('幸运转盘'),
         iconBg: 'linear-gradient(135deg,#FFF1F2,#FFE4E6)',
         icon: '<circle cx="12" cy="12" r="10" stroke="#DC2626" stroke-width="1.8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="3" stroke="#DC2626" stroke-width="1.8"/>',
         route: '/profile/lucky',

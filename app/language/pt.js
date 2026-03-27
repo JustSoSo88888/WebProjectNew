@@ -100,6 +100,17 @@ let pt = {
     "总提现": "Saque total",
     "注册时间": "Data de registro",
     "团队详情": "Detalhes da equipe",
+    "幸运转盘": "Roda da Sorte",
+    "剩余次数": "Tentativas Restantes",
+    "抽奖中": "Sorteando",
+    "开始": "Começar",
+    "中奖记录": "Registros de Ganhos",
+    "用户": "Usuário",
+    "时间": "Hora",
+    "恭喜获得奖励": "Parabéns, você ganhou uma recompensa",
+    "收下奖励": "Receber Recompensa",
+    "记录": "Registros",
+    "我的奖励":"Minhas Recompensas",
 }
 
 export default pt;

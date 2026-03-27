@@ -87,7 +87,7 @@
           <div class="product-bottom">
             <div class="product-stat">
               <span class="stat-label">最低存款</span>
-              <span class="stat-val" translate="no">R${{ item.price }}</span>
+              <span class="stat-val" translate="no">R${{ parseFloat(item.min_amount) }}</span>
             </div>
             <div class="product-progress-wrap">
               <div class="progress-info">

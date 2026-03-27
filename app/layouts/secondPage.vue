@@ -72,7 +72,8 @@ const pageTitleMap = {
     '/task/details': '任务详情',
     '/finance/record': '理财记录',
     '/finance/detail': '产品详情',
-    '/profile/lucky': '幸运转盘',
+    '/profile/lucky': $lang('幸运转盘'),
+    '/profile/lucky/record': $lang('我的奖励'),
     '/chat': '客服',
 }
 

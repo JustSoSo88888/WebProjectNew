@@ -6,14 +6,14 @@
         <template v-else>
             <div class="lucky-header">
                 <div class="header-top">
-                    <h1 class="page-title">Lucky Draw</h1>
-                    <div class="records-entry">
+                    <h1 class="page-title">{{ $lang('幸运转盘') }}</h1>
+                    <div class="records-entry" @click="navigateTo('/profile/lucky/record')">
                         <van-icon name="orders-o" size="20" />
-                        <span>记录</span>
+                        <span>{{ $lang('我的奖励') }}</span>
                     </div>
                 </div>
                 <div class="chances-wrap">
-                    <span class="chances-text">剩余次数: <strong>{{ chances }}</strong></span>
+                    <span class="chances-text">{{ $lang('剩余次数') }}: <strong>{{ chances }}</strong></span>
                 </div>
             </div>
 
@@ -33,27 +33,38 @@
 
                     <div class="center-btn" :class="{ disabled: isSpinning || chances <= 0 }" @click="startDraw">
                         <van-loading v-if="isSpinning" color="#fff" size="24px" />
-                        <span v-else>{{ isSpinning ? '抽奖中...' : '开始' }}</span>
+                        <span v-else>{{ isSpinning ? $lang('抽奖中') : $lang('开始') }}</span>
                     </div>
                 </div>
             </div>
 
             <div class="records-section">
-                <h2 class="section-title">中奖记录</h2>
-                <div class="records-list" ref="scrollContainer">
-                    <div v-if="recordsLoading" class="loading-records">
-                        <van-loading type="spinner" color="#fff" size="24px" />
-                    </div>
-                    <div v-else-if="records.length === 0" class="empty-records">
-                        <span class="empty-text">暂无记录</span>
-                    </div>
-                    <div v-else class="record-item" v-for="(record, index) in records" :key="index">
-                        <div class="record-left">
-                            <span class="record-name">{{ record.name }}</span>
+                <h2 class="section-title">{{ $lang('中奖记录') }}</h2>
+                <div class="records-header">
+                    <span>{{ $lang('用户') }}</span>
+                    <span>{{ $lang('时间') }}</span>
+                    <span>{{ $lang('奖励') }}</span>
+                </div>
+                <div v-if="recordsLoading" class="loading-records">
+                    <van-loading type="spinner" color="#fff" size="24px" />
+                </div>
+                <div v-else-if="records.length === 0" class="empty-records">
+                    <span class="empty-text">{{ $lang('暂无数据') }}</span>
+                </div>
+                <div v-else :class="records.length > 3 ? 'records-scroll' : 'records-list'">
+                    <div :class="records.length > 3 ? 'scroll-inner' : ''" :style="records.length > 3 ? { animationDuration: records.length + 's' } : {}">
+                        <div class="record-item" v-for="(record, index) in records" :key="index">
+                            <span class="record-name">{{ record.phone }}</span>
+                            <span class="record-name">{{ record.create_time }}</span>
+                            <span class="record-prize" translate="no">+ R${{ parseFloat(record.number) }}</span>
                         </div>
-                        <div class="record-right">
-                            <span class="record-prize">+{{ record.amount }}</span>
-                        </div>
+                        <template v-if="records.length > 3">
+                            <div class="record-item" v-for="(record, index) in records" :key="'copy-' + index">
+                                <span class="record-name">{{ record.phone }}</span>
+                                <span class="record-name">{{ record.create_time }}</span>
+                                <span class="record-prize" translate="no">+ R${{ parseFloat(record.number) }}</span>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -68,9 +79,9 @@
                             <span class="prize-currency">R$</span>
                             <span class="prize-amount" :class="{ 'animate': showPrizeModal }">{{ wonAmount }}</span>
                         </div>
-                        <div class="prize-label">恭喜获得奖励</div>
+                        <div class="prize-label">{{ $lang('恭喜获得奖励') }}</div>
                     </div>
-                    <button class="prize-confirm-btn" @click="showPrizeModal = false">收下奖励</button>
+                    <button class="prize-confirm-btn" @click="showPrizeModal = false">{{ $lang('收下奖励') }}</button>
                 </div>
             </van-popup>
         </template>
@@ -79,8 +90,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getLuckyConfig, doLuckyDraw, getLuckyRecords } from '~/api/lucky';
-import { getMemberInfo ,turntableConfig } from '~/api/turntable';
+import { getMemberInfo, turntableConfig, turntableOpen, rewardOrderList } from '~/api/turntable';
 import { navigateTo } from '#imports'
 definePageMeta({
     layout: 'second-page',
@@ -91,23 +101,26 @@ definePageMeta({
 onMounted(() => {
     handleGetMemberInfo()
     handleTurntableConfig()
+    fetchRecords();
 })
 //获取转盘次数
+const chances = ref(0)
 const handleGetMemberInfo = () => {
     getMemberInfo({}).then(res => {
-
+        chances.value = res.data.spin_chance
     }).catch(error => {
 
     })
 }
 
 //获取转盘配置
+const prizes = ref([])//奖品列表
 const handleTurntableConfig = () => {
     turntableConfig({}).then(res => {
         loading.value = false
-        if(res.success){
+        if (res.success) {
             prizes.value = res.data
-        }else{
+        } else {
             showMsg(res.message, 'fail')
         }
 
@@ -122,8 +135,7 @@ const $lang = nuxtApp.$lang
 const loading = ref(true)
 const drawLoading = ref(false)
 const recordsLoading = ref(false)
-const prizes = ref([])
-const chances = ref(0)
+
 const isSpinning = ref(false)
 const activeIndex = ref(-1)
 const winnerIndex = ref(-1)
@@ -137,7 +149,7 @@ const gridItems = computed(() => {
     let items = []
     if (prizes.value.length >= 8) {
         items = prizes.value.slice(0, 8)
-    } 
+    }
     return items
 })
 
@@ -149,6 +161,21 @@ const gridItemsWithPlaceholder = computed(() => {
     return items
 })
 
+const fetchRecords = async () => {
+    recordsLoading.value = true
+    try {
+        const res = await rewardOrderList({page:1,rows:10})
+        if (res.success) {
+            records.value = res.data.list || []
+        } else {
+            showMsg(res.message, 'fail')
+        }
+    } catch (error) {
+        showMsg(error.message, 'fail')
+    } finally {
+        recordsLoading.value = false
+    }
+}
 
 const startDraw = async () => {
     if (isSpinning.value || chances.value <= 0 || drawLoading.value) return
@@ -157,19 +184,18 @@ const startDraw = async () => {
     drawLoading.value = true
 
     try {
-        const res = await doLuckyDraw()
+        const res = await turntableOpen()
         if (res.success) {
-            const prizeIndex = res.data.prizeIndex
-            const gridIndex = prizeToGridIndex[prizeIndex]
-            wonAmount.value = res.data.prize?.amount || 0
-            chances.value = res.data.remainingChances ?? chances.value - 1
+            handleGetMemberInfo();
+            const star = res.data.star
+            const gridIndex = prizeToGridIndex[star]
+            wonAmount.value = res.data.number || 0
 
             let current = 0
-            const totalSteps = 20 + prizeIndex
+            const totalSteps = 20 + star
             const interval = setInterval(() => {
                 current++
                 activeIndex.value = prizeToGridIndex[current % 8]
-
                 if (current >= totalSteps) {
                     clearInterval(interval)
                     winnerIndex.value = gridIndex
@@ -179,16 +205,18 @@ const startDraw = async () => {
 
                     setTimeout(() => {
                         showPrizeModal.value = true
-                        fetchRecords()
                     }, 500)
                 }
             }, 80)
+        } else {
+            isSpinning.value = false
+            drawLoading.value = false
+            showMsg(res.message, 'fail')
         }
     } catch (error) {
-        console.error('Draw failed:', error)
         isSpinning.value = false
         drawLoading.value = false
-        showToast('抽奖失败，请重试')
+        showMsg(error.message, 'fail')
     }
 }
 
@@ -394,27 +422,44 @@ const startDraw = async () => {
     margin: 0 0 rem(12);
 }
 
+.records-header {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: rem(8);
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    font-size: rem(11);
+    margin-bottom: rem(8);
+    padding: 0 rem(4);
+}
+
+.records-scroll {
+    height: rem(144);
+    overflow: hidden;
+}
+
 .records-list {
-    max-height: rem(180);
-    overflow-y: auto;
-
-    &::-webkit-scrollbar {
-        width: 4px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 2px;
-    }
+    overflow: hidden;
 }
 
-.loading-records {
-    display: flex;
+.scroll-inner {
+    animation: scrollUp 10s linear infinite;
+}
+
+@keyframes scrollUp {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+}
+
+.record-item {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: rem(36);
     align-items: center;
-    justify-content: center;
-    padding: rem(24) 0;
+    text-align: center;
 }
 
+.loading-records,
 .empty-records {
     display: flex;
     align-items: center;
@@ -425,18 +470,6 @@ const startDraw = async () => {
 .empty-text {
     font-size: rem(13);
     color: rgba(255, 255, 255, 0.4);
-}
-
-.record-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: rem(10) 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-
-    &:last-child {
-        border-bottom: none;
-    }
 }
 
 .record-name {

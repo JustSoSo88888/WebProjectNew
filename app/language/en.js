@@ -100,6 +100,17 @@ let en = {
     "总提现": "Total Withdrawal",
     "注册时间": "Registration Time",
     "团队详情": "Team Details",
+    "幸运转盘": "Lucky Spin",
+    "剩余次数": "Remaining Attempts",
+    "抽奖中": "Drawing",
+    "开始": "Start",
+    "中奖记录": "Winning Records",
+    "用户": "User",
+    "时间": "Time",
+    "恭喜获得奖励": "Congratulations on Winning",
+    "收下奖励": "Claim Reward",
+    "记录": "Records",
+    "我的奖励":"My Rewards",
 }
 
 export default en

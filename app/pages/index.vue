@@ -230,7 +230,7 @@ const menuItems = [
         path:'gift'
     },
     {
-        label: '幸运转盘',
+        label: $lang('幸运转盘'),
         bg: '#FFF1F2',
         icon: '<circle cx="12" cy="12" r="9" stroke="#DC2626" stroke-width="1.8"/><path d="M12 3v9l6 3" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round"/>',
         path:'/profile/lucky'
