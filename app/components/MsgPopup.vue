@@ -16,7 +16,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 const { $bus } = useNuxtApp()
-import { navigateTo ,useRouter} from '#imports'
+import { navigateTo, useRouter } from '#imports'
 const route = useRoute()
 let timer = null
 const showMessage = ref(false)
@@ -25,16 +25,16 @@ const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
 
 const handleNewMessage = (data) => {
-    console.log('useRouter',route.name);
-    if(route.name === 'chat') return
+    console.log('useRouter', route.name);
+    if (route.name === 'chat') return
 
     clearTimeout(timer)
-    if(data.content.content.includes('clickable-img') && data.content.content.includes('img')){
+    if (data.content.content.includes('clickable-img') && data.content.content.includes('img')) {
         content.value = `[ ${$lang('图片')} ]`
-    }else{
+    } else {
         content.value = data.content.content
     }
-    
+
     showMessage.value = true;
     timer = setTimeout(() => {
         showMessage.value = false;
@@ -79,7 +79,7 @@ onUnmounted(() => {
         border: 1px solid $color-border;
         box-shadow: $shadow-sm;
         cursor: pointer;
-        
+
 
         .icon {
             color: $color-primary;
@@ -90,6 +90,8 @@ onUnmounted(() => {
             width: 100%;
             overflow: hidden;
             margin-left: rem(5);
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
     }
 }

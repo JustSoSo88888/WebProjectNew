@@ -18,28 +18,30 @@
             <!-- 顶部工具栏 -->
             <div class="top-bar">
                 <div class="brand">Nova Travel</div>
-                <div class="tools">
-                    <button class="tool-icon" @click="showLang = true">
-                        <svg viewBox="0 0 24 24" fill="none" class="lang-icon">
-                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
-                            <path d="M12 3c-2.5 3-4 5.5-4 9s1.5 6 4 9M12 3c2.5 3 4 5.5 4 9s-1.5 6-4 9M3 12h18"
-                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-                        </svg>
-                    </button>
-                    <button class="tool-icon" @click="navigateTo('/profile/email')">
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                            <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </button>
-                    <button class="tool-icon" @click="navigateTo('/chat')">
-                        <van-icon name="service-o" size=".35rem" />
-                        <span class="dot" v-if="appStore.getUnReadCount > 0">{{ appStore.getUnReadCount }}</span>
-                    </button>
-                </div>
+                <ConnectionStatus></ConnectionStatus>
+
+            </div>
+
+            <div class="tools">
+                <button class="tool-icon" @click="showLang = true">
+                    <svg viewBox="0 0 24 24" fill="none" class="lang-icon">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
+                        <path d="M12 3c-2.5 3-4 5.5-4 9s1.5 6 4 9M12 3c2.5 3 4 5.5 4 9s-1.5 6-4 9M3 12h18"
+                            stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    </svg>
+                </button>
+                <button class="tool-icon" @click="navigateTo('/profile/email')">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                            stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                        <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <button class="tool-icon" @click="navigateTo('/chat')">
+                    <van-icon name="service-o" size=".35rem" />
+                    <span class="dot" v-if="appStore.getUnReadCount > 0">{{ appStore.getUnReadCount }}</span>
+                </button>
             </div>
             <!-- 快捷操作卡片 -->
             <div class="quick-cards">
@@ -184,6 +186,7 @@ import LangModal from '~/components/LangModal.vue'
 import RedeemModal from '~/components/RedeemModal.vue'
 import { messageUnreadCount, getAgentId } from '~/api/chat'
 import { useAppStore } from '~/stores/app.js'
+import ConnectionStatus from '~/components/ConnectionStatus.vue'
 
 const appStore = useAppStore()
 
@@ -382,7 +385,7 @@ onUnmounted(() => {
 const getMessageUnreadCount = () => {
     getAgentId({}).then(res => {
         if (res.success) {
-            messageUnreadCount({chat_user_id:res.data}).then(res => {
+            messageUnreadCount({ chat_user_id: res.data }).then(res => {
                 appStore.setUnReadCount(appStore.getUnReadCount + Number(res.data.total))
             })
         }
@@ -472,14 +475,19 @@ const getAwardLog = () => {
         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
-    .tools {
-        display: flex;
-        gap: rem(8);
-    }
+}
+
+.tools {
+    position: absolute;
+    right: rem(10);
+    top: rem(110);
+    z-index: 1;
+    gap: rem(8);
 
     .tool-icon {
         width: rem(36);
         height: rem(36);
+        margin-bottom: rem(10);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -492,7 +500,7 @@ const getAwardLog = () => {
         transition: $transition-fast;
         position: relative;
 
-        .dot{
+        .dot {
             position: absolute;
             right: rem(-5);
             top: rem(-5);

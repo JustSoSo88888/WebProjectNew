@@ -110,7 +110,7 @@ let en = {
     "恭喜获得奖励": "Congratulations on Winning",
     "收下奖励": "Claim Reward",
     "记录": "Records",
-    "我的奖励":"My Rewards",
+    "我的奖励": "My Rewards",
     "在线": "Online",
     "连接中": "Connecting",
     "离线": "Offline",
@@ -123,8 +123,13 @@ let en = {
     "立即领取": "Claim Now",
     "恭喜获得": "Congratulations",
     "奖励已发放到您的账户": "The reward has been credited to your account",
-    "任务详情":"Task Details",
-    "图片":"Image",
+    "任务详情": "Task Details",
+    "图片": "Image",
+    "客服": "Customer Service",
+    "条新消息": "new messages",
+    "请上传 .png, .jpg, .jpeg 或 .gif 格式的图片": "Please upload images in .png, .jpg, .jpeg, or .gif format",
+    "您的发言频率过快": "You are sending messages too frequently",
+    "发送": "Send",
 }
 
 export default en

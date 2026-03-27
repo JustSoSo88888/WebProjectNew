@@ -110,7 +110,7 @@ let pt = {
     "恭喜获得奖励": "Parabéns, você ganhou uma recompensa",
     "收下奖励": "Receber Recompensa",
     "记录": "Registros",
-    "我的奖励":"Minhas Recompensas",
+    "我的奖励": "Minhas Recompensas",
     "在线": "Online",
     "连接中": "Conectando",
     "离线": "Offline",
@@ -123,8 +123,13 @@ let pt = {
     "立即领取": "Receber agora",
     "恭喜获得": "Parabéns",
     "奖励已发放到您的账户": "A recompensa foi creditada na sua conta",
-    "任务详情":"Detalhes da Tarefa",
-    "图片":"Image",
+    "任务详情": "Detalhes da Tarefa",
+    "图片": "Image",
+    "客服": "Atendimento ao Cliente",
+    "条新消息": "novas mensagens",
+    "请上传 .png, .jpg, .jpeg 或 .gif 格式的图片": "Por favor, envie imagens nos formatos .png, .jpg, .jpeg ou .gif",
+    "您的发言频率过快": "Você está enviando mensagens com muita frequência",
+    "发送": "Enviar",
 }
 
 export default pt;

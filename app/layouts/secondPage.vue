@@ -77,7 +77,7 @@ const pageTitleMap = {
     '/finance/detail': '产品详情',
     '/profile/lucky': $lang('幸运转盘'),
     '/profile/lucky/record': $lang('我的奖励'),
-    '/chat': '客服',
+    '/chat': $lang('客服'),
 }
 
 const pageTitle = computed(() => {

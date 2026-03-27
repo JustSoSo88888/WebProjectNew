@@ -5,9 +5,9 @@
                 <van-loading v-if="loading" class="loading-tip" size="20" />
                 <div v-for="(msg, index) in messagesList" :key="msg.id || index" class="chat-item"
                     :class="{ 'is-self': userData.id == msg.user_id }">
-                    <img v-if="userData.id != msg.user_id" src="https://api.dicebear.com/7.x/bottts/svg?seed=service"
+                    <img v-if="userData.id != msg.user_id" src="../../assets/img/index/service.png"
                         class="avatar" />
-                    <img v-if="userData.id == msg.user_id" src="https://api.dicebear.com/7.x/avataaars/svg?seed=user"
+                    <img v-if="userData.id == msg.user_id" src="../../assets/img/index/avatar.png"
                         class="avatar" />
                     <div class="bubble" v-html="msg.content" @click="handleMessageClick"></div>
                 </div>
@@ -16,7 +16,7 @@
 
         <div v-if="unreadCount > 0" class="unread-tip" @click="goToBottom">
             <van-icon name="arrow-down" />
-            <span>{{ unreadCount }}条新消息</span>
+            <span>{{ unreadCount }}{{ $lang('条新消息') }}</span>
         </div>
 
         <div class="chat-input">
@@ -47,6 +47,8 @@ import { useAppStore } from '~/stores/app.js'
 import { showImagePreview } from 'vant'
 
 const appStore = useAppStore()
+const nuxtApp = useNuxtApp()
+const $lang = nuxtApp.$lang
 
 definePageMeta({ layout: 'second-page' })
 
@@ -61,6 +63,7 @@ const rows = 20
 const finished = ref(false)
 const isAtBottom = ref(true)
 const unreadCount = ref(0)
+const canSend = ref(true)
 
 onMounted(() => {
     handleGetAgentId()
@@ -210,6 +213,10 @@ const handleFileChange = (event) => {
 
 const sendMessage = () => {
     if (!inputText.value.trim()) return
+    if (!canSend.value) {
+        showMsg($lang('您的发言频率过快'), 'fail')
+        return
+    }
     const params = {
         user_id: userData.value.id,
         name: userData.value.nickname,
@@ -219,6 +226,8 @@ const sendMessage = () => {
     }
     $socket().send(params, inputText.value)
     inputText.value = ''
+    canSend.value = false
+    setTimeout(() => canSend.value = true, 1000)
 }
 
 const onUploadSuccess = (imageUrl) => {
