@@ -55,7 +55,7 @@
                         </svg>
                     </div>
                     <div class="qc-content">
-                        <span class="qc-label">充值</span>
+                        <span class="qc-label">{{ $lang('充值') }}</span>
                     </div>
                 </button>
                 <button class="qc-item qc-withdraw" @click="navigateTo('/profile/withdrawal')">

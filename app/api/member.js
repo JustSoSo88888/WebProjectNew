@@ -68,3 +68,11 @@ export const uploadImage = (params) => {
 export const getCouponList = (params) => {
     return api.post('/member/get_coupon_list', params);
 }
+
+// 法币充值
+// token_channel_id
+// amount
+// home_url
+export const memberRecharge = (params) => {
+    return api.post('/member/recharge', params);
+}

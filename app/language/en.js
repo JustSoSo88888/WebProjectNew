@@ -186,6 +186,12 @@ let en = {
     "您的理财产品已购买成功，请耐心等待收益": "Your investment product has been successfully purchased, please wait patiently for the returns",
     "查看理财记录": "View Investment Records",
     "最低投资金额为": "Minimum investment amount is",
+    "确认充值": "Confirm Deposit",
+    "充值方式": "Deposit Method",
+    "输入其他金额": "Enter Other Amount",
+    "充值金额": "Deposit Amount",
+    "当前余额": "Current Balance",
+    "充值": "Deposit",
 }
 
 export default en

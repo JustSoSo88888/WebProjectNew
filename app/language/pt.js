@@ -186,6 +186,12 @@ let pt = {
     "您的理财产品已购买成功，请耐心等待收益": "Seu produto de investimento foi adquirido com sucesso, aguarde os rendimentos",
     "查看理财记录": "Ver registros de investimento",
     "最低投资金额为": "O valor mínimo de investimento é",
+    "确认充值": "Confirmar depósito",
+    "充值方式": "Método de depósito",
+    "输入其他金额": "Inserir outro valor",
+    "充值金额": "Valor do depósito",
+    "当前余额": "Saldo atual",
+    "充值": "Depositar",
 }
 
 export default pt;

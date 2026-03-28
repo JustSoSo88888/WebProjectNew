@@ -3,7 +3,7 @@
 
         <!-- ① 当前余额 -->
         <div class="balance-card">
-            <div class="balance-label">当前余额</div>
+            <div class="balance-label">{{ $lang('当前余额') }}</div>
             <div class="balance-amount">
                 <span class="balance-unit">R$</span>
                 <span class="balance-value">{{ balance }}</span>
@@ -12,29 +12,35 @@
 
         <!-- ② 充值金额 -->
         <div class="section-card">
-            <div class="section-title">充值金额</div>
+            <div class="section-title">{{ $lang('充值金额') }}</div>
             <div class="preset-grid">
-                <button v-for="(item,index) in amountPresets" :key="index" class="preset-btn"
-                    :class="{ active: selectedAmount === parseFloat(item.amount) && !customActive }" @click="selectPreset(parseFloat(item.amount))">
-                    <span class="preset-unit">R$</span>{{ parseFloat(item.amount) }}
-                </button>
+                <template v-for="(item, index) in amountPresets" :key="index">
+                    <button class="preset-btn"
+                        :class="{ active: selectedAmount === parseFloat(item.amount) && !customActive }"
+                        @click="selectPreset(parseFloat(item.amount))"
+                        v-if="parseFloat(item.amount) >= parseFloat(minAmount) && parseFloat(item.amount) <= parseFloat(maxAmount)">
+                        <span class="preset-unit">R$</span>{{ parseFloat(item.amount) }}
+                    </button>
+                </template>
+
             </div>
             <div class="input-wrap" :class="{ focused: inputFocused }">
                 <span class="input-prefix">R$</span>
                 <input v-model="customAmount" type="number" inputmode="decimal" class="amount-input"
-                    placeholder="输入其他金额" @focus="onInputFocus" @blur="inputFocused = false" @input="onCustomInput" />
+                    :placeholder="$lang('输入其他金额')" @focus="onInputFocus" @blur="inputFocused = false" @input="onCustomInput" />
             </div>
         </div>
 
         <!-- ③ 充值方式 -->
         <div class="section-card">
-            <div class="section-title">充值方式</div>
+            <div class="section-title">{{ $lang('充值方式') }}</div>
             <div class="channel-list">
                 <button v-for="channel in channels" :key="channel.id" class="channel-item"
-                    :class="{ active: selectedChannel === channel.id }" @click="selectedChannel = channel.id">
+                    :class="{ active: selectedChannel === channel.id }" @click="handleSelectedChannel(channel)">
                     <div class="channel-info">
-                        <div class="channel-name">{{ channel.name }}</div>
-                        <div class="channel-range">{{ channel.range }}</div>
+                        <div class="channel-name">{{ channel.channel }}</div>
+                        <div class="channel-range" translate="">R${{ parseFloat(channel.min_amount) }}-R${{
+                            parseFloat(channel.max_amount) }}</div>
                     </div>
                     <div class="channel-radio">
                         <div class="radio-inner" v-if="selectedChannel === channel.id" />
@@ -59,7 +65,7 @@
         <!-- ⑤ 确认充值按钮 -->
         <div class="submit-wrap">
             <button class="submit-btn" :disabled="!canSubmit" @click="handleSubmit">
-                确认充值{{ finalAmount ? ` R$${finalAmount}` : '' }}
+                {{ $lang('确认充值') }}
             </button>
         </div>
 
@@ -69,7 +75,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { navigateTo } from '#imports'
-import { getBalance, getCoinAddress } from '~/api/member'
+import { getBalance, getCoinAddress, memberRecharge } from '~/api/member'
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
 definePageMeta({
@@ -100,12 +106,21 @@ const handleGetBalance = () => {
 
 //获取充值信息
 const amountPresets = ref([])
+const minAmount = ref(0)
+const maxAmount = ref(0)
 const handleGetCoinAddress = () => {
     showLoading($lang('加载中'))
     getCoinAddress({}).then(res => {
         hideLoading();
         if (res.success) {
             amountPresets.value = res.data.amount_configs
+            channels.value = res.data.token_channels || []
+            if (channels.value.length > 0) {
+                selectedChannel.value = res.data.token_channels[0].id
+                minAmount.value = res.data.token_channels[0].min_amount
+                maxAmount.value = res.data.token_channels[0].max_amount
+            }
+
         } else {
             showMsg(res.message, 'fail')
         }
@@ -116,6 +131,13 @@ const handleGetCoinAddress = () => {
     })
 }
 
+const handleSelectedChannel = (channel) => {
+    selectedChannel.value = channel.id
+    minAmount.value = channel.min_amount
+    maxAmount.value = channel.max_amount
+    customAmount.value = ''
+}
+
 
 // 选中状态
 const selectedAmount = ref(null)
@@ -124,31 +146,9 @@ const customActive = ref(false)
 const inputFocused = ref(false)
 
 // 充值通道
-const channels = [
-    {
-        id: 'pix',
-        name: 'PIX 支付',
-        range: 'R$100 - R$50,000',
-        iconBg: 'linear-gradient(135deg, #ECFDF5, #D1FAE5)',
-        icon: '<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#059669" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
-    },
-    {
-        id: 'bank',
-        name: '银行转账',
-        range: 'R$500 - R$200,000',
-        iconBg: 'linear-gradient(135deg, #FFFBEB, #FEF3C7)',
-        icon: '<rect x="2" y="5" width="20" height="14" rx="2" stroke="#D97706" stroke-width="1.8"/><path d="M2 10h20" stroke="#D97706" stroke-width="1.8"/><path d="M6 15h4M14 15h4" stroke="#D97706" stroke-width="1.8" stroke-linecap="round"/>',
-    },
-    {
-        id: 'usdt',
-        name: 'USDT 加密支付',
-        range: 'R$200 - R$100,000',
-        iconBg: 'linear-gradient(135deg, #FFFBEB, #FEF3C7)',
-        icon: '<circle cx="12" cy="12" r="10" stroke="#D97706" stroke-width="1.8"/><path d="M8 9h8M12 9v6M9 12h6" stroke="#D97706" stroke-width="1.8" stroke-linecap="round"/>',
-    },
-]
+const channels = ref([])
 
-const selectedChannel = ref('pix')
+const selectedChannel = ref(0)
 
 // 选中快捷金额
 const selectPreset = (amt) => {
@@ -165,8 +165,14 @@ const onInputFocus = () => {
 }
 
 const onCustomInput = () => {
-    customActive.value = !!customAmount.value
-    if (customActive.value) selectedAmount.value = null
+    // 检查输入金额是否与预设金额匹配
+    const matchedPreset = amountPresets.value.find(item => parseFloat(item.amount) === parseFloat(customAmount.value))
+    if (matchedPreset) {
+        selectedAmount.value = parseFloat(matchedPreset.amount)
+        customActive.value = false
+    } else {
+        selectedAmount.value = null
+    }
 }
 
 // 最终充值金额
@@ -175,11 +181,23 @@ const finalAmount = computed(() => {
     return selectedAmount.value
 })
 
-const canSubmit = computed(() => !!finalAmount.value && finalAmount.value > 0)
+const canSubmit = computed(() => !!finalAmount.value && finalAmount.value >= parseFloat(minAmount.value) && finalAmount.value <= parseFloat(maxAmount.value))
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
     if (!canSubmit.value) return
-    console.log('充值金额:', finalAmount.value, '通道:', selectedChannel.value)
+    showLoading($lang('加载中'))
+    let params = {
+        amount: finalAmount.value,
+        token_channel_id: selectedChannel.value,
+        home_url: window.location.origin
+    }
+    let res = await memberRecharge(params)
+    hideLoading();
+    if (res.success) {
+        window.open(res.data.paymentInfo, '_blank')
+    } else {
+        showMsg(res.message, 'fail')
+    }
     // TODO: 调用充值接口
 }
 </script>
