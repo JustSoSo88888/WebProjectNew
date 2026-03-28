@@ -11,7 +11,7 @@
                 <template v-if="list.length > 0">
                     <div class="list-item" v-for="(item, index) in list" :key="index">
                         <div class="item-main">
-                            <span class="col-type">{{ 123 }}</span>
+                            <span class="col-type">{{ getType(item.type) }}</span>
                             <span class="col-amount" :class="item.change_type == 1 ? 'positive' : 'negative'">
                                 {{ item.change_type == 1 ? '+' : '-' }}R${{ parseFloat(item.amount) }}
                             </span>
@@ -51,21 +51,20 @@ const list = ref([])
 const activeTab = ref(0)
 const tabList = ref(
     [
-        { type: '', label: '全部' },
-        { type: 3, label: '系统赠送' },
-        { type: 7, label: '注册赠送' },
-        { type: 8, label: '充值' },
-        { type: 11, label: '提现' },
-        { type: 12, label: '提现驳回' },
-        { type: 14, label: '下线收益' },
-        { type: 18, label: '理财到期退还本金' },
-        { type: 19, label: '理财收益结算' },
-        { type: 21, label: '购买理财' },
-        { type: 26, label: '用户取消提现' },
-        { type: 44, label: '每日签到' },
-        { type: 45, label: '红包抽奖记录' },
-        { type: 46, label: '红包码兑换' },
-        { type: 50, label: '任务奖励' },
+        { type: 8, label: $lang('充值') },
+        { type: 7, label: $lang('注册赠送') },
+        { type: 11, label: $lang('提现') },
+        { type: 12, label: $lang('提现驳回') },
+        { type: 13, label: $lang('提现失败') },
+        { type: 14, label: $lang('团队收益') },
+        { type: 17, label: $lang('理财收益') },
+        { type: 18, label: $lang('理财到期') },
+        { type: 19, label: $lang('理财收益结算') },
+        { type: 20, label: $lang('升级') },
+        { type: 21, label: $lang('购买理财') },
+        { type: 36, label: $lang('任务收益') },
+        { type: 40, label: $lang('转盘收益') },
+        { type: 46, label: $lang('现金礼物') },
 
     ]
 )
@@ -77,6 +76,46 @@ const getAcTive = computed(() => {
 
 const onTabChange = (val) => {
     onRefresh()
+
+}
+
+const getType = (type) => {
+    let num = Number(type)
+    switch (num) {
+        case 3:
+            return $lang('充值');
+        case 7:
+            return $lang('注册赠送');
+        case 8:
+            return $lang('充值');
+        case 11:
+            return $lang('提现');
+        case 12:
+            return $lang('提现驳回');
+            case 13:
+            return $lang('提现失败') ;
+        case 14:
+            return $lang('团队收益');
+            case 17:
+            return $lang('理财收益');
+        case 18:
+            return $lang('理财到期');
+        case 19:
+            return $lang('理财收益结算');
+        case 20:
+            return $lang('升级') ;
+        case 21:
+            return $lang('购买理财');
+        case 36:
+            return $lang('任务收益') ;
+        case 40:
+            return $lang('转盘收益') ;
+        case 46:
+            return $lang('现金礼物');
+
+        default:
+            return ''
+    }
 
 }
 

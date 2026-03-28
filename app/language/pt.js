@@ -207,6 +207,18 @@ let pt = {
     "团队任务收入": "Ganhos de tarefas da equipe",
     "团队邀请收入": "Ganhos de indicação da equipe",
     "总收入": "Ganhos totais",
+    "提现": "Saque",
+    "提现驳回": "Saque rejeitado",
+    "提现失败": "Falha no saque",
+    "团队收益": "Ganhos da equipe",
+    "理财收益": "Ganhos de investimento",
+    "理财到期": "Vencimento do investimento",
+    "理财收益结算": "Liquidação dos ganhos de investimento",
+    "升级": "Atualizar",
+    "购买理财": "Comprar investimento",
+    "任务收益": "Ganhos de tarefas",
+    "转盘收益": "Ganhos da roleta",
+    "注册赠送":"Bônus de registro",
 }
 
 export default pt;

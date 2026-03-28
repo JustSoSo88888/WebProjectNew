@@ -207,6 +207,18 @@ let en = {
     "团队任务收入": "Team Task Earnings",
     "团队邀请收入": "Team Referral Earnings",
     "总收入": "Total Earnings",
+    "提现": "Withdraw",
+    "提现驳回": "Withdrawal Rejected",
+    "提现失败": "Withdrawal Failed",
+    "团队收益": "Team Earnings",
+    "理财收益": "Investment Earnings",
+    "理财到期": "Investment Maturity",
+    "理财收益结算": "Investment Earnings Settlement",
+    "升级": "Upgrade",
+    "购买理财": "Purchase Investment",
+    "任务收益": "Task Earnings",
+    "转盘收益": "Spin Earnings",
+    "注册赠送":"Register Bonus",
 }
 
 export default en

@@ -114,61 +114,24 @@
                 <h2>会员等级</h2>
                 <p>升级享受更多专属权益</p>
             </div>
-            <div class="vip-list">
-                <div v-for="vip in vipLevels" :key="vip.level" class="vip-card"
-                    :class="{ 'vip-card--current': vip.current }">
-                    <div class="vip-header">
-                        <div class="vip-badge" :style="{ background: vip.gradient }">
-                            <svg viewBox="0 0 24 24" fill="none">
-                                <path
-                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-                                    fill="white" />
-                            </svg>
-                        </div>
-                        <div class="vip-info">
-                            <div class="vip-name">{{ vip.name }} <span class="vip-tag"
-                                    :style="{ background: vip.tagBg, color: vip.tagColor }">{{ vip.tag }}</span>
-                            </div>
-                            <div class="vip-desc">{{ vip.desc }}</div>
-                            <div class="vip-progress-bar" v-if="vip.progress">
-                                <div class="vip-progress-fill" :style="{ width: vip.progress + '%' }"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="vip-tasks" v-if="vip.tasks && vip.tasks.length">
-                        <div class="vip-tasks-title">{{ vip.current ? '升级任务' : '升级条件' }}</div>
-                        <div class="vip-task-item" v-for="task in vip.tasks" :key="task.name">
-                            <div class="vip-task-left">
-                                <span class="vip-task-dot" :class="{ done: task.done }"></span>
-                                <span class="vip-task-name">{{ task.name }}</span>
-                            </div>
-                            <div class="vip-task-right">
-                                <span class="vip-task-count">{{ task.progress }}</span>
-                                <span class="vip-task-reward" :class="{ done: task.done }">{{ task.reward }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="vip-stats">
-                        <div class="vip-stat">
-                            <div class="vip-stat-val">{{ vip.stats.taskReward }}</div>
-                            <div class="vip-stat-label">任务奖励</div>
-                        </div>
-                        <div class="vip-stat">
-                            <div class="vip-stat-val">{{ vip.stats.taskCount }}</div>
-                            <div class="vip-stat-label">任务数量</div>
-                        </div>
-                        <div class="vip-stat">
-                            <div class="vip-stat-val">{{ vip.stats.taskAmount }}</div>
-                            <div class="vip-stat-label">任务金额</div>
-                        </div>
-                    </div>
-
-                    <button class="vip-join-btn"
-                        :style="{ background: vip.current ? 'linear-gradient(135deg, #9CA3AF, #6B7280)' : 'linear-gradient(135deg, #d97706, #b45309)' }">
-                        {{ vip.current ? '当前等级' : '立即加入' }}
-                    </button>
+            <div class="vip-banner">
+                <img src="../assets/img/index/2.png" class="vip-banner-img" />
+                <div class="vip-banner-title">SSS</div>
+            </div>
+            <div class="vip-table">
+                <div class="vip-table-header">
+                    <span></span>
+                    <span>任务奖励</span>
+                    <span>任务</span>
+                    <span>价值</span>
+                    <span></span>
+                </div>
+                <div class="vip-table-row" v-for="item in vipLevels" :key="item.id">
+                    <span class="vip-level">{{ item.name }}</span>
+                    <span>{{ item.income_amount }}</span>
+                    <span>{{ item.daily_order_number }}</span>
+                    <span>{{ item.price }}</span>
+                    <button class="vip-buy-btn">立即加入</button>
                 </div>
             </div>
         </div>
@@ -187,6 +150,7 @@ import RedeemModal from '~/components/RedeemModal.vue'
 import { messageUnreadCount, getAgentId } from '~/api/chat'
 import { useAppStore } from '~/stores/app.js'
 import ConnectionStatus from '~/components/ConnectionStatus.vue'
+import { levelConfigList } from '~/api/level'
 
 const appStore = useAppStore()
 
@@ -259,107 +223,7 @@ const menuItems = [
     },
 ]
 
-const vipLevels = [
-    {
-        level: 1,
-        name: '普通会员',
-        tag: 'LV1',
-        tagBg: '#E5E7EB',
-        tagColor: '#6B7280',
-        gradient: 'linear-gradient(135deg, #9CA3AF, #6B7280)',
-        desc: '享受基础服务',
-        progress: null,
-        tasks: [
-            { name: '注册账户', progress: '已完成', reward: '-', done: true },
-        ],
-        stats: { taskReward: 'R$0', taskCount: '0', taskAmount: 'R$0' },
-        current: false
-    },
-    {
-        level: 2,
-        name: '青铜会员',
-        tag: 'LV2',
-        tagBg: '#FEF3C7',
-        tagColor: '#D97706',
-        gradient: 'linear-gradient(135deg, #CD7F32, #8B4513)',
-        desc: '享受9.5折优惠',
-        progress: null,
-        tasks: [
-            { name: '累计充值', progress: '1/3 次', reward: '+R$200', done: false },
-            { name: '完成交易', progress: '2/5 笔', reward: '+R$100', done: false },
-        ],
-        stats: { taskReward: 'R$580', taskCount: '5', taskAmount: 'R$20,000' },
-        current: false
-    },
-    {
-        level: 3,
-        name: '白银会员',
-        tag: 'LV3',
-        tagBg: '#E5E7EB',
-        tagColor: '#9CA3AF',
-        gradient: 'linear-gradient(135deg, #C0C0C0, #808080)',
-        desc: '享受9折优惠',
-        progress: null,
-        tasks: [
-            { name: '累计充值', progress: '3/5 次', reward: '+R$300', done: false },
-            { name: '完成交易', progress: '6/8 笔', reward: '+R$150', done: false },
-            { name: '邀请好友', progress: '1/2 人', reward: '+R$100', done: false },
-        ],
-        stats: { taskReward: 'R$920', taskCount: '9', taskAmount: 'R$35,000' },
-        current: false
-    },
-    {
-        level: 4,
-        name: '黄金会员',
-        tag: 'LV4',
-        tagBg: '#FEF3C7',
-        tagColor: '#F59E0B',
-        gradient: 'linear-gradient(135deg, #FFD700, #D97706)',
-        desc: '享受8.5折优惠',
-        progress: 65,
-        tasks: [
-            { name: '累计充值', progress: '3/5 次', reward: '+R$500', done: false },
-            { name: '完成交易', progress: '8/10 笔', reward: '+R$200', done: false },
-            { name: '邀请好友', progress: '2/2 人', reward: '+R$100', done: true },
-        ],
-        stats: { taskReward: 'R$1,280', taskCount: '13', taskAmount: 'R$50,000' },
-        current: true
-    },
-    {
-        level: 5,
-        name: '铂金会员',
-        tag: 'LV5',
-        tagBg: '#DBEAFE',
-        tagColor: '#2563EB',
-        gradient: 'linear-gradient(135deg, #E5E4E2, #A0AEC0)',
-        desc: '享受8折优惠',
-        progress: null,
-        tasks: [
-            { name: '累计充值', progress: '5/8 次', reward: '+R$800', done: false },
-            { name: '完成交易', progress: '12/15 笔', reward: '+R$300', done: false },
-            { name: '邀请好友', progress: '3/5 人', reward: '+R$200', done: false },
-        ],
-        stats: { taskReward: 'R$2,580', taskCount: '20', taskAmount: 'R$100,000' },
-        current: false
-    },
-    {
-        level: 6,
-        name: '钻石会员',
-        tag: 'LV6',
-        tagBg: '#EDE9FE',
-        tagColor: '#7C3AED',
-        gradient: 'linear-gradient(135deg, #E5E4E2, #B9F2FF)',
-        desc: '享受7.5折优惠',
-        progress: null,
-        tasks: [
-            { name: '累计充值', progress: '8/10 次', reward: '+R$1,000', done: false },
-            { name: '完成交易', progress: '18/20 笔', reward: '+R$500', done: false },
-            { name: '邀请好友', progress: '5/8 人', reward: '+R$300', done: false },
-        ],
-        stats: { taskReward: 'R$5,000', taskCount: '30', taskAmount: 'R$200,000' },
-        current: false
-    },
-]
+const vipLevels = ref([])
 
 function previewActivity(index) {
     showImagePreview({ images: activityList, startPosition: index })
@@ -374,12 +238,30 @@ const handleMenu = (path) => {
 }
 
 onMounted(() => {
+    handleLevelConfigList();
     getAwardLog()
     getMessageUnreadCount();
 })
 
 onUnmounted(() => {
+    levelConfigList
 })
+
+const handleLevelConfigList = () => {
+    showLoading($lang('加载中'))
+    levelConfigList({}).then(res => {
+        hideLoading();
+        if (res.success) {
+            vipLevels.value = res.data.level_configs || []
+        } else {
+            showMsg(res.message, 'fail')
+        }
+
+    }).catch(error => {
+        hideLoading();
+        showMsg(error.message, 'fail')
+    })
+}
 
 //获取未读消息
 const getMessageUnreadCount = () => {
@@ -783,216 +665,75 @@ const getAwardLog = () => {
     padding-bottom: rem(16);
 }
 
-.vip-list {
-    padding: 0 rem(16);
-    display: flex;
-    flex-direction: column;
-    gap: rem(12);
-}
-
-.vip-card {
-    background: linear-gradient(135deg, $color-bg-page 0%, $color-white 100%);
-    border: 1px solid $color-border;
-    border-radius: $radius-lg;
-    padding: rem(16);
-    transition: $transition-fast;
-
-    &--current {
-        border-color: $color-primary;
-        background: linear-gradient(135deg, $color-primary-bg 0%, #FEF3C7 100%);
-        box-shadow: $shadow-gold;
-    }
-}
-
-.vip-header {
-    display: flex;
-    gap: rem(14);
-    align-items: flex-start;
-    margin-bottom: rem(16);
-}
-
-.vip-badge {
-    flex-shrink: 0;
-    width: rem(56);
-    height: rem(56);
+.vip-banner {
+    position: relative;
+    margin: 0 rem(16);
     border-radius: $radius-md;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
 
-    svg {
-        width: rem(30);
-        height: rem(30);
+    .vip-banner-img {
+        width: 100%;
+        height: rem(160);
+        object-fit: cover;
+    }
+
+    .vip-banner-title {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        padding: rem(8);
+        background: rgba(0, 0, 0, 0.5);
+        color: $color-white;
+        font-size: rem(18);
+        font-weight: 600;
     }
 }
 
-.vip-info {
-    flex: 1;
+.vip-table {
+    margin: rem(12) rem(16) 0;
 }
 
-.vip-name {
-    font-size: rem(16);
-    font-weight: 700;
-    color: $color-text-primary;
-    margin-bottom: rem(4);
-    display: flex;
-    align-items: center;
-    gap: rem(6);
+.vip-table-header {
+    display: grid;
+    grid-template-columns: rem(40) 1fr 1fr 1fr rem(70);
+    gap: rem(8);
+    padding: rem(10) rem(8);
+    background: #3B82F6;
+    border-radius: $radius-sm $radius-sm 0 0;
+    font-size: rem(12);
+    color: $color-white;
+    text-align: center;
 }
 
-.vip-tag {
-    font-size: rem(10);
-    font-weight: 700;
-    padding: rem(2) rem(8);
-    border-radius: $radius-full;
-}
-
-.vip-desc {
+.vip-table-row {
+    display: grid;
+    grid-template-columns: rem(40) 1fr 1fr 1fr rem(70);
+    gap: rem(8);
+    padding: rem(10) rem(8);
+    background: $color-white;
+    border-bottom: 1px solid $color-border;
     font-size: rem(12);
     color: $color-text-secondary;
-    margin-bottom: rem(8);
-}
+    text-align: center;
+    align-items: center;
 
-.vip-progress-bar {
-    height: rem(6);
-    background: $color-border-light;
-    border-radius: $radius-full;
-    overflow: hidden;
-}
-
-.vip-progress-fill {
-    height: 100%;
-    background: $gradient-primary;
-    border-radius: $radius-full;
-    box-shadow: 0 0 8px rgba($color-primary, 0.4);
-}
-
-.vip-tasks {
-    margin-bottom: rem(14);
-
-    .vip-tasks-title {
-        font-size: rem(11);
+    .vip-level {
         font-weight: 600;
-        color: $color-text-muted;
-        margin-bottom: rem(10);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .vip-task-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: rem(10) 0;
-        border-bottom: 1px solid $color-border-light;
-
-        &:last-child {
-            border-bottom: none;
-        }
-    }
-
-    .vip-task-left {
-        display: flex;
-        align-items: center;
-        gap: rem(8);
-    }
-
-    .vip-task-dot {
-        width: rem(8);
-        height: rem(8);
-        border-radius: $radius-full;
-        background: $color-border;
-        border: 1.5px solid $color-gray-300;
-        flex-shrink: 0;
-
-        &.done {
-            background: $color-success;
-            border-color: $color-success;
-        }
-    }
-
-    .vip-task-name {
-        font-size: rem(13);
         color: $color-text-primary;
-        font-weight: 500;
     }
 
-    .vip-task-right {
-        display: flex;
-        align-items: center;
-        gap: rem(10);
-    }
-
-    .vip-task-count {
+    .vip-buy-btn {
+        padding: rem(6) rem(8);
+        background: linear-gradient(135deg, #3B82F6, #2563EB);
+        color: $color-white;
+        border-radius: $radius-sm;
         font-size: rem(11);
-        color: $color-text-muted;
-    }
-
-    .vip-task-reward {
-        font-size: rem(12);
-        font-weight: 700;
-        color: $color-primary;
-        background: $color-primary-bg;
-        padding: rem(3) rem(8);
-        border-radius: $radius-full;
-
-        &.done {
-            color: $color-success;
-            background: $color-success-bg;
-        }
+        white-space: nowrap;
     }
 }
 
-.vip-stats {
-    display: flex;
-    background: $color-white;
-    border-radius: $radius-md;
-    border: 1px solid $color-border;
-    margin-bottom: rem(14);
-    overflow: hidden;
 
-    .vip-stat {
-        flex: 1;
-        text-align: center;
-        padding: rem(14) rem(4);
-        border-right: 1px solid $color-border;
 
-        &:last-child {
-            border-right: none;
-        }
-    }
-
-    .vip-stat-val {
-        font-size: rem(15);
-        font-weight: 700;
-        color: $color-text-primary;
-        margin-bottom: rem(4);
-    }
-
-    .vip-stat-label {
-        font-size: rem(10);
-        color: $color-text-muted;
-    }
-}
-
-.vip-join-btn {
-    width: 100%;
-    height: rem(46);
-    background: $gradient-primary;
-    color: $color-white;
-    border: none;
-    border-radius: $radius-md;
-    font-size: rem(15);
-    font-weight: 700;
-    cursor: pointer;
-    letter-spacing: 0.5px;
-    box-shadow: $shadow-gold;
-    transition: $transition-fast;
-
-    &:active {
-        opacity: 0.9;
-        transform: translateY(1px);
-    }
-}
 </style>

@@ -26,7 +26,7 @@
                             </svg>
                             {{ $lang('信用分') }} {{ balanceData.credit }}
                         </span>
-                        <span class="tag tag--level">Lv.{{ balanceData.level }}</span>
+                        <span class="tag tag--level">{{ levelData.name }}</span>
                     </div>
                 </div>
                 <div class="header-actions">
@@ -144,6 +144,7 @@ import { navigateTo } from '#imports'
 import LangModal from '~/components/LangModal'
 import { getBalance, loginOut, awardTotal } from '~/api/member'
 import { storage } from '~/utils/index'
+import { levelConfigList } from '~/api/level'
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
 const $dialog = nuxtApp.$dialog
@@ -200,6 +201,9 @@ const getAwardTotal = () => {
 //获取余额
 const balance = ref(0)
 const balanceData = ref({})
+const levelData = ref({
+    name:''
+})
 const getBalanceData = () => {
     showLoading($lang('加载中'))
     getBalance({}).then(res => {
@@ -207,6 +211,8 @@ const getBalanceData = () => {
         if (res.success) {
             balance.value = res.data.amount
             balanceData.value = res.data
+            handlelevelConfigList(res.data.level);
+            
         } else {
             showMsg(res.message, 'fail')
         }
@@ -217,6 +223,18 @@ const getBalanceData = () => {
     })
 }
 
+const handlelevelConfigList = (level) => {
+    levelConfigList({}).then(res => {
+        if(res.success){
+            let levelList = res.data.level_configs || []
+            let levelArr = levelList.filter(item => item.level == level)
+            levelData.value = levelArr[0]
+            
+            
+        }
+
+    })
+}
 
 
 const switchTab = (key, index) => {
@@ -252,7 +270,7 @@ const menuItems = [
     },
     {
         key: 'trade',
-        label: '交易记录',
+        label: $lang('交易记录'),
         iconBg: 'linear-gradient(135deg,#F5F3FF,#EDE9FE)',
         icon: '<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9l2 2 4-4" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
         route: '/profile/trade',
