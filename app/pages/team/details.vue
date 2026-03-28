@@ -19,11 +19,11 @@
               </div>
               <div class="member-row">
                 <span class="member-label">{{ $lang('总充值') }}</span>
-                <span class="member-value money" translate="no">R$ {{ item.total_deposit_amount }}</span>
+                <span class="member-value money" translate="no">R$ {{ parseFloat(item.total_deposit_amount )}}</span>
               </div>
               <div class="member-row">
                 <span class="member-label">{{ $lang('总提现') }}</span>
-                <span class="member-value money" translate="no">R$ {{ item.total_without_amount }}</span>
+                <span class="member-value money" translate="no">R$ {{ parseFloat(item.total_without_amount) }}</span>
               </div>
               <div class="member-row">
                 <span class="member-label">{{ $lang('注册时间') }}</span>
@@ -160,6 +160,7 @@ const onRefresh = () => {
   display: flex;
   flex-direction: column;
   gap: rem(8);
+  margin-bottom: rem(10);
 }
 
 .member-row {

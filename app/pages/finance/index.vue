@@ -18,8 +18,8 @@
                 <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z"
                   fill="rgba(255,255,255,0.9)" />
               </svg>
-              <span class="credit-label">信用评分</span>
-              <span class="credit-val">{{ userInfo.creditScore }}</span>
+              <span class="credit-label">{{ $lang('信用评分') }}</span>
+              <span class="credit-val">{{ credit }}</span>
             </div>
           </div>
         </div>
@@ -30,13 +30,13 @@
             <rect x="9" y="3" width="6" height="4" rx="1" stroke="white" stroke-width="1.8" />
             <path d="M9 12h6M9 16h4" stroke="white" stroke-width="1.8" stroke-linecap="round" />
           </svg>
-          理财记录
+          {{ $lang('理财记录') }}
         </button>
       </div>
 
       <!-- 钱包余额 -->
       <div class="wallet-row">
-        <div class="wallet-label">钱包余额</div>
+        <div class="wallet-label">{{ $lang('余额') }}</div>
         <div class="wallet-amount">
           <span class="wallet-unit">R$</span>
           <span class="wallet-num" translate="no">{{ balance }}</span>
@@ -46,13 +46,13 @@
       <!-- 收益统计 -->
       <div class="earnings-row">
         <div class="earning-item">
-          <div class="earning-val" translate="no">R${{ totalEarnings }}</div>
-          <div class="earning-label">总收益</div>
+          <div class="earning-val" translate="no">R$ {{ totalEarnings }}</div>
+          <div class="earning-label">{{ $lang('总收益') }}</div>
         </div>
         <div class="earning-divider"></div>
         <div class="earning-item">
-          <div class="earning-val earning-val--today">+R${{ userInfo.todayEarnings }}</div>
-          <div class="earning-label">今日收益</div>
+          <div class="earning-val earning-val--today" translate="no">+R$ {{ todayEarnings }}</div>
+          <div class="earning-label">{{ $lang('今日收益') }}</div>
         </div>
       </div>
     </div>
@@ -60,7 +60,7 @@
     <!-- 理财产品列表 -->
     <div class="product-section">
       <div class="section-header">
-        <span class="section-title">理财产品</span>
+        <span class="section-title">{{ $lang('理财产品') }}</span>
       </div>
       <div class="product-list">
         <div v-for="item in products" :key="item.id" class="product-card" @click="handleBuy(item)">
@@ -73,10 +73,10 @@
                   <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
                   <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
                 </svg>
-                {{ item.day_number }} 天
+                {{ item.day_number }} {{ $lang('天') }}
               </div>
               <div class="product-profit">
-                <span class="profit-label">日收益率</span>
+                <span class="profit-label">{{ $lang('日收益率') }}</span>
                 <span class="profit-val">{{ item.daily_income_rate }}%</span>
               </div>
             </div>
@@ -84,12 +84,13 @@
 
           <div class="product-bottom">
             <div class="product-stat">
-              <span class="stat-label">最低存款</span>
+              <span class="stat-label">{{ $lang('最低存款') }}</span>
               <span class="stat-val" translate="no">R${{ parseFloat(item.min_amount) }}</span>
             </div>
             <div class="product-progress-wrap">
               <div class="progress-info">
-                <span class="progress-pct">{{ item.total_amount == 0 ? 100 : ((item.surplus_amount / item.total_amount) *
+                <span class="progress-pct">{{ item.total_amount == 0 ? 100 : ((item.surplus_amount / item.total_amount)
+                  *
                   100) }}%</span>
               </div>
               <div class="progress-bar">
@@ -127,12 +128,14 @@ onMounted(() => {
 //获取余额
 
 const balance = ref(0)
+const credit = ref(0)
 const getBalanceData = () => {
   showLoading($lang('加载中'))
   getBalance({}).then(res => {
     hideLoading();
     if (res.success) {
       balance.value = res.data.amount
+      credit.value = res.data.credit
     } else {
       showMsg(res.message, 'fail')
     }
@@ -146,6 +149,7 @@ const getBalanceData = () => {
 //理财列表
 const products = ref([])
 const totalEarnings = ref(0)
+const todayEarnings = ref(0)
 const getMealList = () => {
   showLoading($lang('加载中'))
   mealList({}).then(res => {
@@ -153,6 +157,7 @@ const getMealList = () => {
     if (res.success) {
       products.value = res.data.list
       totalEarnings.value = res.data.total_income_amount
+      todayEarnings.value = res.data.today_income_amount
     } else {
       showMsg(res.message, 'fail')
     }
@@ -162,16 +167,6 @@ const getMealList = () => {
     showMsg(error.message, 'fail')
   })
 }
-
-const userInfo = ref({
-  account: 'user_8821',
-  creditScore: 98,
-  balance: '12,580.00',
-  totalEarnings: '3,240.50',
-  todayEarnings: '128.60',
-})
-
-
 
 function goRecord() {
   navigateTo('/finance/record')

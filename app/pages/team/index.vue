@@ -3,21 +3,21 @@
 
     <!-- 顶部统计卡片 -->
     <div class="hero-card">
-      <div class="hero-title">我的团队</div>
+      <div class="hero-title">{{ $lang('我的团队') }}</div>
       <div class="hero-stats">
         <div class="hero-stat">
-          <div class="hero-stat-val" translate="no">{{ teamData.total_sub_count }}</div>
-          <div class="hero-stat-label">团队总人数</div>
+          <div class="hero-stat-val" translate="no">{{ totalCount }}</div>
+          <div class="hero-stat-label">{{ $lang('团队总人数') }}</div>
         </div>
         <div class="hero-divider"></div>
         <div class="hero-stat">
           <div class="hero-stat-val" translate="no">R$ {{ teamData.total_award_amount }}</div>
-          <div class="hero-stat-label">团队收入</div>
+          <div class="hero-stat-label">{{ $lang('团队收入') }}</div>
         </div>
         <div class="hero-divider"></div>
         <div class="hero-stat">
-          <div class="hero-stat-val">{{ teamInfo.scale }}</div>
-          <div class="hero-stat-label">团队规模</div>
+          <div class="hero-stat-val">{{ scaleStr }}</div>
+          <div class="hero-stat-label">{{ $lang('团队规模') }}</div>
         </div>
       </div>
     </div>
@@ -32,7 +32,8 @@
 
     <!-- 团队分队面板 -->
     <div v-if="activeTab === 'team'" class="panel">
-      <div v-for="group in teamGroups" :key="group.name" class="group-card" @click="navigateTo({path:'/team/details',query: {title: group.name,deep:group.deep}})">
+      <div v-for="group in teamGroups" :key="group.name" class="group-card"
+        @click="navigateTo({ path: '/team/details', query: { title: group.name, deep: group.deep } })">
         <div class="group-header">
           <span class="group-badge" :style="{ background: group.color }">{{ group.name }}</span>
           <span class="group-members">
@@ -43,28 +44,28 @@
               <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.8"
                 stroke-linecap="round" />
             </svg>
-            {{ group.number }} 人
+            {{ group.number }} {{ $lang('人') }}
           </span>
         </div>
         <div class="group-stats">
           <div class="group-stat">
-            <div class="group-stat-val" translate="no">0</div>
-            <div class="group-stat-label">注册人数</div>
+            <div class="group-stat-val" translate="no">{{ group.registerCount }}</div>
+            <div class="group-stat-label">{{ $lang('注册人数') }}</div>
           </div>
           <div class="group-stat">
             <div class="group-stat-val" translate="no">R$ {{ group.taskIncome }}</div>
-            <div class="group-stat-label">任务收入</div>
+            <div class="group-stat-label">{{ $lang('任务收入') }}</div>
           </div>
           <div class="group-stat">
             <div class="group-stat-val" translate="no">R$ {{ group.referralIncome }}</div>
-            <div class="group-stat-label">推荐收入</div>
+            <div class="group-stat-label">{{ $lang('推荐收入') }}</div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- 邀请面板 -->
-    <div v-if="activeTab === 'invite'" class="panel">
+    <div v-if="activeTab === 'invite' && showInvite" class="panel">
       <div class="invite-card">
         <div class="qr-wrap">
           <canvas ref="qrCanvas" class="qr-canvas"></canvas>
@@ -103,18 +104,21 @@
         </div>
       </div>
     </div>
+    <div v-if="activeTab === 'invite' && !showInvite" class="upgrade-tip">
+      {{ $lang('升级即可获得特权和奖励。') }}
+    </div>
 
   </div>
 </template>
 
 <script setup>
-import { ref, watch, nextTick, onMounted } from 'vue'
+import { ref, watch, nextTick, onMounted, computed } from 'vue'
 import { showToast } from 'vant'
 import { useRoute } from 'vue-router'
 import QRCode from 'qrcode'
 import config from '~/config'
 import { storage } from '../../utils/index';
-import { basicData } from '~/api/member'
+import { basicData, getBalance } from '~/api/member'
 import { navigateTo } from '#imports'
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
@@ -134,27 +138,33 @@ const init = () => {
     inviteInfo.value.code = userData.invite_code
     inviteInfo.value.link = config.frontUrl + '/login/register?code=' + userData.invite_code
   }
-  getBsicData();
+
 }
 
+
 const teamData = ref({})
+const totalCount = ref(0)
 const getBsicData = () => {
   showLoading($lang('加载中'))
   basicData({}).then(res => {
     hideLoading();
     if (res.success) {
       teamData.value = res.data;
-      teamGroups.value[0].taskIncome = 0//一级任务推荐收入
-      teamGroups.value[0].referralIncome = res.data.one_generation_award_amount
+      teamGroups.value[0].taskIncome = res.data.one_generation_order_award_amount//一级任务推荐收入
+      teamGroups.value[0].referralIncome = res.data.one_generation_meal_award_amount
       teamGroups.value[0].number = res.data.one_sub_count
+      teamGroups.value[0].registerCount = res.data.one_sub_count
 
-      teamGroups.value[1].taskIncome = 0//二级任务推荐收入
-      teamGroups.value[1].referralIncome = res.data.two_generation_award_amount
+      teamGroups.value[1].taskIncome = res.data.two_generation_order_award_amount//二级任务推荐收入
+      teamGroups.value[1].referralIncome = res.data.two_generation_meal_award_amount
       teamGroups.value[1].number = res.data.two_sub_count
+      teamGroups.value[1].registerCount = res.data.two_sub_count
 
-      teamGroups.value[2].taskIncome = 0//三级任务推荐收入
-      teamGroups.value[2].referralIncome = res.data.three_generation_award_amount
+      teamGroups.value[2].taskIncome = res.data.three_generation_order_award_amount//三级任务推荐收入
+      teamGroups.value[2].referralIncome = res.data.three_generation_meal_award_amount
       teamGroups.value[2].number = res.data.three_sub_count
+      teamGroups.value[2].registerCount = res.data.three_sub_count
+      totalCount.value = Number(res.data.three_sub_count) + Number(res.data.two_sub_count) + Number(res.data.one_sub_count)
     } else {
       showMsg(res.message, 'fail')
     }
@@ -165,44 +175,53 @@ const getBsicData = () => {
   })
 }
 
+const scaleStr = computed(() => {
+  if (Number(totalCount.value) < 30) {
+    return $lang('小型')
+  } else if (totalCount.value < 100) {
+    return $lang('中型')
+  } else {
+    return $lang('大型')
+  }
+
+})
+
+
 const route = useRoute()
 const activeTab = ref('team')
 const tabs = [
-  { key: 'team', label: '团队' },
-  { key: 'invite', label: '邀请' },
+  { key: 'team', label: $lang('团队') },
+  { key: 'invite', label: $lang('邀请') },
 ]
-
-const teamInfo = ref({
-  totalMembers: 128,
-  totalIncome: '45,680',
-  scale: '中型',
-})
 
 const teamGroups = ref([
   {
-    name: 'A队',
+    name: $lang('A团队'),
     color: 'linear-gradient(135deg, #d97706, #FBBF24)',
     number: 0,
-    taskIncome:0,
-    referralIncome:0,
-    deep:1,
+    taskIncome: 0,
+    referralIncome: 0,
+    deep: 1,
+    registerCount: 0,
 
   },
   {
-    name: 'B队',
+    name: $lang('B团队'),
     color: 'linear-gradient(135deg, #b45309, #d97706)',
     number: 0,
-    taskIncome:0,
-    referralIncome:0,
-    deep:2,
+    taskIncome: 0,
+    referralIncome: 0,
+    deep: 2,
+    registerCount: 0,
   },
   {
-    name: 'C队',
+    name: $lang('C团队'),
     color: 'linear-gradient(135deg, #059669, #34D399)',
     number: 0,
-    taskIncome:0,
-    referralIncome:0,
-    deep:3,
+    taskIncome: 0,
+    referralIncome: 0,
+    deep: 3,
+    registerCount: 0,
   },
 ])
 
@@ -216,11 +235,32 @@ const qrCanvas = ref(null)
 
 
 
-
-watch(activeTab, (val) => {
+const showInvite = ref(false)
+watch(activeTab, async (val) => {
   if (val === 'invite') {
-    nextTick(() => generateQR())
+    try {
+      showLoading($lang('加载中'))
+      let res = await getBalance();
+      if (res.success) {
+        hideLoading();
+        if (res.data.can_invite != 0) {
+          nextTick(() => generateQR())
+          showInvite.value = true
+        } else {
+          showInvite.value = false
+        }
+      } else {
+        showMsg(res.message, 'fail')
+      }
+    } catch (error) {
+      hideLoading();
+      showMsg(error.message, 'fail')
+    }
+  } else {
+    getBsicData();
   }
+}, {
+  immediate: true
 })
 
 function generateQR() {
@@ -236,10 +276,10 @@ async function copyText(text, type) {
   try {
     await navigator.clipboard.writeText(text)
     copied.value = type
-    showToast('复制成功')
+    showToast($lang('复制成功'))
     setTimeout(() => { copied.value = '' }, 2000)
   } catch {
-    showToast('复制失败，请手动复制')
+    showToast($lang('复制失败，请手动复制'))
   }
 }
 </script>
@@ -348,7 +388,8 @@ async function copyText(text, type) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: rem(40);
+  padding: 0 rem(10);
+  box-sizing: border-box;
   height: rem(24);
   border-radius: $radius-full;
   font-size: rem(12);
@@ -488,4 +529,19 @@ async function copyText(text, type) {
     opacity: 0.85;
   }
 }
+.upgrade-tip {
+  padding: rem(24) rem(16);
+  height: rem(100);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: $color-text-muted;
+  font-size: rem(14);
+  background: $color-bg-page;
+  border-radius: $radius-lg;
+  margin: 0 rem(14);
+  border: 1px dashed $color-border;
+}
+
 </style>
