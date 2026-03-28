@@ -3,14 +3,14 @@
         <!-- Tab Switch -->
         <div class="tab-container">
             <div class="tab-wrapper">
-                <button class="tab-btn" :class="{ active: activeTab === 'recharge' }" @click="activeTab = 'recharge'">
+                <button class="tab-btn" :class="{ active: activeTab == 0 }" @click="activeTab = 0">
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M12 5v14M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
                     充值
                 </button>
-                <button class="tab-btn" :class="{ active: activeTab === 'withdraw' }" @click="activeTab = 'withdraw'">
+                <button class="tab-btn" :class="{ active: activeTab == 1 }" @click="activeTab = 1">
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M12 19V5M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
@@ -29,47 +29,32 @@
                 <span>金额</span>
                 <span>状态</span>
             </div>
-            <div class="list-content" ref="scrollContainer" @touchstart="onTouchStart" @touchmove="onTouchMove"
-                @touchend="onTouchEnd" @scroll="onScroll">
-                <!-- 下拉刷新提示 -->
-                <div class="refresh-indicator" :style="{ height: refreshHeight + 'px' }">
-                    <div class="refresh-content">
-                        <svg class="refresh-icon" :class="{ rotating: isRefreshing }" viewBox="0 0 24 24" fill="none">
-                            <path d="M23 4v6h-6M1 20v-6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                        <span>{{ refreshText }}</span>
-                    </div>
-                </div>
-
-                <!-- 列表数据 -->
-                <div v-for="item in currentList" :key="item.id" class="list-item">
-                    <div class="item-main">
-                        <span class="col-id">{{ item.id }}</span>
-                        <span class="col-amount" :class="{ positive: item.type === 'recharge' }">
-                            {{ item.type === 'recharge' ? '+' : '-' }}R${{ item.amount }}
-                        </span>
-                        <span class="col-status" :class="item.statusClass">{{ item.statusText }}</span>
-                    </div>
-                    <div class="item-footer">
-                        <span class="col-time">{{ item.time }}</span>
-                    </div>
-                </div>
-
-                <!-- 加载更多提示 -->
-                <div class="loading-indicator" v-if="isLoading">
-                    <svg class="loading-icon" viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-opacity="0.3" />
-                        <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" />
-                    </svg>
-                    <span>加载中...</span>
-                </div>
-
-                <!-- 无更多数据提示 -->
-                <div class="no-more-indicator" v-else-if="!hasMore">
-                    <span>没有更多数据了</span>
-                </div>
+            <div class="list-content">
+                <van-pull-refresh :pulling-text="$lang('下拉即可刷新') + '...'" :loosing-text="$lang('释放即可刷新') + '...'"
+                    :loading-text="$lang('加载中') + '...'" v-model="refreshing" @refresh="onRefresh">
+                    <van-list v-model:loading="loading" :finished="finished" :loading-text="$lang('加载中')"
+                        :finished-text="list.length > 0 ? $lang('没有更多了') : ''" @load="onLoad">
+                        <template v-if="list.length > 0">
+                            <div v-for="item in list" :key="item.id" class="list-item">
+                                <div class="item-main">
+                                    <span class="col-id">{{ item.order_no }}</span>
+                                    <span class="col-amount" :class="{ positive: activeTab === 0 }" translate="no">
+                                        {{ activeTab === 0 ? '+' : '-' }}R${{ parseFloat(item.amount) }}
+                                    </span>
+                                    <span class="col-status" :class="getType(item.status).class">{{ getType(item.status).text }}</span>
+                                </div>
+                                <div class="item-footer">
+                                    <span class="col-time">{{ item.create_time }}</span>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div>
+                                <Empty></Empty>
+                            </div>
+                        </template>
+                    </van-list>
+                </van-pull-refresh>
             </div>
         </div>
 
@@ -78,190 +63,97 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from '#imports'
+import { memberRechargeOrder } from '~/api/member'
+import { bankCardList } from '~/api/member'
 
 definePageMeta({ layout: 'second-page' })
 
+const nuxtApp = useNuxtApp()
+const $lang = nuxtApp.$lang
+
+const loading = ref(false)
+const finished = ref(false)
+const refreshing = ref(false)
+const page = ref(1)
+const rows = ref(20)
+const list = ref([])
+const activeTab = ref(0)
+const tabList = ref(
+    [
+        { type: '0', label: '充值' },
+        { type: '1', label: '提现' },
+
+    ]
+)
+
+const getAcTive = computed(() => {
+    const type = tabList.value[activeTab.value].type
+    return type
+})
+
+const getType = (status) =>{
+    if(Number(status) == 0){
+        return {text:'待支付',class:'pending'}
+    }else if(Number(status) == 1){
+        return {text:'已支付',class:'success'}
+    }else if(Number(status) == 2){
+        return {text:'已取消',class:'error'}
+    }else if(Number(status) == 3){
+        return {text:'交易失败',class:'error'}
+    }
+}
+const onTabChange = (val) => {
+    onRefresh()
+
+}
+
+const onRefresh = () => {
+    finished.value = false;
+    page.value = 1;
+    loading.value = true;
+    onLoad();
+}
+
+const onLoad = () => {
+    let param = {
+        page: page.value,
+        rows: rows.value,
+        type: getAcTive.value
+    }
+    showLoading($lang('加载中'))
+    memberRechargeOrder(param).then(res => {
+        hideLoading();
+        refreshing.value = false
+        if (res.success) {
+            const dataList = res.data.rows || []
+            if (page.value <= 1) {
+                list.value = dataList
+            } else {
+                list.value = [...list.value, ...dataList]
+            }
+            if (dataList.length >= rows.value) {
+                page.value++
+            } else {
+                finished.value = true
+            }
+
+        } else {
+            showMsg(res.message, 'fail')
+            finished.value = true
+        }
+        loading.value = false
+    }).catch(error => {
+        finished.value = true
+        loading.value = false;
+        hideLoading();
+        showMsg(error.message, 'fail')
+    })
+}
+
 const route = useRoute()
 
-// Tab state — 支持 ?tab=recharge / ?tab=withdraw 初始化
-const activeTab = ref(route.query.tab === 'withdraw' ? 'withdraw' : 'recharge')
-
-
-
-// Mock data generators
-const generateMockData = (type, count, startIndex = 0) => {
-    const data = []
-    const prefix = type === 'recharge' ? 'RC' : 'WD'
-    const statusOptions = [
-        { text: '成功', class: 'success' },
-        { text: '处理中', class: 'pending' },
-        { text: '失败', class: 'error' }
-    ]
-
-    for (let i = 0; i < count; i++) {
-        const index = startIndex + i
-        const date = new Date()
-        date.setDate(date.getDate() - Math.floor(Math.random() * 30))
-        const dateStr = date.toISOString().split('T')[0].replace(/-/g, '')
-        const timeStr = date.toTimeString().split(' ')[0].substring(0, 5)
-
-        const status = statusOptions[Math.floor(Math.random() * statusOptions.length)]
-        const amount = (Math.random() * 1000 + 50).toFixed(2)
-
-        data.push({
-            id: `${prefix}${dateStr}${String(index + 1).padStart(3, '0')}`,
-            amount: amount,
-            time: `${date.toISOString().split('T')[0]} ${timeStr}`,
-            statusText: status.text,
-            statusClass: status.class
-        })
-    }
-    return data
-}
-
-// Initial data
-const rechargeList = ref(generateMockData('recharge', 10))
-const withdrawList = ref(generateMockData('withdraw', 10))
-
-// Pagination state
-const page = ref(1)
-const rows = 10
-const isLoading = ref(false)
-const hasMore = ref(true)
-
-// Touch/Scroll state for pull-to-refresh
-const scrollContainer = ref(null)
-const touchStartY = ref(0)
-const refreshHeight = ref(0)
-const isRefreshing = ref(false)
-const refreshText = ref('下拉刷新')
-
-// Computed list based on active tab
-const currentList = computed(() => {
-    const list = activeTab.value === 'recharge' ? rechargeList.value : withdrawList.value
-    return list.map(item => ({
-        ...item,
-        type: activeTab.value
-    }))
-})
-
-// Watch tab change to reset pagination
-watch(activeTab, () => {
-    page.value = 1
-    hasMore.value = true
-    if (scrollContainer.value) {
-        scrollContainer.value.scrollTop = 0
-    }
-    // Reset data for demo purposes
-    if (activeTab.value === 'recharge') {
-        rechargeList.value = generateMockData('recharge', 10)
-    } else {
-        withdrawList.value = generateMockData('withdraw', 10)
-    }
-})
-
-// Pull to refresh logic
-const onTouchStart = (e) => {
-    if (isRefreshing.value) return
-    touchStartY.value = e.touches[0].clientY
-}
-
-const onTouchMove = (e) => {
-    if (isRefreshing.value) return
-    const scrollTop = scrollContainer.value?.scrollTop || 0
-    if (scrollTop > 0) return
-
-    const deltaY = e.touches[0].clientY - touchStartY.value
-    if (deltaY > 0) {
-        refreshHeight.value = Math.min(deltaY * 0.5, 80)
-        refreshText.value = refreshHeight.value > 60 ? '松开刷新' : '下拉刷新'
-        e.preventDefault()
-    }
-}
-
-const onTouchEnd = () => {
-    if (refreshHeight.value > 60) {
-        startRefresh()
-    } else {
-        refreshHeight.value = 0
-        refreshText.value = '下拉刷新'
-    }
-}
-
-const startRefresh = async () => {
-    isRefreshing.value = true
-    refreshText.value = '刷新中...'
-
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
-
-    // Generate new data
-    const newData = activeTab.value === 'recharge'
-        ? generateMockData('recharge', 10, 0)
-        : generateMockData('withdraw', 10, 0)
-
-    if (activeTab.value === 'recharge') {
-        rechargeList.value = newData
-    } else {
-        withdrawList.value = newData
-    }
-
-    page.value = 1
-    hasMore.value = true
-
-    // Reset state
-    isRefreshing.value = false
-    refreshHeight.value = 0
-    refreshText.value = '下拉刷新'
-}
-
-// Infinite scroll logic
-const onScroll = () => {
-    if (isLoading.value || !hasMore.value) return
-
-    const container = scrollContainer.value
-    if (!container) return
-
-    const { scrollTop, scrollHeight, clientHeight } = container
-    const distanceToBottom = scrollHeight - scrollTop - clientHeight
-
-    // Trigger load when near bottom
-    if (distanceToBottom < 50) {
-        loadMore()
-    }
-}
-
-const loadMore = async () => {
-    if (isLoading.value || !hasMore.value) return
-
-    isLoading.value = true
-
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 800))
-
-    const newPage = page.value + 1
-    const startIndex = (newPage - 1) * rows
-    const newData = activeTab.value === 'recharge'
-        ? generateMockData('recharge', rows, startIndex)
-        : generateMockData('withdraw', rows, startIndex)
-
-    if (activeTab.value === 'recharge') {
-        rechargeList.value = [...rechargeList.value, ...newData]
-    } else {
-        withdrawList.value = [...withdrawList.value, ...newData]
-    }
-
-    page.value = newPage
-
-    // Simulate end of data after 5 pages
-    if (newPage >= 5) {
-        hasMore.value = false
-    }
-
-    isLoading.value = false
-}
 </script>
 
 <style scoped lang="scss">

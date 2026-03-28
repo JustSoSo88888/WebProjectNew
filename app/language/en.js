@@ -197,6 +197,16 @@ let en = {
     "每日收益率": "Daily Return Rate",
     "有效期": "Validity Period",
     "理财记录": "Investment Records",
+    "信用分": "Credit Score",
+    "有效日期": "Valid Date",
+    "收益统计": "Earnings Statistics",
+    "昨日收入": "Yesterday's Earnings",
+    "今日收入": "Today's Earnings",
+    "7日收入": "7-Day Earnings",
+    "本月收入": "This Month's Earnings",
+    "团队任务收入": "Team Task Earnings",
+    "团队邀请收入": "Team Referral Earnings",
+    "总收入": "Total Earnings",
 }
 
 export default en

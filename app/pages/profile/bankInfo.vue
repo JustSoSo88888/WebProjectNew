@@ -62,8 +62,8 @@
                 </div>
             </div>
             <div class="form-item">
-                <div class="form-label">{{ $lang('银行账户') }}</div>
-                <div class="form-input form-select" :class="{ focused: inputFocused.bank }" @click="showPicker = true">
+                <div class="form-label">类型</div>
+                <div class="form-input form-select" :class="{ focused: inputFocused.acc_code }" @click="showPicker = true">
                     <div class="input-icon">
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"
@@ -72,7 +72,7 @@
                         </svg>
                     </div>
                     <div class="select-value" :class="{ placeholder: !selectedBankName }">
-                        {{ selectedBankName || $lang('请选择银行账户') }}
+                        {{ selectedBankName || '请选择银行类型' }}
                     </div>
                     <div class="select-arrow">
                         <svg viewBox="0 0 24 24" fill="none">
@@ -175,6 +175,7 @@ const inputFocused = ref({
     phone: false,
     bank: false,
     account: false,
+    acc_code:false,
 })
 
 const form = ref({
@@ -182,6 +183,7 @@ const form = ref({
     phone: '',
     bank: '',
     account: '',
+    acc_code:'',
 })
 
 const hasData = computed(() => {

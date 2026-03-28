@@ -6,7 +6,8 @@
             <div class="header-bg"></div>
             <div class="user-info">
                 <div class="avatar-wrap">
-                    <img class="avatar" :src="userInfo.avatar"  />
+                    <img class="avatar"
+                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=profile&backgroundColor=b6e3f4" />
                     <div class="avatar-badge">
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path
@@ -23,20 +24,20 @@
                                 <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8" />
                                 <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
                             </svg>
-                            信用分 {{ userInfo.creditScore }}
+                            {{ $lang('信用分') }} {{ balanceData.credit }}
                         </span>
-                        <span class="tag tag--level">Lv.{{ userData.level }}</span>
+                        <span class="tag tag--level">Lv.{{ balanceData.level }}</span>
                     </div>
                 </div>
                 <div class="header-actions">
-                    <button class="action-btn action-btn--recharge" @click="navigateTo('/profile/recharge')" aria-label="充值">
+                    <button class="action-btn action-btn--recharge" @click="navigateTo('/profile/recharge')">
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="M12 5v14M5 12l7-7 7 7" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                         {{ $lang('充值') }}
                     </button>
-                    <button class="action-btn action-btn--withdraw" @click="navigateTo('/profile/withdrawal')" aria-label="提现">
+                    <button class="action-btn action-btn--withdraw" @click="navigateTo('/profile/withdrawal')">
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="M12 19V5M5 12l7 7 7-7" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
@@ -50,19 +51,14 @@
         <!-- ② 钱包余额卡片 -->
         <div class="wallet-card">
             <div class="wallet-row">
-                <div class="wallet-item">
-                    <div class="wallet-label">钱包余额</div>
-                    <div class="wallet-amount" translate="no">R${{ balance }}</div>
+                <div class="wallet-item" @click="getBalanceData">
+                    <div class="wallet-label">{{ $lang('余额') }}</div>
+                    <div class="wallet-amount" translate="no">R${{ balance }} <van-icon name="replay" style="font-weight: bold;"/></div>
                 </div>
                 <div class="wallet-divider"></div>
                 <div class="wallet-item">
-                    <div class="wallet-label">保证金</div>
-                    <div class="wallet-amount wallet-amount--warning">R${{ userInfo.deposit }}</div>
-                </div>
-                <div class="wallet-divider"></div>
-                <div class="wallet-item">
-                    <div class="wallet-label">等级生效日期</div>
-                    <div class="wallet-date">{{ userInfo.levelDate }}</div>
+                    <div class="wallet-label">{{ $lang('有效日期') }}</div>
+                    <div class="wallet-date">{{ balanceData.level_expire_time }}</div>
                 </div>
             </div>
         </div>
@@ -74,30 +70,42 @@
                     <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor"
                         stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
-                收益统计
-            </div>
-            <div class="time-tabs">
-                <button v-for="(tab, index) in timeTabs" :key="tab.key" class="time-tab"
-                    :class="{ active: activeTimeTab === tab.key }" @click="switchTab(tab.key, index)">{{ tab.label }}
-                </button>
+                {{ $lang('收益统计') }}
             </div>
             <div class="earnings-grid-wrap">
                 <Transition :name="slideDirection" mode="out-in">
                     <div :key="activeTimeTab" class="earnings-grid">
                         <div class="earnings-item">
-                            <div class="earnings-label">团队任务收入</div>
-                            <div class="earnings-val earnings-val--blue">R${{
-                                currentEarnings.taskIncome }}</div>
+                            <div class="earnings-label">{{ $lang('昨日收入') }}</div>
+                            <div class="earnings-val earnings-val--blue" translate="no">R${{
+                                parseFloat(awardTotalData.yesterday_income) }}</div>
                         </div>
                         <div class="earnings-item">
-                            <div class="earnings-label">团队邀请收入</div>
-                            <div class="earnings-val earnings-val--purple">R${{
-                                currentEarnings.inviteIncome }}</div>
+                            <div class="earnings-label">{{ $lang('今日收入') }}</div>
+                            <div class="earnings-val earnings-val--purple" translate="no">R${{
+                                parseFloat(awardTotalData.today_income) }}</div>
+                        </div>
+                        <div class="earnings-item">
+                            <div class="earnings-label">{{ $lang('7日收入') }}</div>
+                            <div class="earnings-val earnings-val--light" translate="no">R${{
+                                parseFloat(awardTotalData.week_income) }}</div>
+                        </div>
+                        <div class="earnings-item">
+                            <div class="earnings-label">{{ $lang('本月收入') }}</div>
+                            <div class="earnings-val earnings-val--info" translate="no">R${{
+                                parseFloat(awardTotalData.today_income) }}</div>
+                        </div>
+                        <div class="earnings-item">
+                            <div class="earnings-label">{{ $lang('团队任务收入') }}</div>
+                            <div class="earnings-val earnings-val--danger">R${{ parseFloat(awardTotalData.order_referral_income) }}</div>
+                        </div>
+                        <div class="earnings-item">
+                            <div class="earnings-label">{{ $lang('团队邀请收入') }}</div>
+                            <div class="earnings-val earnings-val--dark">R${{ parseFloat(awardTotalData.meal_referral_income) }}</div>
                         </div>
                         <div class="earnings-item earnings-item--full">
-                            <div class="earnings-label">总收入</div>
-                            <div class="earnings-val earnings-val--green">R${{ currentEarnings.total
-                            }}</div>
+                            <div class="earnings-label">{{ $lang('总收入') }}</div>
+                            <div class="earnings-val earnings-val--green">R${{ parseFloat(awardTotalData.total_income) }}</div>
                         </div>
                     </div>
                 </Transition>
@@ -127,10 +135,10 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted ,reactive} from 'vue'
+import { ref, computed, onMounted, reactive } from 'vue'
 import { navigateTo } from '#imports'
 import LangModal from '~/components/LangModal'
-import { getBalance, loginOut } from '~/api/member'
+import { getBalance, loginOut, awardTotal } from '~/api/member'
 import { storage } from '~/utils/index'
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
@@ -148,8 +156,8 @@ const init = () => {
     let user_data = storage.get('user_data') ? JSON.parse(storage.get('user_data')) : null;
     if (user_data) {
         userData.value = user_data
-
     }
+    getAwardTotal();
 }
 // 语言弹窗
 const showLang = ref(false)
@@ -161,15 +169,32 @@ const switchLang = (lang) => {
     location.reload()
 }
 
-//获取余额
+const awardTotalData = ref({})
+const getAwardTotal = () => {
+    showLoading($lang('加载中'))
+    awardTotal({ data_type: activeTimeTab.value }).then(res => {
+        hideLoading();
+        if (res.success) {
+            awardTotalData.value = res.data
+        } else {
+            showMsg(res.message, 'fail')
+        }
+    }).catch(error => {
+        hideLoading();
+        showMsg(error.message, 'fail')
+    })
+}
 
+//获取余额
 const balance = ref(0)
+const balanceData = ref({})
 const getBalanceData = () => {
     showLoading($lang('加载中'))
     getBalance({}).then(res => {
         hideLoading();
         if (res.success) {
             balance.value = res.data.amount
+            balanceData.value = res.data
         } else {
             showMsg(res.message, 'fail')
         }
@@ -181,39 +206,17 @@ const getBalanceData = () => {
 }
 
 
-
-// 用户信息
-const userInfo = ref({
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=profile&backgroundColor=b6e3f4',
-    account: 'user_8823',
-    creditScore: 98,
-    level: 3,
-    balance: '2,580.00',
-    deposit: '500.00',
-    levelDate: '2026-06-18',
-})
-
-
-
 // 收益统计
-const activeTimeTab = ref('today')
+const activeTimeTab = ref(2)
 const slideDirection = ref('slide-right')
 const currentTabIndex = ref(1)
 const timeTabs = [
-    { key: 'yesterday', label: '昨天' },
-    { key: 'today', label: '今天' },
-    { key: 'week', label: '本星期' },
-    { key: 'month', label: '本月' },
+    { key: 2, label: '昨天' },
+    { key: 1, label: '今天' },
+    { key: 3, label: '本星期' },
+    { key: 4, label: '本月' },
 ]
 
-const earningsData = {
-    yesterday: { taskIncome: '320.00', inviteIncome: '80.00', total: '400.00' },
-    today: { taskIncome: '150.00', inviteIncome: '50.00', total: '200.00' },
-    week: { taskIncome: '1,280.00', inviteIncome: '420.00', total: '1,700.00' },
-    month: { taskIncome: '5,600.00', inviteIncome: '1,800.00', total: '7,400.00' },
-}
-
-const currentEarnings = computed(() => earningsData[activeTimeTab.value])
 
 const switchTab = (key, index) => {
     if (key === activeTimeTab.value) return
@@ -337,9 +340,6 @@ const handleMenu = (item) => {
     if (item.route) navigateTo(item.route)
 }
 
-const confirmLogout = () => {
-    navigateTo('/login/login')
-}
 </script>
 
 <style scoped lang="scss">
@@ -680,6 +680,20 @@ const confirmLogout = () => {
 
     &--green {
         color: $color-success;
+    }
+
+    &--light{
+        color: $color-primary-light;
+    }
+    &--info{
+        color: #0284C7;
+    }
+    &--danger{
+        color: #DC2626;
+    }
+
+    &--dark{
+        color: #b45309;
     }
 }
 

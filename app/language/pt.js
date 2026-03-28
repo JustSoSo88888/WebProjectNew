@@ -197,6 +197,16 @@ let pt = {
     "每日收益率": "Taxa de retorno diária",
     "有效期": "Período de validade",
     "理财记录": "Registros de investimento",
+    "信用分": "Pontuação de crédito",
+    "有效日期": "Data de validade",
+    "收益统计": "Estatísticas de ganhos",
+    "昨日收入": "Ganhos de ontem",
+    "今日收入": "Ganhos de hoje",
+    "7日收入": "Ganhos de 7 dias",
+    "本月收入": "Ganhos deste mês",
+    "团队任务收入": "Ganhos de tarefas da equipe",
+    "团队邀请收入": "Ganhos de indicação da equipe",
+    "总收入": "Ganhos totais",
 }
 
 export default pt;

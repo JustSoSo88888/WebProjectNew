@@ -76,3 +76,12 @@ export const getCouponList = (params) => {
 export const memberRecharge = (params) => {
     return api.post('/member/recharge', params);
 }
+
+export const awardTotal = (params) => {
+    return api.post('/member/award_total', params);
+}
+
+// 法币充值订单
+export const memberRechargeOrder = (params) => {
+    return api.post('/member/recharge_order_list', params);
+}
