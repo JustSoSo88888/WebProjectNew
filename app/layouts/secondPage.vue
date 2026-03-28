@@ -73,7 +73,7 @@ const pageTitleMap = {
     '/profile/withdrawal': '提现',
     '/team/details': $lang('团队详情'),
     '/task/details': $lang('任务详情'),
-    '/finance/record': '理财记录',
+    '/finance/record': $lang('理财记录'),
     '/finance/detail': $lang('产品详情'),
     '/profile/lucky': $lang('幸运转盘'),
     '/profile/lucky/record': $lang('我的奖励'),

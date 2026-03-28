@@ -118,7 +118,6 @@ let en = {
     "已完成": "Completed",
     "全部": "All",
     "收益": "Earnings",
-    "进行中": "In Progress",
     "完成": "Completed",
     "立即领取": "Claim Now",
     "恭喜获得": "Congratulations",
@@ -192,6 +191,12 @@ let en = {
     "充值金额": "Deposit Amount",
     "当前余额": "Current Balance",
     "充值": "Deposit",
+    "成本": "Cost",
+    "总天数": "Total Days",
+    "有效期": "Validity Period",
+    "每日收益率": "Daily Return Rate",
+    "有效期": "Validity Period",
+    "理财记录": "Investment Records",
 }
 
 export default en

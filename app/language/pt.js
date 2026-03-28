@@ -118,7 +118,6 @@ let pt = {
     "已完成": "Concluído",
     "全部": "Todos",
     "收益": "Ganhos",
-    "进行中": "Em andamento",
     "完成": "Concluído",
     "立即领取": "Receber agora",
     "恭喜获得": "Parabéns",
@@ -192,6 +191,12 @@ let pt = {
     "充值金额": "Valor do depósito",
     "当前余额": "Saldo atual",
     "充值": "Depositar",
+    "成本": "Custo",
+    "总天数": "Total de dias",
+    "有效期": "Período de validade",
+    "每日收益率": "Taxa de retorno diária",
+    "有效期": "Período de validade",
+    "理财记录": "Registros de investimento",
 }
 
 export default pt;

@@ -61,9 +61,7 @@
                         @focus="inputFocused.account = true" @blur="inputFocused.account = false" />
                 </div>
             </div>
-
-            <!-- 银行账户 -->
-            <!-- <div class="form-item">
+            <div class="form-item">
                 <div class="form-label">{{ $lang('银行账户') }}</div>
                 <div class="form-input form-select" :class="{ focused: inputFocused.bank }" @click="showPicker = true">
                     <div class="input-icon">
@@ -83,7 +81,7 @@
                         </svg>
                     </div>
                 </div>
-            </div> -->
+            </div>
 
             <!-- 账户号码 -->
             <!-- <div class="form-item">
@@ -120,27 +118,27 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { bankCardList, bindBankCard } from '~/api/member';
+import { tokenChannelTypeConfigList } from '~/api/token_channel';
 
 definePageMeta({ layout: 'second-page' })
 
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
 
-const bankList = ref([
-    { code: '001', name: 'Banco do Brasil' },
-    { code: '033', name: 'Santander' },
-    { code: '104', name: 'Caixa Econômica Federal' },
-    { code: '237', name: 'Bradesco' },
-    { code: '341', name: 'Itaú' },
-    { code: '399', name: 'HSBC' },
-    { code: '422', name: 'Safra' },
-    { code: '748', name: 'Sicredi' },
-    { code: '756', name: 'Sicoob' },
-])
+const bankList = ref([])
 
 onMounted(() => {
     getBankCardList();
+    getTokenChannelTypeConfigList();
 })
+
+const getTokenChannelTypeConfigList = () => {
+    tokenChannelTypeConfigList({}).then(res => {
+        if (res.success) {
+            bankList.value = res.data
+        }
+    })
+}
 
 const getBankCardList = () => {
     showLoading($lang('加载中'))
@@ -160,7 +158,7 @@ const getBankCardList = () => {
 }
 
 const showPicker = ref(false)
-const bankColumns = computed(() => bankList.value.map(bank => ({ text: bank.name, value: bank.code })))
+const bankColumns = computed(() => bankList.value.map(bank => ({ text: bank.name, value: bank.id })))
 
 const selectedBankName = computed(() => {
     const bank = bankList.value.find(b => b.code === form.value.bank)
@@ -206,12 +204,12 @@ const handleSubmit = () => {
     showLoading($lang('加载中'))
     bindBankCard(params).then(res => {
         hideLoading();
-        if(res.success){
+        if (res.success) {
             showMsg('绑定成功', 'success')
             setTimeout(() => {
                 getBankCardList();
-            },1000)
-        }else{
+            }, 1000)
+        } else {
             showMsg(res.message, 'fail')
         }
 
