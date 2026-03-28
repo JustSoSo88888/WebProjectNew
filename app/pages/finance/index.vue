@@ -89,13 +89,13 @@
             </div>
             <div class="product-progress-wrap">
               <div class="progress-info">
-                <span class="progress-pct">{{ item.total_amount == 0 ? 100 : ((item.surplus_amount / item.total_amount)
+                <span class="progress-pct">{{ item.total_amount == 0 ? 0 : ((item.surplus_amount / item.total_amount)
                   *
                   100) }}%</span>
               </div>
               <div class="progress-bar">
                 <div class="progress-fill"
-                  :style="{ width: (parseFloat(item.surplus_amount) / parseFloat(item.total_amount) * 100) + '%' }">
+                  :style="{ width: item.total_amount == 0 ? 0 : (parseFloat(item.surplus_amount) / parseFloat(item.total_amount) * 100) + '%' }">
                 </div>
               </div>
             </div>

@@ -2,7 +2,7 @@
     <div class="finance-detail-page">
         <!-- Product Header -->
         <div class="product-header">
-            <img :src="detail.image_url" :alt="product.name" class="product-image" />
+            <img :src="detail.image_url" class="product-image" />
             <div class="product-info">
                 <h1 class="product-name">{{ detail.title }}</h1>
             </div>
@@ -12,48 +12,48 @@
         <div class="stats-card">
             <div class="stat-item">
                 <span class="stat-value" translate="no">{{ detail.day_number }}</span>
-                <span class="stat-label">理财天数</span>
+                <span class="stat-label">{{ $lang('天数') }}</span>
             </div>
             <div class="stat-divider"></div>
             <div class="stat-item">
                 <span class="stat-value highlight">{{ detail.daily_income_rate }}%</span>
-                <span class="stat-label">日收益率</span>
+                <span class="stat-label">{{ $lang('日收益率') }}</span>
             </div>
             <div class="stat-divider"></div>
             <div class="stat-item">
                 <span class="stat-value">R$ {{ detail.min_amount }}</span>
-                <span class="stat-label">最低金额</span>
+                <span class="stat-label">{{ $lang('最低金额') }}</span>
             </div>
         </div>
 
         <!-- Product Description -->
-        <div class="desc-card">
-            <div class="card-title">产品简介</div>
+        <div class="desc-card" v-if="detail.desc">
+            <div class="card-title">{{ $lang('产品简介') }}</div>
             <div class="desc-content" v-html="detail.desc">
             </div>
         </div>
 
         <!-- Investment Form -->
         <div class="invest-card">
-            <div class="card-title">购买理财</div>
+            <div class="card-title">{{ $lang('购买理财') }}</div>
 
             <!-- Amount Input -->
             <div class="form-item">
-                <label class="form-label">投资金额</label>
+                <label class="form-label">{{ $lang('投资金额') }}</label>
                 <div class="amount-input-wrap">
                     <span class="currency">R$</span>
-                    <input v-model="investAmount" type="number" class="amount-input" placeholder="请输入投资金额"
-                        @input="onAmountChange" />
+                    <input v-model="investAmount" type="number" class="amount-input" :placeholder="$lang('请输入投资金额')" />
                 </div>
-                <div class="amount-hint">最低投资金额：R$ {{ detail.min_amount }}</div>
+                <div class="amount-hint">{{$lang('最低投资金额')}}：R$ {{ detail.min_amount }}</div>
             </div>
 
             <!-- Select Coupon -->
-            <!-- <div class="form-item">
-                <label class="form-label">选择卡券</label>
-                <div class="coupon-select" @click="showCouponPicker = true">
+            <div class="form-item">
+                <label class="form-label">{{ $lang('选择优惠券') }}</label>
+                <div class="coupon-select" @click="handleShowCouponPicker">
                     <span class="coupon-value">
-                        {{ selectedCoupon ? `${selectedCoupon.title} - ${selectedCoupon.value}` : '请选择卡券' }}
+                        {{ selectedCoupon ? `${selectedCoupon.title} -
+                        R$${parseFloat(selectedCoupon.limit_deductible_amount)}` :  $lang('选择优惠券')}}
                     </span>
                     <svg viewBox="0 0 24 24" fill="none">
                         <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -61,26 +61,26 @@
                     </svg>
                 </div>
                 <div class="coupon-hint" v-if="selectedCoupon">
-                    已优惠：R$ {{ couponDiscount }}
+                    {{$lang('已优惠')}}：R$ {{ parseFloat(selectedCoupon.limit_deductible_amount) }}
                 </div>
-            </div> -->
+            </div>
 
             <!-- Discount Preview -->
             <div class="discount-preview" v-if="investAmount >= detail.min_amount">
                 <div class="preview-row">
-                    <span>投资金额</span>
+                    <span>{{ $lang('投资金额') }}</span>
                     <span>R$ {{ investAmount || 0 }}</span>
                 </div>
                 <div class="preview-row" v-if="selectedCoupon">
-                    <span>卡券优惠</span>
-                    <span class="discount">-R$ {{ couponDiscount }}</span>
+                    <span>{{ $lang('优惠') }}</span>
+                    <span class="discount">-R$ {{ parseFloat(selectedCoupon.limit_deductible_amount) }}</span>
                 </div>
                 <div class="preview-row total">
-                    <span>实付金额</span>
+                    <span>{{ $lang('实付金额') }}</span>
                     <span class="total-value">R$ {{ actualAmount }}</span>
                 </div>
                 <div class="preview-row profit">
-                    <span>预计总收益</span>
+                    <span>{{ $lang('预计总收益') }}</span>
                     <span class="profit-value">+R$ {{ estimatedProfit }}</span>
                 </div>
             </div>
@@ -89,11 +89,11 @@
         <!-- Bottom Bar -->
         <div class="bottom-bar">
             <div class="profit-info">
-                <span class="profit-label">预计收益</span>
+                <span class="profit-label">{{ $lang('预计总收益') }}</span>
                 <span class="profit-amount">+R$ {{ estimatedProfit }}</span>
             </div>
             <button class="invest-btn" :disabled="!canInvest" @click="handleInvest">
-                立即投资
+                {{ $lang('立即投资') }}
             </button>
         </div>
 
@@ -102,7 +102,7 @@
             round>
             <div class="coupon-picker">
                 <div class="picker-header">
-                    <span class="picker-title">选择卡券</span>
+                    <span class="picker-title">{{ $lang('选择优惠券') }}</span>
                     <button class="picker-close" @click="showCouponPicker = false">
                         <svg viewBox="0 0 24 24" fill="none">
                             <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2"
@@ -113,7 +113,7 @@
                 <div class="coupon-list">
                     <div class="coupon-option" :class="{ selected: !selectedCoupon }" @click="selectCoupon(null)">
                         <div class="option-info">
-                            <span class="option-title">不使用卡券</span>
+                            <span class="option-title">{{ $lang('不使用优惠券') }}</span>
                         </div>
                         <div class="option-check" v-if="!selectedCoupon">
                             <svg viewBox="0 0 24 24" fill="none">
@@ -126,8 +126,7 @@
                         :class="{ selected: selectedCoupon?.id === coupon.id }" @click="selectCoupon(coupon)">
                         <div class="option-info">
                             <span class="option-title">{{ coupon.title }}</span>
-                            <span class="option-value">{{ coupon.value }}</span>
-                            <span class="option-desc">{{ coupon.condition }}</span>
+                            <span class="option-value">R${{ parseFloat(coupon.limit_deductible_amount) }}</span>
                         </div>
                         <div class="option-check" v-if="selectedCoupon?.id === coupon.id">
                             <svg viewBox="0 0 24 24" fill="none">
@@ -151,9 +150,9 @@
                             stroke-linejoin="round" />
                     </svg>
                 </div>
-                <div class="success-title">投资成功</div>
-                <div class="success-desc">您的理财产品已购买成功，请耐心等待收益</div>
-                <button class="success-btn" @click="goToRecord">查看理财记录</button>
+                <div class="success-title">{{ $lang('投资成功') }}</div>
+                <div class="success-desc">{{ $lang('您的理财产品已购买成功，请耐心等待收益') }}</div>
+                <button class="success-btn" @click="goToRecord">{{ $lang('查看理财记录') }}</button>
             </div>
         </van-popup>
     </div>
@@ -164,6 +163,7 @@ import { ref, computed, onMounted } from 'vue'
 import { showToast } from 'vant'
 import { navigateTo } from '#imports'
 import { mealDetail, mealBuy } from '~/api/meal'
+import { getCouponList } from '~/api/member'
 import PaymentPasswordPopup from '~/components/PaymentPasswordPopup.vue'
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
@@ -196,6 +196,7 @@ onMounted(async () => {
 
 })
 
+
 // Estimated Profit
 const estimatedProfit = computed(() => {
     if (!investAmount.value) return '0.00'
@@ -206,16 +207,6 @@ const estimatedProfit = computed(() => {
     return (dailyProfit * detail.value.day_number).toFixed(2)
 })
 
-// Product Data (from query or mock)
-const product = ref({
-    id: 1,
-    name: '稳健增利宝',
-    image: 'https://picsum.photos/seed/fin1/400/200',
-    days: 30,
-    dailyRate: 0.8,
-    minAmount: 500,
-    description: '稳健增利宝是一款低风险、高收益的理财产品，由专业团队精心管理，资金安全有保障。每日结算收益，让您轻松理财，坐享收益。适合追求稳定收益的投资者。'
-})
 
 // Investment Form
 const investAmount = ref('')
@@ -224,27 +215,33 @@ const showCouponPicker = ref(false)
 const showSuccessModal = ref(false)
 
 // Available Coupons (mock)
-const availableCoupons = ref([
-    { id: 1, title: '满减券', value: 'R$50', amount: 50, condition: '满2000可用' },
-    { id: 2, title: '满减券', value: 'R$100', amount: 100, condition: '满5000可用' },
-    { id: 3, title: '折扣券', value: '9.5折', amount: 0, condition: '满3000可用', isDiscount: true },
-])
+const availableCoupons = ref([])
+const handleShowCouponPicker = async () => {
+    try {
+        showLoading($lang('加载中'))
+        let res = await getCouponList({ status: 0 })
 
-// Coupon Discount
-const couponDiscount = computed(() => {
-    if (!selectedCoupon.value || !investAmount.value) return 0
-    const amount = parseFloat(investAmount.value)
-    if (selectedCoupon.value.isDiscount) {
-        return (amount * 0.05).toFixed(2)
+        hideLoading();
+        if (res.success) {
+            availableCoupons.value = res.data.rows || []
+            showCouponPicker.value = true
+        } else {
+            showMsg(res.message, 'fail')
+        }
+    } catch (error) {
+        showMsg(error.message, 'fail')
     }
-    return selectedCoupon.value.amount
-})
+}
+
 
 // Actual Amount to Pay
 const actualAmount = computed(() => {
     if (!investAmount.value) return 0
-    const amount = parseFloat(investAmount.value)
-    return Math.max(0, amount - couponDiscount.value).toFixed(2)
+    const discount = selectedCoupon.value ? parseFloat(selectedCoupon.value.limit_deductible_amount) : 0
+    if (parseFloat(investAmount.value) - discount < 0) {
+        return 0
+    }
+    return parseFloat(investAmount.value) - discount
 })
 
 
@@ -256,18 +253,6 @@ const canInvest = computed(() => {
     return amount >= detail.value.min_amount
 })
 
-// Amount Change
-const onAmountChange = () => {
-    if (selectedCoupon.value && investAmount.value < 2000 && selectedCoupon.value.id === 1) {
-        selectedCoupon.value = null
-    }
-    if (selectedCoupon.value && investAmount.value < 3000 && selectedCoupon.value.id === 2) {
-        selectedCoupon.value = null
-    }
-    if (selectedCoupon.value && investAmount.value < 3000 && selectedCoupon.value.id === 3) {
-        selectedCoupon.value = null
-    }
-}
 
 // Select Coupon
 const selectCoupon = (coupon) => {
@@ -284,14 +269,16 @@ const handlePasswordConfirm = async (val) => {
             meal_id: id.value,
             amount: investAmount.value,
             pay_password: val,
-            coupon_id: '',
+        }
+        if(selectedCoupon.value){
+            params.coupon_id = selectedCoupon.value.id
         }
         showLoading($lang('加载中'))
         let res = await mealBuy(params)
         hideLoading();
-        if(res.success){
+        if (res.success) {
             showSuccessModal.value = true
-        }else{
+        } else {
             showMsg(res.message, 'fail')
         }
     } catch (error) {
@@ -304,10 +291,9 @@ const handlePasswordConfirm = async (val) => {
 }
 const handleInvest = async () => {
     if (!canInvest.value) {
-        showToast(`最低投资金额为 R$ ${product.value.minAmount}`)
+        showMsg(`${$lang('最低投资金额为')} R$ ${detail.value.min_amount}`,'fail')
         return
     }
-
     showPaymentPopup.value = true
 }
 
