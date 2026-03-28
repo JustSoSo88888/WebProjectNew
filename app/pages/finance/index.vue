@@ -30,7 +30,7 @@
             <rect x="9" y="3" width="6" height="4" rx="1" stroke="white" stroke-width="1.8" />
             <path d="M9 12h6M9 16h4" stroke="white" stroke-width="1.8" stroke-linecap="round" />
           </svg>
-          {{ $lang('理财记录') }}
+          {{ $lang('记录') }}
         </button>
       </div>
 

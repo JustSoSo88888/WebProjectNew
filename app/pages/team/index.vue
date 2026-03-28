@@ -70,12 +70,12 @@
         <div class="qr-wrap">
           <canvas ref="qrCanvas" class="qr-canvas"></canvas>
         </div>
-        <div class="invite-title">扫码邀请好友</div>
-        <div class="invite-desc">邀请好友加入，获得丰厚推荐奖励</div>
+        <div class="invite-title">{{ $lang('扫码邀请好友') }}</div>
+        <div class="invite-desc">{{ $lang('邀请好友加入，获得丰厚推荐奖励') }}</div>
       </div>
 
       <div class="invite-field">
-        <div class="invite-field-label">邀请码</div>
+        <div class="invite-field-label">{{ $lang('邀请码') }}</div>
         <div class="invite-field-row">
           <span class="invite-field-val">{{ inviteInfo.code }}</span>
           <button class="copy-btn" @click="copyText(inviteInfo.code, 'code')">
@@ -84,13 +84,13 @@
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.8"
                 stroke-linecap="round" />
             </svg>
-            {{ copied === 'code' ? '已复制' : '复制' }}
+            {{ copied === 'code' ? $lang('已复制') : $lang('复制') }}
           </button>
         </div>
       </div>
 
       <div class="invite-field">
-        <div class="invite-field-label">邀请链接</div>
+        <div class="invite-field-label">{{ $lang('邀请链接') }}</div>
         <div class="invite-field-row">
           <span class="invite-field-val invite-field-val--link">{{ inviteInfo.link }}</span>
           <button class="copy-btn" @click="copyText(inviteInfo.link, 'link')">
@@ -99,7 +99,7 @@
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.8"
                 stroke-linecap="round" />
             </svg>
-            {{ copied === 'link' ? '已复制' : '复制' }}
+            {{ copied === 'link' ? $lang('已复制') : $lang('复制') }}
           </button>
         </div>
       </div>

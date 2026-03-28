@@ -2,7 +2,7 @@
   <div class="connection-status" :class="status" @click="handleClick">
     <span class="dot"></span>
     <span class="text">{{ statusText }}</span>
-    <van-icon v-if="status.value === 'disconnected'" class="text" name="replay" style="font-weight: bold;" size=".3rem"/>
+    <van-icon v-if="status === 'disconnected'" class="text" name="replay" style="font-weight: bold;" size=".3rem"/>
   </div>
 </template>
 

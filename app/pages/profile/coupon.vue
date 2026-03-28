@@ -1,241 +1,118 @@
 <template>
     <div class="coupon-page">
-        <!-- List Section -->
-        <div class="list-section">
-            <div
-                    class="list-content"
-                    ref="scrollContainer"
-                    @touchstart="onTouchStart"
-                    @touchmove="onTouchMove"
-                    @touchend="onTouchEnd"
-                    @scroll="onScroll"
-            >
-                <!-- 下拉刷新提示 -->
-                <div class="refresh-indicator" :style="{ height: refreshHeight + 'px' }">
-                    <div class="refresh-content">
-                        <svg class="refresh-icon" :class="{ rotating: isRefreshing }" viewBox="0 0 24 24" fill="none">
-                            <path d="M23 4v6h-6M1 20v-6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                  stroke-linejoin="round"/>
-                        </svg>
-                        <span>{{ refreshText }}</span>
-                    </div>
-                </div>
-
-                <!-- 卡券列表 -->
-                <div
-                        v-for="item in couponList"
-                        :key="item.id"
-                        class="coupon-item"
-                        :class="{ expired: item.status === 'expired', used: item.status === 'used' }"
-                >
-                    <div class="coupon-main">
-                        <div class="coupon-info">
-                            <div class="coupon-title">{{ item.title }}</div>
-                            <div class="coupon-desc">{{ item.description }}</div>
-                            <div class="coupon-date">有效期: {{ item.expiryDate }}</div>
+        <!-- 卡券列表 -->
+        <van-pull-refresh :pulling-text="$lang('下拉即可刷新') + '...'" :loosing-text="$lang('释放即可刷新') + '...'"
+            :loading-text="$lang('加载中') + '...'" v-model="refreshing" @refresh="onRefresh">
+            <van-list v-model:loading="loading" :finished="finished" :loading-text="$lang('加载中')"
+                :finished-text="list.length > 0 ? $lang('没有更多了') : ''" @load="onLoad">
+                <template v-if="list.length > 0">
+                    <div v-for="item in list" :key="item.id" class="coupon-item">
+                        <div class="coupon-main">
+                            <div class="coupon-value">
+                                <div class="coupon-amount" translate="n
+                                ">R$ {{ parseFloat(item.limit_deductible_amount) }}</div>
+                            </div>
+                            <div class="coupon-info">
+                                <div class="coupon-title">{{ item.title }}</div>
+                            </div>
+                            
                         </div>
-                        <div class="coupon-value">
-                            <div class="coupon-amount">{{ item.value }}</div>
-                            <div class="coupon-unit">{{ item.unit }}</div>
+                        <div class="coupon-footer">
+                            <div class="coupon-status">
+                                {{ item.create_time }} - {{ item.end_time }}
+                            </div>
                         </div>
                     </div>
-                    <div class="coupon-footer">
-                        <div class="coupon-status" :class="item.status">
-                            {{ getStatusText(item.status) }}
-                        </div>
+                </template>
+                <template v-else>
+                    <div>
+                        <Empty></Empty>
                     </div>
-                </div>
+                </template>
+            </van-list>
+        </van-pull-refresh>
 
-                <!-- 加载更多提示 -->
-                <div class="loading-indicator" v-if="isLoading">
-                    <svg class="loading-icon" viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-opacity="0.3"/>
-                        <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="2"
-                              stroke-linecap="round"/>
-                    </svg>
-                    <span>加载中...</span>
-                </div>
-
-                <!-- 无更多数据提示 -->
-                <div class="no-more-indicator" v-else-if="!hasMore">
-                    <span>没有更多卡券了</span>
-                </div>
-            </div>
-        </div>
     </div>
 </template>
 
 <script setup>
-    import {ref, onMounted} from 'vue'
+import { ref, onMounted } from 'vue'
+import { getCouponList } from '~/api/member'
+const nuxtApp = useNuxtApp()
+const $lang = nuxtApp.$lang
+import Empty from '~/components/Empty.vue';
 
 definePageMeta({ layout: 'second-page' })
+const loading = ref(false)
+const finished = ref(false)
+const refreshing = ref(false)
+const page = ref(1)
+const rows = ref(20)
+const list = ref([])
 
-    // List Data
-    const couponList = ref([])
+onMounted(() => {
+})
 
-    // Pagination State
-    const page = ref(1)
-    const rows = 10
-    const isLoading = ref(false)
-    const hasMore = ref(true)
+const onRefresh = () => {
+    finished.value = false;
+    page.value = 1;
+    loading.value = true;
+    onLoad();
+}
 
-    // Refresh State
-    const scrollContainer = ref(null)
-    const touchStartY = ref(0)
-    const refreshHeight = ref(0)
-    const isRefreshing = ref(false)
-    const refreshText = ref('下拉刷新')
-
-    // Mock API Service
-    const api = {
-        async getCoupons(params) {
-            // Simulate network delay
-            await new Promise(resolve => setTimeout(resolve, 800))
-
-            const {page = 1, rows = 10} = params
-            const data = []
-
-            const couponTypes = [
-                {title: '满减券', value: 'R$50', unit: '满200可用', description: '全场通用'},
-                {title: '新人专享券', value: 'R$100', unit: '满500可用', description: '仅限新用户'},
-                {title: '会员专享券', value: 'R$30', unit: '满100可用', description: 'VIP会员专享'},
-            ]
-
-            const statuses = ['available', 'used', 'expired']
-
-            const startIndex = (page - 1) * rows
-
-            for (let i = 0; i < rows; i++) {
-                const index = startIndex + i
-                const date = new Date()
-                date.setDate(date.getDate() + Math.floor(Math.random() * 90) - 30)
-                const dateStr = date.toISOString().split('T')[0]
-
-                const type = couponTypes[Math.floor(Math.random() * couponTypes.length)]
-                const status = statuses[Math.floor(Math.random() * statuses.length)]
-
-                data.push({
-                    id: `CPN${Date.now()}${String(index).padStart(4, '0')}`,
-                    title: type.title,
-                    value: type.value,
-                    unit: type.unit,
-                    description: type.description,
-                    expiryDate: dateStr,
-                    status: status,
-                })
-            }
-
-            return {
-                data,
-                total: page * rows + Math.floor(Math.random() * 50),
-                hasMore: page < 5 // Simulate end of data after 5 pages
-            }
-        }
+const onLoad = () => {
+    let param = {
+        page: page.value,
+        rows: rows.value,
+        status: 0,
     }
-
-    // Fetch Data
-    const fetchData = async (isRefresh = false) => {
-        if (isLoading.value) return
-
-        isLoading.value = true
-
-        try {
-            const response = await api.getCoupons({
-                page: isRefresh ? 1 : page.value,
-                rows
-            })
-
-            if (isRefresh) {
-                couponList.value = response.data
-                page.value = 1
+    showLoading($lang('加载中'))
+    getCouponList(param).then(res => {
+        hideLoading();
+        refreshing.value = false
+        if (res.success) {
+            const dataList = res.data.rows || []
+            if (page.value <= 1) {
+                list.value = dataList
             } else {
-                couponList.value = [...couponList.value, ...response.data]
+                list.value = [...list.value, ...dataList]
+            }
+            if (dataList.length >= rows.value) {
+                page.value++
+            } else {
+                finished.value = true
             }
 
-            hasMore.value = response.hasMore
-            if (!isRefresh) page.value++
-
-        } catch (error) {
-            console.error('Fetch error:', error)
-        } finally {
-            isLoading.value = false
-        }
-    }
-
-    // Initial fetch
-    onMounted(() => {
-        fetchData()
-    })
-
-    // Pull to refresh logic
-    const onTouchStart = (e) => {
-        if (isRefreshing.value) return
-        touchStartY.value = e.touches[0].clientY
-    }
-
-    const onTouchMove = (e) => {
-        if (isRefreshing.value) return
-        const scrollTop = scrollContainer.value?.scrollTop || 0
-        if (scrollTop > 0) return
-
-        const deltaY = e.touches[0].clientY - touchStartY.value
-        if (deltaY > 0) {
-            refreshHeight.value = Math.min(deltaY * 0.5, 80)
-            refreshText.value = refreshHeight.value > 60 ? '松开刷新' : '下拉刷新'
-            e.preventDefault()
-        }
-    }
-
-    const onTouchEnd = () => {
-        if (refreshHeight.value > 60) {
-            startRefresh()
         } else {
-            refreshHeight.value = 0
-            refreshText.value = '下拉刷新'
+            showMsg(res.message, 'fail')
+            finished.value = true
         }
+        loading.value = false
+    }).catch(error => {
+        finished.value = true
+        loading.value = false;
+        hideLoading();
+        showMsg(error.message, 'fail')
+    })
+}
+
+// Get status text
+const getStatusText = (status) => {
+    const statusMap = {
+        '0': {
+            text: $lang('可使用'),
+            color: "available"
+        },
     }
-
-    const startRefresh = async () => {
-        isRefreshing.value = true
-        refreshText.value = '刷新中...'
-
-        await fetchData(true)
-
-        isRefreshing.value = false
-        refreshHeight.value = 0
-        refreshText.value = '下拉刷新'
-    }
-
-    // Infinite Scroll
-    const onScroll = () => {
-        if (isLoading.value || !hasMore.value) return
-
-        const container = scrollContainer.value
-        if (!container) return
-
-        const {scrollTop, scrollHeight, clientHeight} = container
-        const distanceToBottom = scrollHeight - scrollTop - clientHeight
-
-        if (distanceToBottom < 50) {
-            fetchData()
-        }
-    }
-
-    // Get status text
-    const getStatusText = (status) => {
-        const statusMap = {
-            'available': '可使用',
-            'used': '已使用',
-            'expired': '已过期'
-        }
-        return statusMap[status] || status
-    }
+    return statusMap[status] || status
+}
 </script>
 
 <style scoped lang="scss">
 .coupon-page {
     min-height: 100vh;
     background: $color-bg-page;
+    padding: rem(10);
 }
 
 // ── List Section ──────────────────────────────────────────────
@@ -304,11 +181,14 @@ definePageMeta({ layout: 'second-page' })
 .coupon-main {
     display: flex;
     padding: rem(16);
+    align-items: stretch;
 }
 
 .coupon-info {
     flex: 1;
     min-width: 0;
+    display: flex;
+    margin-left: rem(12);
 }
 
 .coupon-title {
@@ -340,7 +220,7 @@ definePageMeta({ layout: 'second-page' })
     align-items: center;
     justify-content: center;
     color: #fff;
-    margin-left: rem(12);
+    
 }
 
 .coupon-amount {
@@ -362,8 +242,8 @@ definePageMeta({ layout: 'second-page' })
 .coupon-status {
     font-size: rem(11);
     padding: rem(2) rem(8);
-    border-radius: $radius-full;
     font-weight: 500;
+    color: $color-text-muted;
 
     &.available {
         background: $color-success-bg;
@@ -409,7 +289,12 @@ definePageMeta({ layout: 'second-page' })
 
 // ── Animations ─────────────────────────────────────────────────
 @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 </style>

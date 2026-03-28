@@ -2,30 +2,26 @@
     <div class="finance-detail-page">
         <!-- Product Header -->
         <div class="product-header">
-            <img :src="product.image" :alt="product.name" class="product-image" />
+            <img :src="detail.image_url" :alt="product.name" class="product-image" />
             <div class="product-info">
-                <h1 class="product-name">{{ product.name }}</h1>
-                <div class="product-tags">
-                    <span class="tag">稳健型</span>
-                    <span class="tag">低风险</span>
-                </div>
+                <h1 class="product-name">{{ detail.title }}</h1>
             </div>
         </div>
 
         <!-- Product Stats -->
         <div class="stats-card">
             <div class="stat-item">
-                <span class="stat-value">{{ product.days }}</span>
+                <span class="stat-value" translate="no">{{ detail.day_number }}</span>
                 <span class="stat-label">理财天数</span>
             </div>
             <div class="stat-divider"></div>
             <div class="stat-item">
-                <span class="stat-value highlight">{{ product.dailyRate }}%</span>
+                <span class="stat-value highlight">{{ detail.daily_income_rate }}%</span>
                 <span class="stat-label">日收益率</span>
             </div>
             <div class="stat-divider"></div>
             <div class="stat-item">
-                <span class="stat-value">BRL {{ product.minAmount }}</span>
+                <span class="stat-value">R$ {{ detail.min_amount }}</span>
                 <span class="stat-label">最低金额</span>
             </div>
         </div>
@@ -33,14 +29,7 @@
         <!-- Product Description -->
         <div class="desc-card">
             <div class="card-title">产品简介</div>
-            <div class="desc-content">
-                <p>{{ product.description }}</p>
-                <ul class="desc-list">
-                    <li>本金保障：100%本金保障，到期还本付息</li>
-                    <li>收益稳定：每日结算，收益清晰可见</li>
-                    <li>灵活期限：多种期限可选，满足不同需求</li>
-                    <li>资金安全：银行存管，资金安全有保障</li>
-                </ul>
+            <div class="desc-content" v-html="detail.desc">
             </div>
         </div>
 
@@ -52,51 +41,47 @@
             <div class="form-item">
                 <label class="form-label">投资金额</label>
                 <div class="amount-input-wrap">
-                    <span class="currency">BRL</span>
-                    <input 
-                        v-model="investAmount" 
-                        type="number" 
-                        class="amount-input" 
-                        placeholder="请输入投资金额"
-                        @input="onAmountChange"
-                    />
+                    <span class="currency">R$</span>
+                    <input v-model="investAmount" type="number" class="amount-input" placeholder="请输入投资金额"
+                        @input="onAmountChange" />
                 </div>
-                <div class="amount-hint">最低投资金额：BRL {{ product.minAmount }}</div>
+                <div class="amount-hint">最低投资金额：R$ {{ detail.min_amount }}</div>
             </div>
 
             <!-- Select Coupon -->
-            <div class="form-item">
+            <!-- <div class="form-item">
                 <label class="form-label">选择卡券</label>
                 <div class="coupon-select" @click="showCouponPicker = true">
                     <span class="coupon-value">
                         {{ selectedCoupon ? `${selectedCoupon.title} - ${selectedCoupon.value}` : '请选择卡券' }}
                     </span>
                     <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </div>
                 <div class="coupon-hint" v-if="selectedCoupon">
-                    已优惠：BRL {{ couponDiscount }}
+                    已优惠：R$ {{ couponDiscount }}
                 </div>
-            </div>
+            </div> -->
 
             <!-- Discount Preview -->
-            <div class="discount-preview" v-if="investAmount >= product.minAmount">
+            <div class="discount-preview" v-if="investAmount >= detail.min_amount">
                 <div class="preview-row">
                     <span>投资金额</span>
-                    <span>BRL {{ investAmount || 0 }}</span>
+                    <span>R$ {{ investAmount || 0 }}</span>
                 </div>
                 <div class="preview-row" v-if="selectedCoupon">
                     <span>卡券优惠</span>
-                    <span class="discount">-BRL {{ couponDiscount }}</span>
+                    <span class="discount">-R$ {{ couponDiscount }}</span>
                 </div>
                 <div class="preview-row total">
                     <span>实付金额</span>
-                    <span class="total-value">BRL {{ actualAmount }}</span>
+                    <span class="total-value">R$ {{ actualAmount }}</span>
                 </div>
                 <div class="preview-row profit">
                     <span>预计总收益</span>
-                    <span class="profit-value">+BRL {{ estimatedProfit }}</span>
+                    <span class="profit-value">+R$ {{ estimatedProfit }}</span>
                 </div>
             </div>
         </div>
@@ -105,50 +90,40 @@
         <div class="bottom-bar">
             <div class="profit-info">
                 <span class="profit-label">预计收益</span>
-                <span class="profit-amount">+BRL {{ estimatedProfit }}</span>
+                <span class="profit-amount">+R$ {{ estimatedProfit }}</span>
             </div>
-            <button 
-                class="invest-btn" 
-                :disabled="!canInvest"
-                @click="handleInvest"
-            >
+            <button class="invest-btn" :disabled="!canInvest" @click="handleInvest">
                 立即投资
             </button>
         </div>
 
         <!-- Coupon Picker Popup -->
-        <van-popup v-model:show="showCouponPicker" position="bottom" round>
+        <van-popup v-model:show="showCouponPicker" overlay-class="popup-bottom" class="popup-bottom" position="bottom"
+            round>
             <div class="coupon-picker">
                 <div class="picker-header">
                     <span class="picker-title">选择卡券</span>
                     <button class="picker-close" @click="showCouponPicker = false">
                         <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" />
                         </svg>
                     </button>
                 </div>
                 <div class="coupon-list">
-                    <div 
-                        class="coupon-option" 
-                        :class="{ selected: !selectedCoupon }"
-                        @click="selectCoupon(null)"
-                    >
+                    <div class="coupon-option" :class="{ selected: !selectedCoupon }" @click="selectCoupon(null)">
                         <div class="option-info">
                             <span class="option-title">不使用卡券</span>
                         </div>
                         <div class="option-check" v-if="!selectedCoupon">
                             <svg viewBox="0 0 24 24" fill="none">
-                                <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
                             </svg>
                         </div>
                     </div>
-                    <div 
-                        v-for="coupon in availableCoupons" 
-                        :key="coupon.id"
-                        class="coupon-option" 
-                        :class="{ selected: selectedCoupon?.id === coupon.id }"
-                        @click="selectCoupon(coupon)"
-                    >
+                    <div v-for="coupon in availableCoupons" :key="coupon.id" class="coupon-option"
+                        :class="{ selected: selectedCoupon?.id === coupon.id }" @click="selectCoupon(coupon)">
                         <div class="option-info">
                             <span class="option-title">{{ coupon.title }}</span>
                             <span class="option-value">{{ coupon.value }}</span>
@@ -156,21 +131,24 @@
                         </div>
                         <div class="option-check" v-if="selectedCoupon?.id === coupon.id">
                             <svg viewBox="0 0 24 24" fill="none">
-                                <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
                             </svg>
                         </div>
                     </div>
                 </div>
             </div>
         </van-popup>
-
+        <PaymentPasswordPopup v-model:show="showPaymentPopup" @cancel="showPaymentPopup = false"
+            @confirm="handlePasswordConfirm"></PaymentPasswordPopup>
         <!-- Success Modal -->
         <van-popup v-model:show="showSuccessModal" position="center" round>
             <div class="success-modal">
                 <div class="success-icon">
                     <svg viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/>
-                        <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8" />
+                        <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </div>
                 <div class="success-title">投资成功</div>
@@ -182,11 +160,51 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { showToast } from 'vant'
 import { navigateTo } from '#imports'
-
+import { mealDetail, mealBuy } from '~/api/meal'
+import PaymentPasswordPopup from '~/components/PaymentPasswordPopup.vue'
+const nuxtApp = useNuxtApp()
+const $lang = nuxtApp.$lang
 definePageMeta({ layout: 'second-page' })
+const route = useRoute()
+
+
+const id = ref(null)
+const detail = ref({})
+onMounted(async () => {
+    let mealId = route.query.id
+    if (mealId) {
+        id.value = mealId
+        showLoading($lang('加载中'))
+        try {
+            let res = await mealDetail({ id: id.value });
+            hideLoading();
+            if (res.success) {
+                detail.value = res.data
+            } else {
+                showMsg(res.message, 'fail')
+            }
+        } catch (error) {
+            showMsg(error.message, 'fail')
+        }
+
+    } else {
+        history.back()
+    }
+
+})
+
+// Estimated Profit
+const estimatedProfit = computed(() => {
+    if (!investAmount.value) return '0.00'
+    const amount = parseFloat(investAmount.value)
+    console.log();
+
+    const dailyProfit = amount * (detail.value.daily_income_rate / 100)
+    return (dailyProfit * detail.value.day_number).toFixed(2)
+})
 
 // Product Data (from query or mock)
 const product = ref({
@@ -229,19 +247,13 @@ const actualAmount = computed(() => {
     return Math.max(0, amount - couponDiscount.value).toFixed(2)
 })
 
-// Estimated Profit
-const estimatedProfit = computed(() => {
-    if (!investAmount.value) return '0.00'
-    const amount = parseFloat(investAmount.value)
-    const dailyProfit = amount * (product.value.dailyRate / 100)
-    return (dailyProfit * product.value.days).toFixed(2)
-})
+
 
 // Can Invest
 const canInvest = computed(() => {
     if (!investAmount.value) return false
     const amount = parseFloat(investAmount.value)
-    return amount >= product.value.minAmount
+    return amount >= detail.value.min_amount
 })
 
 // Amount Change
@@ -264,12 +276,39 @@ const selectCoupon = (coupon) => {
 }
 
 // Handle Invest
-const handleInvest = () => {
+
+const showPaymentPopup = ref(false)
+const handlePasswordConfirm = async (val) => {
+    try {
+        let params = {
+            meal_id: id.value,
+            amount: investAmount.value,
+            pay_password: val,
+            coupon_id: '',
+        }
+        showLoading($lang('加载中'))
+        let res = await mealBuy(params)
+        hideLoading();
+        if(res.success){
+            showSuccessModal.value = true
+        }else{
+            showMsg(res.message, 'fail')
+        }
+    } catch (error) {
+        hideLoading();
+        showMsg(error.message, 'fail')
+    }
+
+
+    showPaymentPopup.value = false
+}
+const handleInvest = async () => {
     if (!canInvest.value) {
-        showToast(`最低投资金额为 BRL ${product.value.minAmount}`)
+        showToast(`最低投资金额为 R$ ${product.value.minAmount}`)
         return
     }
-    showSuccessModal.value = true
+
+    showPaymentPopup.value = true
 }
 
 // Go to Record
@@ -594,6 +633,12 @@ const goToRecord = () => {
 }
 
 // ── Coupon Picker ────────────────────────────────────────────
+
+.popup-bottom {
+    width: rem(375);
+    left: calc(50% - rem(187.5));
+}
+
 .coupon-picker {
     background: #fff;
     max-height: 60vh;
@@ -690,7 +735,7 @@ const goToRecord = () => {
     border-radius: $radius-xl;
     padding: rem(24);
     text-align: center;
-    width: 80%;
+    width: 100%;
     max-width: rem(300);
 }
 

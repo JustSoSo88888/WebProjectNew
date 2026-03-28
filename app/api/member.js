@@ -62,3 +62,9 @@ export const bankCardList = (params) => {
 export const uploadImage = (params) => {
     return api.post('/upload/upload_image', params);
 }
+
+
+// 优惠卷
+export const getCouponList = (params) => {
+    return api.post('/member/get_coupon_list', params);
+}

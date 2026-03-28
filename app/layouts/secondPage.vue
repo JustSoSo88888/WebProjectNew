@@ -63,7 +63,7 @@ const pageTitleMap = {
     '/profile/aboutUs': $lang('关于我们'),
     '/profile/article': $lang('收益'),
     '/profile/help': $lang('帮助'),
-    '/profile/coupon': '卡券',
+    '/profile/coupon': $lang('优惠券'),
     '/profile/address': '地址管理',
     '/profile/address/addressAdd': '地址管理',
     '/profile/finance': '财务记录',

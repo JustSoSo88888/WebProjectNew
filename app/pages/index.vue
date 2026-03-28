@@ -246,7 +246,7 @@ const menuItems = [
         path: '/profile/lucky'
     },
     {
-        label: '邀请',
+        label: $lang('邀请'),
         bg: '#F0FDF4',
         icon: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="#059669" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#059669" stroke-width="1.8"/><path d="M19 8v6M22 11h-6" stroke="#059669" stroke-width="1.8" stroke-linecap="round"/>',
         path: '/team?tab=invite'

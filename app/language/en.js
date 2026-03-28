@@ -157,6 +157,15 @@ let en = {
     "天": "Days",
     "日收益率": "Daily Return Rate",
     "最低存款": "Minimum Deposit",
+    "扫码邀请好友": "Scan QR Code to Invite Friends",
+    "邀请好友加入，获得丰厚推荐奖励": "Invite friends to join and earn generous referral rewards",
+    "复制": "Copy",
+    "已复制": "Copied",
+    "邀请链接": "Invitation Link",
+    "优惠券": "Coupon",
+    "有效期": "Validity Period",
+    "至": "To",
+    "可使用": "Available",
 }
 
 export default en

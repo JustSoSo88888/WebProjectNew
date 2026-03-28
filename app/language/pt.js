@@ -157,6 +157,15 @@ let pt = {
     "天": "Dias",
     "日收益率": "Taxa de retorno diária",
     "最低存款": "Depósito mínimo",
+    "扫码邀请好友": "Escaneie o QR Code para convidar amigos",
+    "邀请好友加入，获得丰厚推荐奖励": "Convide amigos para participar e ganhe generosas recompensas por indicação",
+    "复制": "Copiar",
+    "已复制": "Copiado",
+    "邀请链接": "Link de convite",
+    "优惠券": "Cupom",
+    "有效期": "Período de validade",
+    "至": "Até",
+    "可使用": "Disponível",
 }
 
 export default pt;
