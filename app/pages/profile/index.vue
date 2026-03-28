@@ -53,7 +53,8 @@
             <div class="wallet-row">
                 <div class="wallet-item" @click="getBalanceData">
                     <div class="wallet-label">{{ $lang('余额') }}</div>
-                    <div class="wallet-amount" translate="no">R${{ balance }} <van-icon name="replay" style="font-weight: bold;"/></div>
+                    <div class="wallet-amount" translate="no">R${{ balance }} <van-icon name="replay"
+                            style="font-weight: bold;" /></div>
                 </div>
                 <div class="wallet-divider"></div>
                 <div class="wallet-item">
@@ -73,8 +74,8 @@
                 {{ $lang('收益统计') }}
             </div>
             <div class="earnings-grid-wrap">
-                <Transition :name="slideDirection" mode="out-in">
-                    <div :key="activeTimeTab" class="earnings-grid">
+                <Transition mode="out-in">
+                    <div class="earnings-grid">
                         <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('昨日收入') }}</div>
                             <div class="earnings-val earnings-val--blue" translate="no">R${{
@@ -97,15 +98,18 @@
                         </div>
                         <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('团队任务收入') }}</div>
-                            <div class="earnings-val earnings-val--danger">R${{ parseFloat(awardTotalData.order_referral_income) }}</div>
+                            <div class="earnings-val earnings-val--danger">R${{
+                                parseFloat(awardTotalData.order_referral_income) }}</div>
                         </div>
                         <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('团队邀请收入') }}</div>
-                            <div class="earnings-val earnings-val--dark">R${{ parseFloat(awardTotalData.meal_referral_income) }}</div>
+                            <div class="earnings-val earnings-val--dark">R${{
+                                parseFloat(awardTotalData.meal_referral_income) }}</div>
                         </div>
                         <div class="earnings-item earnings-item--full">
                             <div class="earnings-label">{{ $lang('总收入') }}</div>
-                            <div class="earnings-val earnings-val--green">R${{ parseFloat(awardTotalData.total_income) }}</div>
+                            <div class="earnings-val earnings-val--green">R${{ parseFloat(awardTotalData.total_income)
+                                }}</div>
                         </div>
                     </div>
                 </Transition>
@@ -169,10 +173,18 @@ const switchLang = (lang) => {
     location.reload()
 }
 
-const awardTotalData = ref({})
+const awardTotalData = ref({
+    meal_referral_income: 0,
+    month_income: 0,
+    order_referral_income: 0,
+    today_income: 0,
+    total_income: 0,
+    week_income: 0,
+    yesterday_income: 0
+})
 const getAwardTotal = () => {
     showLoading($lang('加载中'))
-    awardTotal({ data_type: activeTimeTab.value }).then(res => {
+    awardTotal({}).then(res => {
         hideLoading();
         if (res.success) {
             awardTotalData.value = res.data
@@ -205,17 +217,6 @@ const getBalanceData = () => {
     })
 }
 
-
-// 收益统计
-const activeTimeTab = ref(2)
-const slideDirection = ref('slide-right')
-const currentTabIndex = ref(1)
-const timeTabs = [
-    { key: 2, label: '昨天' },
-    { key: 1, label: '今天' },
-    { key: 3, label: '本星期' },
-    { key: 4, label: '本月' },
-]
 
 
 const switchTab = (key, index) => {
@@ -682,17 +683,19 @@ const handleMenu = (item) => {
         color: $color-success;
     }
 
-    &--light{
+    &--light {
         color: $color-primary-light;
     }
-    &--info{
+
+    &--info {
         color: #0284C7;
     }
-    &--danger{
+
+    &--danger {
         color: #DC2626;
     }
 
-    &--dark{
+    &--dark {
         color: #b45309;
     }
 }

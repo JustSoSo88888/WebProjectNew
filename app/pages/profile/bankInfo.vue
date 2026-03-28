@@ -63,7 +63,8 @@
             </div>
             <div class="form-item">
                 <div class="form-label">类型</div>
-                <div class="form-input form-select" :class="{ focused: inputFocused.acc_code }" @click="showPicker = true">
+                <div class="form-input form-select" :class="{ focused: inputFocused.payWayType }"
+                    @click="showPicker = true">
                     <div class="input-icon">
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"
@@ -161,12 +162,12 @@ const showPicker = ref(false)
 const bankColumns = computed(() => bankList.value.map(bank => ({ text: bank.name, value: bank.id })))
 
 const selectedBankName = computed(() => {
-    const bank = bankList.value.find(b => b.code === form.value.bank)
+    const bank = bankList.value.find(b => b.name === form.value.payWayType)
     return bank ? bank.name : ''
 })
 
 const onBankConfirm = ({ selectedOptions }) => {
-    form.value.bank = selectedOptions[0].value
+    form.value.payWayType = selectedOptions[0].value
     showPicker.value = false
 }
 
@@ -175,7 +176,7 @@ const inputFocused = ref({
     phone: false,
     bank: false,
     account: false,
-    acc_code:false,
+    payWayType: false,
 })
 
 const form = ref({
@@ -183,7 +184,7 @@ const form = ref({
     phone: '',
     bank: '',
     account: '',
-    acc_code:'',
+    payWayType: '',
 })
 
 const hasData = computed(() => {
@@ -202,6 +203,7 @@ const handleSubmit = () => {
         bank_card_no: form.value.account,
         bank_name: form.value.bank,
         user_name: form.value.name,
+        pay_way_type: form.value.payWayType
     }
     showLoading($lang('加载中'))
     bindBankCard(params).then(res => {
