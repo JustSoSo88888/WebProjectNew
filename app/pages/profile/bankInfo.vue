@@ -12,7 +12,7 @@
                             <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.8" />
                         </svg>
                     </div>
-                    <input v-model="form.name" type="text" class="input" :placeholder="$lang('请输入姓名')"
+                    <input v-model="form.name" disabled="isEdit" type="text" class="input" :placeholder="$lang('请输入姓名')"
                         @focus="inputFocused.name = true" @blur="inputFocused.name = false" />
                 </div>
             </div>
@@ -30,12 +30,12 @@
                         </svg>
                     </div>
                     <div class="area-code">+55</div>
-                    <input v-model="form.phone" type="number" class="input" :placeholder="$lang('请输入手机号')"
+                    <input v-model="form.phone" type="number" disabled="isEdit" class="input" :placeholder="$lang('请输入手机号')"
                         @focus="inputFocused.phone = true" @blur="inputFocused.phone = false" />
                 </div>
             </div>
             <div class="form-item">
-                <div class="form-label">银行</div>
+                <div class="form-label">{{ $lang('银行') }}</div>
                 <div class="form-input" :class="{ focused: inputFocused.bank }">
                     <div class="input-icon">
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -44,12 +44,12 @@
                                 stroke-linejoin="round" />
                         </svg>
                     </div>
-                    <input v-model="form.bank" type="text" class="input" :placeholder="'请输入银行'"
+                    <input v-model="form.bank" type="text" disabled="isEdit" class="input" :placeholder="$lang('请输入银行')"
                         @focus="inputFocused.bank = true" @blur="inputFocused.bank = false" />
                 </div>
             </div>
             <div class="form-item">
-                <div class="form-label">银行卡号</div>
+                <div class="form-label">{{ $lang('银行卡号') }}</div>
                 <div class="form-input" :class="{ focused: inputFocused.account }">
                     <div class="input-icon">
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -57,14 +57,14 @@
                             <path d="M1 10h22" stroke="currentColor" stroke-width="1.8" />
                         </svg>
                     </div>
-                    <input v-model="form.account" type="text" class="input" :placeholder="'请输入银行卡号'"
+                    <input v-model="form.account" type="text" disabled="isEdit" class="input" :placeholder="$lang('请输入银行卡号')"
                         @focus="inputFocused.account = true" @blur="inputFocused.account = false" />
                 </div>
             </div>
             <div class="form-item">
-                <div class="form-label">类型</div>
+                <div class="form-label">{{ $lang('类型') }}</div>
                 <div class="form-input form-select" :class="{ focused: inputFocused.payWayType }"
-                    @click="showPicker = true">
+                    @click="handleShowPicker">
                     <div class="input-icon">
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"
@@ -73,7 +73,7 @@
                         </svg>
                     </div>
                     <div class="select-value" :class="{ placeholder: !selectedBankName }">
-                        {{ selectedBankName || '请选择银行类型' }}
+                        {{ selectedBankName || $lang('请选择银行类型') }}
                     </div>
                     <div class="select-arrow">
                         <svg viewBox="0 0 24 24" fill="none">
@@ -109,7 +109,7 @@
         <!-- 提交按钮 -->
         <div class="submit-wrap">
             <button class="submit-btn" :disabled="!canSubmit" @click="handleSubmit">
-                {{ $lang('提交') }}
+                {{ !isEdit ? $lang('提交') : $lang('请联系客服更改') }}
             </button>
         </div>
     </div>
@@ -141,13 +141,24 @@ const getTokenChannelTypeConfigList = () => {
     })
 }
 
+const handleShowPicker = () => {
+    if(isEdit.value) return
+    showPicker.value = true
+}
 const getBankCardList = () => {
     showLoading($lang('加载中'))
     bankCardList({}).then(res => {
         hideLoading();
         if (res.success) {
-            if (res.data) {
-
+            if (res.data.rows && res.data.rows.length > 0) {
+                isEdit.value = true
+                form.value.name = res.data.rows[0].user_name
+                form.value.phone = res.data.rows[0].phone
+                form.value.bank = res.data.rows[0].bank_name
+                form.value.account = res.data.rows[0].bank_card_no
+                form.value.payWayType = res.data.rows[0].pay_way_type
+            } else {
+                isEdit.value = false
             }
         } else {
             showMsg(res.message, 'fail')
@@ -159,10 +170,11 @@ const getBankCardList = () => {
 }
 
 const showPicker = ref(false)
+const isEdit = ref(false)
 const bankColumns = computed(() => bankList.value.map(bank => ({ text: bank.name, value: bank.id })))
 
 const selectedBankName = computed(() => {
-    const bank = bankList.value.find(b => b.name === form.value.payWayType)
+    const bank = bankList.value.find(b => b.id == form.value.payWayType)
     return bank ? bank.name : ''
 })
 
@@ -192,7 +204,7 @@ const hasData = computed(() => {
 })
 
 const canSubmit = computed(() => {
-    return form.value.name && form.value.phone && form.value.bank && form.value.account
+    return form.value.name && form.value.phone && form.value.bank && form.value.account && !isEdit
 })
 
 const handleSubmit = () => {
@@ -209,7 +221,7 @@ const handleSubmit = () => {
     bindBankCard(params).then(res => {
         hideLoading();
         if (res.success) {
-            showMsg('绑定成功', 'success')
+            showMsg($lang('绑定成功'), 'success')
             setTimeout(() => {
                 getBankCardList();
             }, 1000)

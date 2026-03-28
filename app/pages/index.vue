@@ -114,29 +114,35 @@
                 <h2>会员等级</h2>
                 <p>升级享受更多专属权益</p>
             </div>
-            <div class="vip-banner">
-                <img src="../assets/img/index/2.png" class="vip-banner-img" />
-                <div class="vip-banner-title">SSS</div>
-            </div>
-            <div class="vip-table">
-                <div class="vip-table-header">
-                    <span></span>
-                    <span>任务奖励</span>
-                    <span>任务</span>
-                    <span>价值</span>
-                    <span></span>
-                </div>
-                <div class="vip-table-row" v-for="item in vipLevels" :key="item.id">
-                    <span class="vip-level">{{ item.name }}</span>
-                    <span>{{ item.income_amount }}</span>
-                    <span>{{ item.daily_order_number }}</span>
-                    <span>{{ item.price }}</span>
-                    <button class="vip-buy-btn">立即加入</button>
+            <div class="vip-list">
+                <div class="vip-card" v-for="item in vipLevels" :key="item.id">
+                    <div class="vip-img-box">
+                        <img :src="item.image_url" class="vip-img" />
+                        <div class="vip-name">{{ item.name }}</div>
+                    </div>
+                    <div class="vip-info">
+                        <div class="vip-row">
+                            <div>任务奖励</div>
+                            <div class="amount" translate="n
+                        ">R$ {{ item.income_amount }}</div>
+                        </div>
+                        <div class="vip-row">
+                            <div>任务</div>
+                            <div class="amount">{{ item.daily_order_number }}</div>
+                        </div>
+                        <div class="vip-row">
+                            <div>价格</div>
+                            <div class="amount" translate="no">R$ {{ item.price }}</div>
+                        </div>
+                    </div>
+                    <button class="vip-buy-btn" v-if="item.level > level" @click="handleUpdateLevel(item)">立即加入</button>
                 </div>
             </div>
         </div>
         <LangModal v-model="showLang" v-model:currentLang="currentLang" @change="handleLangChange" />
         <RedeemModal v-model="showRedeem" />
+        <PaymentPasswordPopup v-model:show="showPaymentPopup" @cancel="showPaymentPopup = false"
+            @confirm="handlePasswordConfirm"></PaymentPasswordPopup>
     </div>
 </template>
 
@@ -150,7 +156,9 @@ import RedeemModal from '~/components/RedeemModal.vue'
 import { messageUnreadCount, getAgentId } from '~/api/chat'
 import { useAppStore } from '~/stores/app.js'
 import ConnectionStatus from '~/components/ConnectionStatus.vue'
-import { levelConfigList } from '~/api/level'
+import { levelConfigList, updateLevel } from '~/api/level'
+import { getBalance } from '~/api/member'
+import PaymentPasswordPopup from '~/components/PaymentPasswordPopup.vue'
 
 const appStore = useAppStore()
 
@@ -169,9 +177,56 @@ definePageMeta({
     pageTransition: { name: 'slide-left', mode: 'out-in' },
     layoutTransition: false
 })
-
+const showPaymentPopup = ref(false)
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
+const upLevelData = ref({})
+const $dialog = nuxtApp.$dialog
+const handleUpdateLevel = (item) => {
+    upLevelData.value = item
+    $dialog.confirm({
+        title: $lang('提示'),
+        message: $lang('确认要升级？'),
+        confirmText: $lang('确认'),
+        cancelText: $lang('取消')
+    }).then(() => {
+        showPaymentPopup.value = true
+    }).catch(() => {
+        upLevelData.value = {}
+    })
+
+}
+const handlePasswordConfirm = async (val) => {
+    showPaymentPopup.value = false
+    showLoading($lang('加载中'))
+    updateLevel({ id: upLevelData.value.id }).then(async res => {
+        hideLoading();
+        if (res.success) {
+            getBalanceData()
+        } else {
+            showMsg(res.message, 'fail')
+        }
+
+    }).catch(error => {
+        hideLoading();
+        showMsg(error.message, 'fail')
+    })
+}
+
+const getBalanceData = () => {
+    showLoading($lang('加载中'))
+    getBalance({}).then(res => {
+        if (res.success) {
+            level.value = res.data.level
+        } else {
+            showMsg(res.message, 'fail')
+        }
+
+    }).catch(error => {
+        hideLoading();
+        showMsg(error.message, 'fail')
+    })
+}
 
 const bannerList = [
     new URL('../assets/img/index/1.jpg', import.meta.url),
@@ -237,7 +292,13 @@ const handleMenu = (path) => {
     navigateTo(path)
 }
 
-onMounted(() => {
+const level = ref(0)
+onMounted(async () => {
+    showLoading($lang('加载中'))
+    let res = await getBalance();
+    if (res.success) {
+        level.value = res.data.level
+    }
     handleLevelConfigList();
     getAwardLog()
     getMessageUnreadCount();
@@ -246,6 +307,7 @@ onMounted(() => {
 onUnmounted(() => {
     levelConfigList
 })
+
 
 const handleLevelConfigList = () => {
     showLoading($lang('加载中'))
@@ -665,75 +727,69 @@ const getAwardLog = () => {
     padding-bottom: rem(16);
 }
 
-.vip-banner {
-    position: relative;
-    margin: 0 rem(16);
+.vip-list {
+    padding: 0 rem(16);
+    display: flex;
+    flex-direction: column;
+    gap: rem(12);
+}
+
+.vip-card {
+    background: $color-bg-page;
     border-radius: $radius-md;
     overflow: hidden;
+    text-align: center;
 
-    .vip-banner-img {
+    .vip-img-box {
+        position: relative;
+        overflow: hidden;
+        border-radius: rem(10);
+    }
+
+    .vip-img {
         width: 100%;
-        height: rem(160);
+        height: rem(140);
         object-fit: cover;
     }
 
-    .vip-banner-title {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        text-align: center;
-        padding: rem(8);
-        background: rgba(0, 0, 0, 0.5);
-        color: $color-white;
+    .vip-name {
         font-size: rem(18);
         font-weight: 600;
+        color: #fff;
+        padding: rem(10) 0 rem(6);
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, .3);
     }
-}
 
-.vip-table {
-    margin: rem(12) rem(16) 0;
-}
+    .vip-info {
+        padding: rem(10) rem(12) rem(5);
+        display: flex;
+        justify-content: space-around;
+    }
 
-.vip-table-header {
-    display: grid;
-    grid-template-columns: rem(40) 1fr 1fr 1fr rem(70);
-    gap: rem(8);
-    padding: rem(10) rem(8);
-    background: #3B82F6;
-    border-radius: $radius-sm $radius-sm 0 0;
-    font-size: rem(12);
-    color: $color-white;
-    text-align: center;
-}
+    .vip-row {
+        padding: rem(6) 0;
+        font-size: rem(13);
+        color: $color-text-secondary;
 
-.vip-table-row {
-    display: grid;
-    grid-template-columns: rem(40) 1fr 1fr 1fr rem(70);
-    gap: rem(8);
-    padding: rem(10) rem(8);
-    background: $color-white;
-    border-bottom: 1px solid $color-border;
-    font-size: rem(12);
-    color: $color-text-secondary;
-    text-align: center;
-    align-items: center;
-
-    .vip-level {
-        font-weight: 600;
-        color: $color-text-primary;
+        .amount {
+            font-weight: bold;
+            font-size: rem(14);
+            margin-top: rem(3);
+        }
     }
 
     .vip-buy-btn {
-        padding: rem(6) rem(8);
-        background: linear-gradient(135deg, #3B82F6, #2563EB);
+        width: calc(100% - rem(24));
+        margin: 0 rem(12) rem(12);
+        padding: rem(10);
+        background: $color-primary;
         color: $color-white;
         border-radius: $radius-sm;
-        font-size: rem(11);
-        white-space: nowrap;
+        font-size: rem(14);
+        font-weight: 500;
     }
 }
-
-
-
 </style>

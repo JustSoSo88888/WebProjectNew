@@ -218,7 +218,15 @@ let en = {
     "购买理财": "Purchase Investment",
     "任务收益": "Task Earnings",
     "转盘收益": "Spin Earnings",
-    "注册赠送":"Register Bonus",
+    "注册赠送": "Register Bonus",
+    "银行": "Bank",
+    "请输入银行": "Please enter the bank",
+    "银行卡号": "Bank Card Number",
+    "请输入银行卡号": "Please enter the bank card number",
+    "类型": "Type",
+    "请选择银行类型": "Please select a bank type",
+    "请联系客服更改": "Please contact customer service to modify",
+    "绑定成功": "Binding Successful",
 }
 
 export default en

@@ -218,7 +218,15 @@ let pt = {
     "购买理财": "Comprar investimento",
     "任务收益": "Ganhos de tarefas",
     "转盘收益": "Ganhos da roleta",
-    "注册赠送":"Bônus de registro",
+    "注册赠送": "Bônus de registro",
+    "银行": "Banco",
+    "请输入银行": "Por favor, insira o banco",
+    "银行卡号": "Número do cartão bancário",
+    "请输入银行卡号": "Por favor, insira o número do cartão bancário",
+    "类型": "Tipo",
+    "请选择银行类型": "Por favor, selecione o tipo de banco",
+    "请联系客服更改": "Por favor, entre em contato com o atendimento ao cliente para alterar",
+    "绑定成功": "Vinculação bem-sucedida",
 }
 
 export default pt;
