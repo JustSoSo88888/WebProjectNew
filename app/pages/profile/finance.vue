@@ -3,19 +3,19 @@
         <!-- Tab Switch -->
         <div class="tab-container">
             <div class="tab-wrapper">
-                <button class="tab-btn" :class="{ active: activeTab == 0 }" @click="activeTab = 0">
+                <button class="tab-btn" :class="{ active: activeTab == 0 }" @click="onTabChange(0)">
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M12 5v14M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    充值
+                    {{ $lang('充值') }}
                 </button>
-                <button class="tab-btn" :class="{ active: activeTab == 1 }" @click="activeTab = 1">
+                <button class="tab-btn" :class="{ active: activeTab == 1 }" @click="onTabChange(1)">
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M12 19V5M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    提现
+                    {{ $lang('提现') }}
                 </button>
             </div>
         </div>
@@ -25,9 +25,9 @@
         <!-- List Section -->
         <div class="list-section">
             <div class="list-header">
-                <span>单号</span>
-                <span>金额</span>
-                <span>状态</span>
+                <span>{{ $lang('单号') }}</span>
+                <span>{{ $lang('金额') }}</span>
+                <span>{{ $lang('状态') }}</span>
             </div>
             <div class="list-content">
                 <van-pull-refresh :pulling-text="$lang('下拉即可刷新') + '...'" :loosing-text="$lang('释放即可刷新') + '...'"
@@ -35,18 +35,36 @@
                     <van-list v-model:loading="loading" :finished="finished" :loading-text="$lang('加载中')"
                         :finished-text="list.length > 0 ? $lang('没有更多了') : ''" @load="onLoad">
                         <template v-if="list.length > 0">
-                            <div v-for="item in list" :key="item.id" class="list-item">
-                                <div class="item-main">
-                                    <span class="col-id">{{ item.order_no }}</span>
-                                    <span class="col-amount" :class="{ positive: activeTab === 0 }" translate="no">
-                                        {{ activeTab === 0 ? '+' : '-' }}R${{ parseFloat(item.amount) }}
-                                    </span>
-                                    <span class="col-status" :class="getType(item.status).class">{{ getType(item.status).text }}</span>
+                            <template v-if="activeTab == 0">
+                                <div v-for="item in list" :key="item.id" class="list-item">
+                                    <div class="item-main">
+                                        <span class="col-id">{{ item.order_no }}</span>
+                                        <span class="col-amount positive" translate="no">
+                                            +R${{ parseFloat(item.amount) }}
+                                        </span>
+                                        <span class="col-status" :class="getType(item.status).class">{{
+                                            getType(item.status).text }}</span>
+                                    </div>
+                                    <div class="item-footer">
+                                        <span class="col-time">{{ item.create_time }}</span>
+                                    </div>
                                 </div>
-                                <div class="item-footer">
-                                    <span class="col-time">{{ item.create_time }}</span>
+                            </template>
+                            <template v-if="activeTab == 1">
+                                <div v-for="item in list" :key="item.id" class="list-item">
+                                    <div class="item-main">
+                                        <span class="col-id">{{ item.order_no }}</span>
+                                        <span class="col-amount" translate="no">
+                                            -R${{ parseFloat(item.amount) }}
+                                        </span>
+                                        <span class="col-status" :class="getWithdrawType(item.status).class">{{
+                                            getType(item.status).text }}</span>
+                                    </div>
+                                    <div class="item-footer">
+                                        <span class="col-time">{{ item.create_time }}</span>
+                                    </div>
                                 </div>
-                            </div>
+                            </template>
                         </template>
                         <template v-else>
                             <div>
@@ -67,6 +85,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from '#imports'
 import { memberRechargeOrder } from '~/api/member'
 import { bankCardList } from '~/api/member'
+import { bankCardWithdrawalList } from '~/api/withdrawal'
 
 definePageMeta({ layout: 'second-page' })
 
@@ -80,31 +99,36 @@ const page = ref(1)
 const rows = ref(20)
 const list = ref([])
 const activeTab = ref(0)
-const tabList = ref(
-    [
-        { type: '0', label: '充值' },
-        { type: '1', label: '提现' },
 
-    ]
-)
+const getWithdrawType = (status) => {
+    if (Number(status) == 1) {
+        return { text: $lang('已到达'), class: 'success' }
+    } else if (Number(status) == 2) {
+        return { text: $lang('不通过'), class: 'error' }
+    } else if (Number(status) == 3) {
+        return { text: $lang('线上打款中'), class: 'pending' }
+    } else if (Number(status) == 4) {
+        return { text: $lang('用户取消'), class: 'success' }
+    }else{
+        return { text: $lang('未审核'), class: 'pending' }
+    }
+}
 
-const getAcTive = computed(() => {
-    const type = tabList.value[activeTab.value].type
-    return type
-})
-
-const getType = (status) =>{
-    if(Number(status) == 0){
-        return {text:'待支付',class:'pending'}
-    }else if(Number(status) == 1){
-        return {text:'已支付',class:'success'}
-    }else if(Number(status) == 2){
-        return {text:'已取消',class:'error'}
-    }else if(Number(status) == 3){
-        return {text:'交易失败',class:'error'}
+const getType = (status) => {
+    if (Number(status) == 0) {
+        return { text: $lang('待支付'), class: 'pending' }
+    } else if (Number(status) == 1) {
+        return { text: $lang('已支付'), class: 'success' }
+    } else if (Number(status) == 2) {
+        return { text: $lang('已取消'), class: 'error' }
+    } else if (Number(status) == 3) {
+        return { text: $lang('交易失败'), class: 'error' }
     }
 }
 const onTabChange = (val) => {
+    page.value = 1
+    list.value = []
+    activeTab.value = val
     onRefresh()
 
 }
@@ -120,10 +144,10 @@ const onLoad = () => {
     let param = {
         page: page.value,
         rows: rows.value,
-        type: getAcTive.value
     }
     showLoading($lang('加载中'))
-    memberRechargeOrder(param).then(res => {
+    let apiFn = activeTab.value == 0 ? memberRechargeOrder : bankCardWithdrawalList
+    apiFn(param).then(res => {
         hideLoading();
         refreshing.value = false
         if (res.success) {

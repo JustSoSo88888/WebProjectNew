@@ -66,7 +66,7 @@ const pageTitleMap = {
     '/profile/coupon': $lang('优惠券'),
     '/profile/address': '地址管理',
     '/profile/address/addressAdd': '地址管理',
-    '/profile/finance': '财务记录',
+    '/profile/finance': $lang('财务记录'),
     '/profile/email': '邮箱',
     '/profile/email/details': '邮箱详情',
     '/profile/recharge': $lang('充值'),

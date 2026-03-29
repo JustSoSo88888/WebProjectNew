@@ -21,7 +21,7 @@
 
         <div class="chat-input">
             <div class="input-box">
-                <input v-model="inputText" type="text" class="input-field" placeholder="请输入内容..."
+                <input v-model="inputText" type="text" class="input-field" :placeholder="$lang('请输入消息内容')"
                     @keyup.enter="sendMessage" />
                 <button class="send-btn" @click="sendMessage">
                     <svg viewBox="0 0 24 24" fill="none">

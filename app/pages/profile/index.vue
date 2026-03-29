@@ -269,7 +269,7 @@ const menuItems = [
     // },
     {
         key: 'finance',
-        label: '财务记录',
+        label: $lang('财务记录'),
         iconBg: 'linear-gradient(135deg,#FFF7ED,#FFEDD5)',
         icon: '<rect x="2" y="5" width="20" height="14" rx="2" stroke="#D97706" stroke-width="1.8"/><path d="M2 10h20" stroke="#D97706" stroke-width="1.8"/><path d="M6 15h4M14 15h4" stroke="#D97706" stroke-width="1.8" stroke-linecap="round"/>',
         route: '/profile/finance',

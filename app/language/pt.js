@@ -245,6 +245,20 @@ let pt = {
     "确认提现": "Confirmar saque",
     "提现申请已提交": "Solicitação de saque enviada",
     "您的提现申请已提交，请耐心等待": "Sua solicitação de saque foi enviada. Por favor, aguarde pacientemente.",
+    "财务记录": "Histórico Financeiro",
+    "单号": "Número do pedido",
+    "金额": "Valor",
+    "状态": "Status",
+    "已到达": "Concluído",
+    "不通过": "Rejeitado",
+    "线上打款中": "Pagamento em processamento",
+    "用户取消": "Cancelado pelo usuário",
+    "未审核": "Pendente de revisão",
+    "待支付": "Pendente de pagamento",
+    "已支付": "Pago",
+    "已取消": "Cancelado",
+    "交易失败": "Falha na transação",
+    "请输入消息内容":"Por favor, insira sua mensagem",
 }
 
 export default pt;

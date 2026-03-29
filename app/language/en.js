@@ -244,7 +244,21 @@ let en = {
     "请输入金额": "Please enter an amount",
     "确认提现": "Confirm withdrawal",
     "提现申请已提交": "Withdrawal request submitted",
-    "您的提现申请已提交，请耐心等待": "Your withdrawal request has been submitted. Please wait patiently."
+    "您的提现申请已提交，请耐心等待": "Your withdrawal request has been submitted. Please wait patiently.",
+    "财务记录": "Financial History",
+    "单号": "Order number",
+    "金额": "Amount",
+    "状态": "Status",
+    "已到达": "Completed",
+    "不通过": "Rejected",
+    "线上打款中": "Processing payment",
+    "用户取消": "Cancelled by user",
+    "未审核": "Pending review",
+    "待支付": "Pending payment",
+    "已支付": "Paid",
+    "已取消": "Cancelled",
+    "交易失败": "Transaction failed",
+    "请输入消息内容":"Please enter your message",
 }
 
 export default en
