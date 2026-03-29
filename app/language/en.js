@@ -236,6 +236,7 @@ let en = {
     "会员等级": "Membership level",
     "当前等级": "Current level",
     "等级说明": "Level Explanation",
+    "****9000邀请3级新用户佣金：100 ABCD": "****9000 Level 3 user invite, commission: 100",
 }
 
 export default en

@@ -236,6 +236,7 @@ let pt = {
     "会员等级": "Nível de associação",
     "当前等级": "Nível atual",
     "等级说明": "Explicação do nível",
+    "****9000邀请3级新用户佣金：100 ABCD": "Convite de usuário de nível 3 (****9000), comissão: 100",
 }
 
 export default pt;

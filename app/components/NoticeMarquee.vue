@@ -2,17 +2,21 @@
     <div class="notice-section" v-if="list.length">
         <div class="notice-icon">
             <svg viewBox="0 0 24 24" fill="none">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                    stroke-linejoin="round" />
             </svg>
         </div>
         <div class="notice-marquee">
             <div class="notice-track" :style="{ animationDuration: (list.length / 2 * 10) + 's' }">
                 <template v-for="(item, index) in list" :key="index">
                     <span class="notice-item">
-                        <span class="notice-phone">{{ item.Phone }}</span>
-                        <span class="notice-text">邀请{{ item.generation }}代新用户。</span>
-                        <span >佣金:R$ {{ item.amount }}</span>
+                        {{ replaceMap($lang('****9000邀请3级新用户佣金：100 ABCD'), {
+                            "****9000": String(item.Phone).slice(0, 2) + '***' + String(item.Phone).slice(-2),
+                            "3": item.generation,
+                            "100": "R$" + item.amount
+                        }) }}
                     </span>
                 </template>
             </div>
@@ -27,6 +31,13 @@ defineProps({
         default: () => []
     }
 })
+
+const replaceMap = (str, map) => {
+    Object.keys(map).forEach(key => {
+        str = str.replaceAll(key, map[key])
+    })
+    return str
+}
 </script>
 
 <style scoped lang="scss">
@@ -95,6 +106,7 @@ defineProps({
     0% {
         transform: translateX(0);
     }
+
     100% {
         transform: translateX(-50%);
     }
