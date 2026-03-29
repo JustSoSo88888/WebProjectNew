@@ -17,7 +17,15 @@
                     </div>
                 </div>
                 <div class="user-meta">
-                    <div class="user-account">{{ userData.id }}</div>
+                    <div class="user-account">{{ userData.phone }}</div>
+                    <div class="user-id" @click="copyText(userData.id)">
+                        ID:{{ userData.id }}
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.8" />
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor"
+                                stroke-width="1.8" stroke-linecap="round" />
+                        </svg>
+                    </div>
                     <div class="user-tags">
                         <span class="tag tag--credit">
                             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -42,7 +50,7 @@
                             <path d="M12 19V5M5 12l7 7 7-7" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-                        提现
+                        {{ $lang('提现') }}
                     </button>
                 </div>
             </div>
@@ -202,7 +210,7 @@ const getAwardTotal = () => {
 const balance = ref(0)
 const balanceData = ref({})
 const levelData = ref({
-    name:''
+    name: ''
 })
 const getBalanceData = () => {
     showLoading($lang('加载中'))
@@ -212,7 +220,7 @@ const getBalanceData = () => {
             balance.value = res.data.amount
             balanceData.value = res.data
             handlelevelConfigList(res.data.level);
-            
+
         } else {
             showMsg(res.message, 'fail')
         }
@@ -225,12 +233,10 @@ const getBalanceData = () => {
 
 const handlelevelConfigList = (level) => {
     levelConfigList({}).then(res => {
-        if(res.success){
+        if (res.success) {
             let levelList = res.data.level_configs || []
             let levelArr = levelList.filter(item => item.level == level)
             levelData.value = levelArr[0]
-            
-            
         }
 
     })
@@ -358,7 +364,14 @@ const handleMenu = (item) => {
     }
     if (item.route) navigateTo(item.route)
 }
-
+async function copyText(text) {
+    try {
+        await navigator.clipboard.writeText(text)
+        showMsg($lang('复制成功'), 'success')
+    } catch {
+        showMsg($lang('复制失败，请手动复制'), 'fail')
+    }
+}
 </script>
 
 <style scoped lang="scss">
@@ -448,10 +461,22 @@ const handleMenu = (item) => {
     font-size: rem(16);
     font-weight: 600;
     color: #fff;
-    margin-bottom: rem(6);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.user-id {
+    font-size: rem(12);
+    margin-bottom: rem(6);
+    color: $color-gray-50;
+
+    svg {
+        width: rem(12);
+        height: rem(12);
+        margin-left: rem(5);
+        cursor: pointer;
+    }
 }
 
 .user-tags {

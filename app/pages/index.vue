@@ -5,7 +5,7 @@
         <div class="hero-banner">
             <van-swipe class="hero-swipe" :autoplay="4000" indicator-color="#d97706">
                 <van-swipe-item v-for="(item, index) in bannerList" :key="index">
-                    <img :src="item" alt="旅游景点">
+                    <img :src="item">
                     <div class="hero-overlay"></div>
                 </van-swipe-item>
             </van-swipe>
@@ -68,7 +68,7 @@
                         </svg>
                     </div>
                     <div class="qc-content">
-                        <span class="qc-label">提现</span>
+                        <span class="qc-label">{{ $lang('提现') }}</span>
                     </div>
                 </button>
                 <button class="qc-item qc-profit" @click="navigateTo('/profile/article')">
@@ -111,31 +111,32 @@
         <!-- 会员等级 -->
         <div class="vip-section">
             <div class="section-header">
-                <h2>会员等级</h2>
-                <p>升级享受更多专属权益</p>
+                <h2>{{ $lang('会员等级') }}</h2>
+                <van-icon name="warning-o" class="icon"  @click="navigateTo('/profile/levelInfo')"/>
             </div>
             <div class="vip-list">
-                <div class="vip-card" v-for="item in vipLevels" :key="item.id">
+                <div class="vip-card" :class="{ 'vip-card--current': item.level == level }" v-for="item in vipLevels" :key="item.id">
+                    <div class="current-badge" v-if="item.level == level">{{ $lang('当前等级') }}</div>
                     <div class="vip-img-box">
                         <img :src="item.image_url" class="vip-img" />
                         <div class="vip-name">{{ item.name }}</div>
                     </div>
                     <div class="vip-info">
                         <div class="vip-row">
-                            <div>任务奖励</div>
+                            <div>{{ $lang('奖励') }}</div>
                             <div class="amount" translate="n
                         ">R$ {{ item.income_amount }}</div>
                         </div>
                         <div class="vip-row">
-                            <div>任务</div>
+                            <div>{{ $lang('任务') }}</div>
                             <div class="amount">{{ item.daily_order_number }}</div>
                         </div>
                         <div class="vip-row">
-                            <div>价格</div>
+                            <div>{{ $lang('价格') }}</div>
                             <div class="amount" translate="no">R$ {{ item.price }}</div>
                         </div>
                     </div>
-                    <button class="vip-buy-btn" v-if="item.level > level" @click="handleUpdateLevel(item)">立即加入</button>
+                    <button class="vip-buy-btn" v-if="item.level > level" @click="handleUpdateLevel(item)">{{ $lang('立即加入') }}</button>
                 </div>
             </div>
         </div>
@@ -143,6 +144,22 @@
         <RedeemModal v-model="showRedeem" />
         <PaymentPasswordPopup v-model:show="showPaymentPopup" @cancel="showPaymentPopup = false"
             @confirm="handlePasswordConfirm"></PaymentPasswordPopup>
+
+        <!-- 升级成功动画 -->
+        <Transition name="success-fade">
+            <div class="upgrade-success-overlay" v-if="showUpgradeSuccess" @click="showUpgradeSuccess = false">
+                <div class="upgrade-success-modal">
+                    <div class="success-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="10" stroke="#10B981" stroke-width="2" />
+                            <path d="M8 12l3 3 5-6" stroke="#10B981" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <div class="success-title">{{ $lang('升级成功') }}</div>
+                </div>
+            </div>
+        </Transition>
     </div>
 </template>
 
@@ -178,6 +195,7 @@ definePageMeta({
     layoutTransition: false
 })
 const showPaymentPopup = ref(false)
+const showUpgradeSuccess = ref(false)
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
 const upLevelData = ref({})
@@ -197,11 +215,16 @@ const handleUpdateLevel = (item) => {
 
 }
 const handlePasswordConfirm = async (val) => {
+    let param = {
+        config_id: upLevelData.value.id,
+        pay_password: val
+    }
     showPaymentPopup.value = false
     showLoading($lang('加载中'))
-    updateLevel({ id: upLevelData.value.id }).then(async res => {
+    updateLevel(param).then(async res => {
         hideLoading();
         if (res.success) {
+            showUpgradeSuccess.value = true
             getBalanceData()
         } else {
             showMsg(res.message, 'fail')
@@ -631,6 +654,9 @@ const getAwardLog = () => {
 // 通用区域样式
 .section-header {
     padding: rem(20) rem(16) rem(12);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
     h2 {
         font-size: rem(18);
@@ -639,9 +665,10 @@ const getAwardLog = () => {
         margin-bottom: rem(4);
     }
 
-    p {
-        font-size: rem(13);
-        color: $color-text-secondary;
+    .icon{
+        font-size: rem(16);
+        font-weight: bold;
+        cursor: pointer;
     }
 }
 
@@ -735,10 +762,23 @@ const getAwardLog = () => {
 }
 
 .vip-card {
+    position: relative;
     background: $color-bg-page;
     border-radius: $radius-md;
     overflow: hidden;
     text-align: center;
+
+    .current-badge {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: $color-primary;
+        color: #fff;
+        font-size: rem(12);
+        padding: rem(4) rem(8);
+        border-radius: 0 0 $radius-sm 0;
+        z-index: 1;
+    }
 
     .vip-img-box {
         position: relative;
@@ -773,6 +813,7 @@ const getAwardLog = () => {
         padding: rem(6) 0;
         font-size: rem(13);
         color: $color-text-secondary;
+        flex:1;
 
         .amount {
             font-weight: bold;
@@ -791,5 +832,130 @@ const getAwardLog = () => {
         font-size: rem(14);
         font-weight: 500;
     }
+}
+
+// 升级成功动画
+.upgrade-success-overlay {
+    position: fixed;
+    inset: 0;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    background: rgba(0, 0, 0, .7);
+}
+
+.upgrade-success-modal {
+    background: #fff;
+    border-radius: rem(20);
+    padding: rem(40) rem(50);
+    text-align: center;
+    animation: modal-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(16, 185, 129, 0.3);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.success-icon {
+    width: rem(80);
+    height: rem(80);
+    margin: 0 auto rem(20);
+    animation: icon-bounce 0.6s ease-out 0.2s both;
+
+    svg {
+        width: 100%;
+        height: 100%;
+
+        circle {
+            stroke-dasharray: 63;
+            stroke-dashoffset: 63;
+            animation: circle-draw 0.6s ease-out 0.3s forwards;
+        }
+
+        path {
+            stroke-dasharray: 20;
+            stroke-dashoffset: 20;
+            animation: check-draw 0.4s ease-out 0.7s forwards;
+        }
+    }
+}
+
+.success-title {
+    font-size: rem(24);
+    font-weight: 700;
+    color: #10B981;
+    margin-bottom: rem(10);
+    animation: text-fade 0.4s ease-out 0.5s both;
+}
+
+.success-level {
+    font-size: rem(20);
+    font-weight: 600;
+    color: #fbbf24;
+    animation: text-fade 0.4s ease-out 0.7s both;
+}
+
+@keyframes modal-pop {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes icon-bounce {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes circle-draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes check-draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes text-fade {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Transition
+.success-fade-enter-active {
+    transition: opacity 0.3s ease;
+}
+
+.success-fade-leave-active {
+    transition: opacity 0.3s ease 0.1s;
+}
+
+.success-fade-enter-from,
+.success-fade-leave-to {
+    opacity: 0;
 }
 </style>

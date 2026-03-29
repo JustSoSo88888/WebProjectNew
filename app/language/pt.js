@@ -227,6 +227,15 @@ let pt = {
     "请选择银行类型": "Por favor, selecione o tipo de banco",
     "请联系客服更改": "Por favor, entre em contato com o atendimento ao cliente para alterar",
     "绑定成功": "Vinculação bem-sucedida",
+    "确认要升级？": "Tem certeza de que deseja atualizar?",
+    "升级成功": "Atualização bem-sucedida",
+    "立即加入": "Junte-se agora",
+    "价格": "Preço",
+    "任务": "Tarefas",
+    "任务奖励": "Recompensas de tarefas",
+    "会员等级": "Nível de associação",
+    "当前等级": "Nível atual",
+    "等级说明": "Explicação do nível",
 }
 
 export default pt;

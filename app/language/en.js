@@ -227,6 +227,15 @@ let en = {
     "请选择银行类型": "Please select a bank type",
     "请联系客服更改": "Please contact customer service to modify",
     "绑定成功": "Binding Successful",
+    "确认要升级？": "Are you sure you want to upgrade?",
+    "升级成功": "Upgrade successful",
+    "立即加入": "Join now",
+    "价格": "Price",
+    "任务": "Tasks",
+    "任务奖励": "Task rewards",
+    "会员等级": "Membership level",
+    "当前等级": "Current level",
+    "等级说明": "Level Explanation",
 }
 
 export default en

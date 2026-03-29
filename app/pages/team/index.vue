@@ -276,10 +276,10 @@ async function copyText(text, type) {
   try {
     await navigator.clipboard.writeText(text)
     copied.value = type
-    showToast($lang('复制成功'))
+    showMsg($lang('复制成功'),success)
     setTimeout(() => { copied.value = '' }, 2000)
   } catch {
-    showToast($lang('复制失败，请手动复制'))
+    showMsg($lang('复制失败，请手动复制'), 'fail')
   }
 }
 </script>

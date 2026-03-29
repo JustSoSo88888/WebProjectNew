@@ -76,6 +76,7 @@ const pageTitleMap = {
     '/finance/record': $lang('理财记录'),
     '/finance/detail': $lang('产品详情'),
     '/profile/lucky': $lang('幸运转盘'),
+    '/profile/levelInfo': $lang('等级说明'),
     '/profile/lucky/record': $lang('我的奖励'),
     '/chat': $lang('客服'),
 }
