@@ -237,6 +237,14 @@ let pt = {
     "当前等级": "Nível atual",
     "等级说明": "Explicação do nível",
     "****9000邀请3级新用户佣金：100 ABCD": "Convite de usuário de nível 3 (****9000), comissão: 100",
+    "手续费": "Taxa de transação",
+    "最低提现金额": "Valor mínimo de saque",
+    "选择或输入提现金额": "Selecione ou insira o valor do saque",
+    "实际到账金额": "Valor líquido recebido",
+    "请输入金额": "Por favor, insira um valor",
+    "确认提现": "Confirmar saque",
+    "提现申请已提交": "Solicitação de saque enviada",
+    "您的提现申请已提交，请耐心等待": "Sua solicitação de saque foi enviada. Por favor, aguarde pacientemente.",
 }
 
 export default pt;

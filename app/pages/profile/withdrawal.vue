@@ -2,9 +2,9 @@
     <div class="withdrawal-page">
         <!-- Balance Card -->
         <div class="balance-card">
-            <div class="balance-label">可提现余额</div>
-            <div class="balance-amount">
-                <span class="currency">BRL</span>
+            <div class="balance-label">{{ $lang('余额') }}</div>
+            <div class="balance-amount" translate="no">
+                <span class="currency">R$</span>
                 <span class="amount">{{ balance }}</span>
             </div>
         </div>
@@ -12,160 +12,169 @@
         <!-- Fee Info -->
         <div class="fee-info">
             <div class="fee-item">
-                <span class="fee-label">提现手续费</span>
-                <span class="fee-value">10%</span>
+                <span class="fee-label">{{ $lang('手续费') }}</span>
+                <span class="fee-value">{{ tax }}%</span>
             </div>
             <div class="fee-item">
-                <span class="fee-label">最低提现金额</span>
-                <span class="fee-value">BRL {{ minAmount }}</span>
+                <span class="fee-label">{{ $lang('最低提现金额') }}</span>
+                <span class="fee-value" translate="no">R$ {{ minAmount }}</span>
             </div>
         </div>
 
         <!-- Amount Selection -->
         <div class="amount-section">
-            <div class="section-title">选择或输入提现金额</div>
-            
+            <div class="section-title">{{ $lang('选择或输入提现金额') }}</div>
+
             <!-- Amount Presets -->
             <div class="amount-presets">
-                <button
-                    v-for="preset in amountPresets"
-                    :key="preset"
-                    class="preset-btn"
-                    :class="{ active: selectedAmount === preset }"
-                    @click="selectAmount(preset)"
-                >
-                    BRL {{ preset }}
-                </button>
+                <template v-for="preset in amountPresets" :key="preset">
+                    <button v-if="parseFloat(preset.amount) > minAmount" class="preset-btn"
+                        :class="{ active: selectedAmount == preset.amount }" @click="selectAmount(preset.amount)">
+                        R$ {{ parseFloat(preset.amount) }}
+                    </button>
+                </template>
             </div>
 
             <!-- Custom Amount Input -->
             <div class="custom-amount">
-                <span class="prefix">BRL</span>
-                <input
-                    v-model="customAmount"
-                    type="number"
-                    class="amount-input"
-                    placeholder="输入金额"
-                    @input="onCustomInput"
-                />
+                <span class="prefix">R$</span>
+                <input v-model="customAmount" type="number" class="amount-input" :placeholder="$lang('请输入金额')"
+                    @input="onCustomInput" />
             </div>
         </div>
 
         <!-- Actual Amount -->
         <div class="actual-amount" v-if="actualAmount > 0">
-            <span class="label">实际到账金额</span>
-            <span class="value">BRL {{ actualAmount.toFixed(2) }}</span>
+            <span class="label" translate="no">{{ $lang('实际到账金额') }}</span>
+            <span class="value">R$ {{ actualAmount.toFixed(2) }}</span>
         </div>
 
-        <!-- Password Input -->
-        <div class="password-section">
-            <div class="section-title">输入支付密码</div>
-            <div class="password-input-wrapper">
-                <input
-                    v-model="password"
-                    type="password"
-                    maxlength="6"
-                    class="password-input"
-                    placeholder="请输入6位支付密码"
-                    inputmode="numeric"
-                    pattern="[0-9]*"
-                />
-            </div>
-        </div>
 
         <!-- Submit Button -->
-        <button 
-            class="submit-btn" 
-            :disabled="!canSubmit"
-            @click="handleSubmit"
-        >
-            确认提现
+        <button class="submit-btn" :disabled="!canSubmit" @click="handleSubmit">
+            {{ $lang('确认提现') }}
         </button>
 
         <!-- Bottom Description -->
-        <div class="description">
+        <!-- <div class="description">
             <p>根据巴西税法规定，员工每次提款都需要缴纳10%的税款，该税款由巴西政府征收。</p>
             <p>当您申请提款时，SP财务部门会将您的银行信息发送给与SP合作的银行，该银行将为您进行转账。请您核对您的银行账户信息是否正确。</p>
             <p>银行将在0至72小时内完成转账，请您耐心等待。</p>
-        </div>
+        </div> -->
 
         <!-- Success Modal -->
-        <van-popup 
-            v-model:show="showSuccessModal" 
-            position="center" 
-            round
-            class="center-popup"
-        >
+        <van-popup v-model:show="showSuccessModal" position="center" round class="center-popup">
             <div class="modal-content">
                 <div class="modal-icon success-icon">
                     <svg viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/>
-                        <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8" />
+                        <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </div>
-                <div class="modal-title">提现申请已提交</div>
-                <div class="modal-desc">您的提现申请已提交，请耐心等待银行处理</div>
+                <div class="modal-title">{{ $lang('提现申请已提交') }}</div>
+                <div class="modal-desc">{{ $lang('您的提现申请已提交，请耐心等待') }}</div>
                 <div class="modal-actions">
-                    <button class="modal-btn modal-btn--confirm" @click="showSuccessModal = false">确定</button>
+                    <button class="modal-btn modal-btn--confirm" @click="showSuccessModal = false">{{ $lang('确认') }}</button>
                 </div>
             </div>
         </van-popup>
+        <PaymentPasswordPopup v-model:show="showPaymentPopup" @cancel="showPaymentPopup = false"
+            @confirm="handlePasswordConfirm"></PaymentPasswordPopup>
     </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { showToast } from 'vant'
 import { navigateTo } from '#imports'
+import { bankCardWithdrawalRate, bankCardWithdrawal } from '~/api/withdrawal'
+const nuxtApp = useNuxtApp()
+const $lang = nuxtApp.$lang
 
 definePageMeta({ layout: 'second-page' })
 
-const balance = ref('2,580.00')
-const minAmount = ref(50)
-const feeRate = 0.1
+onMounted(() => {
+    getBankCardWithdrawalRate()
 
-const amountPresets = [100, 200, 500, 1000]
+})
+
+const withdrawalData = ref({})
+const tax = ref(0)
+const getBankCardWithdrawalRate = () => {
+    showLoading($lang('加载中'))
+    bankCardWithdrawalRate({}).then(res => {
+        hideLoading();
+        if (res.success) {
+            withdrawalData.value = res.data
+            amountPresets.value = res.data.amount_configs || []
+            balance.value = parseFloat(res.data.amount_data.amount)
+            tax.value = res.data.without_tax
+            minAmount.value = parseFloat(res.data.without_min)
+        } else {
+            showMsg(res.message, 'fail')
+        }
+    }).catch(error => {
+        hideLoading();
+        showMsg(error.message, 'fail')
+    })
+}
+
+const balance = ref('')
+const minAmount = ref(0)
+
+const amountPresets = ref([])
 const selectedAmount = ref(0)
 const customAmount = ref('')
 
-const password = ref('')
-const hasSetPassword = ref(true)
 
 const showSuccessModal = ref(false)
 
 const actualAmount = computed(() => {
     const amount = selectedAmount.value || parseFloat(customAmount.value) || 0
-    return amount * (1 - feeRate)
+    return amount * (1 - (tax.value / 100))
 })
 
 const canSubmit = computed(() => {
     const amount = selectedAmount.value || parseFloat(customAmount.value) || 0
-    return amount >= minAmount.value && password.value.length === 6
+    return amount >= minAmount.value
 })
 
 const selectAmount = (amount) => {
-    selectedAmount.value = amount
-    customAmount.value = ''
+    selectedAmount.value = parseFloat(amount)
+    customAmount.value = parseFloat(amount)
 }
 
 const onCustomInput = () => {
     selectedAmount.value = 0
 }
 
+const showPaymentPopup = ref(false)
 const handleSubmit = () => {
+    showPaymentPopup.value = true
 
-    const amount = selectedAmount.value || parseFloat(customAmount.value)
-    if (amount < minAmount.value) {
-        showToast(`最低提现金额为 BRL ${minAmount.value}`)
-        return
+}
+
+const handlePasswordConfirm = (password) => {
+    showPaymentPopup.value = false
+    showLoading($lang('加载中'))
+    let params = {
+        amount: customAmount.value,
+        pay_password: password,
+        bank_card_id: withdrawalData.value.bank_cards[0].id,
     }
-
-    if (password.value.length !== 6) {
-        showToast('请输入6位支付密码')
-        return
-    }
-
-    showSuccessModal.value = true
+    bankCardWithdrawal(params).then(res => {
+        hideLoading();
+        if (res.success) {
+            showSuccessModal.value = true
+            getBankCardWithdrawalRate();
+        } else {
+            showMsg(res.message, 'fail')
+        }
+    }).catch(error => {
+        hideLoading();
+        showMsg(error.message, 'fail')
+    })
 }
 
 
@@ -380,7 +389,7 @@ const handleSubmit = () => {
     background: $color-gray-50;
     border-radius: $radius-md;
     padding: rem(14);
-    
+
     p {
         font-size: rem(11);
         color: $color-text-muted;

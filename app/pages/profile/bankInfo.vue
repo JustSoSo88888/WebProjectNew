@@ -12,7 +12,7 @@
                             <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.8" />
                         </svg>
                     </div>
-                    <input v-model="form.name" disabled="isEdit" type="text" class="input" :placeholder="$lang('请输入姓名')"
+                    <input v-model="form.name" :disabled="isEdit" type="text" class="input" :placeholder="$lang('请输入姓名')"
                         @focus="inputFocused.name = true" @blur="inputFocused.name = false" />
                 </div>
             </div>
@@ -30,22 +30,8 @@
                         </svg>
                     </div>
                     <div class="area-code">+55</div>
-                    <input v-model="form.phone" type="number" disabled="isEdit" class="input" :placeholder="$lang('请输入手机号')"
+                    <input v-model="form.phone" type="number" :disabled="isEdit" class="input" :placeholder="$lang('请输入手机号')"
                         @focus="inputFocused.phone = true" @blur="inputFocused.phone = false" />
-                </div>
-            </div>
-            <div class="form-item">
-                <div class="form-label">{{ $lang('银行') }}</div>
-                <div class="form-input" :class="{ focused: inputFocused.bank }">
-                    <div class="input-icon">
-                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"
-                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                    <input v-model="form.bank" type="text" disabled="isEdit" class="input" :placeholder="$lang('请输入银行')"
-                        @focus="inputFocused.bank = true" @blur="inputFocused.bank = false" />
                 </div>
             </div>
             <div class="form-item">
@@ -57,7 +43,7 @@
                             <path d="M1 10h22" stroke="currentColor" stroke-width="1.8" />
                         </svg>
                     </div>
-                    <input v-model="form.account" type="text" disabled="isEdit" class="input" :placeholder="$lang('请输入银行卡号')"
+                    <input v-model="form.account" type="text" :disabled="isEdit" class="input" :placeholder="$lang('请输入银行卡号')"
                         @focus="inputFocused.account = true" @blur="inputFocused.account = false" />
                 </div>
             </div>
@@ -186,7 +172,7 @@ const onBankConfirm = ({ selectedOptions }) => {
 const inputFocused = ref({
     name: false,
     phone: false,
-    bank: false,
+    bank: true,
     account: false,
     payWayType: false,
 })
@@ -194,23 +180,20 @@ const inputFocused = ref({
 const form = ref({
     name: '',
     phone: '',
-    bank: '',
+    bank: 'PIX',
     account: '',
     payWayType: '',
 })
 
-const hasData = computed(() => {
-    return form.value.name || form.value.phone || form.value.bank || form.value.account
-})
 
 const canSubmit = computed(() => {
-    return form.value.name && form.value.phone && form.value.bank && form.value.account && !isEdit
+    return form.value.name && form.value.phone  && form.value.account && form.value.payWayType && !isEdit.value
 })
 
 const handleSubmit = () => {
     if (!canSubmit.value) return
     let params = {
-        id: '',
+        id: '4',
         phone: form.value.phone,
         bank_card_no: form.value.account,
         bank_name: form.value.bank,

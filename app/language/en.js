@@ -237,6 +237,14 @@ let en = {
     "当前等级": "Current level",
     "等级说明": "Level Explanation",
     "****9000邀请3级新用户佣金：100 ABCD": "****9000 Level 3 user invite, commission: 100",
+    "手续费": "Fee",
+    "最低提现金额": "Minimum withdrawal amount",
+    "选择或输入提现金额": "Select or enter withdrawal amount",
+    "实际到账金额": "Net amount received",
+    "请输入金额": "Please enter an amount",
+    "确认提现": "Confirm withdrawal",
+    "提现申请已提交": "Withdrawal request submitted",
+    "您的提现申请已提交，请耐心等待": "Your withdrawal request has been submitted. Please wait patiently."
 }
 
 export default en

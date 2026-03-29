@@ -276,7 +276,7 @@ async function copyText(text, type) {
   try {
     await navigator.clipboard.writeText(text)
     copied.value = type
-    showMsg($lang('复制成功'),success)
+    showMsg($lang('复制成功'),'success')
     setTimeout(() => { copied.value = '' }, 2000)
   } catch {
     showMsg($lang('复制失败，请手动复制'), 'fail')

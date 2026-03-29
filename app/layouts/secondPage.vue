@@ -70,7 +70,7 @@ const pageTitleMap = {
     '/profile/email': '邮箱',
     '/profile/email/details': '邮箱详情',
     '/profile/recharge': $lang('充值'),
-    '/profile/withdrawal': '提现',
+    '/profile/withdrawal': $lang('提现'),
     '/team/details': $lang('团队详情'),
     '/task/details': $lang('任务详情'),
     '/finance/record': $lang('理财记录'),
