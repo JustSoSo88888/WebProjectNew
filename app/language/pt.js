@@ -31,6 +31,7 @@ let pt = {
     "选择语言": "Selecionar idioma",
     "提示": "Aviso",
     "登录超时，请重新登录": "Sessão expirada, por favor faça login novamente",
+    "请先绑定银行卡": "Por favor, vincule um cartão bancário primeiro",
     "确认": "Confirmar",
     "取消": "Cancelar",
     "确认退出登录？": "Tem certeza de que deseja sair?",
@@ -259,6 +260,7 @@ let pt = {
     "已取消": "Cancelado",
     "交易失败": "Falha na transação",
     "请输入消息内容":"Por favor, insira sua mensagem",
+    "选择银行卡": "Selecionar cartão bancário",
 }
 
 export default pt;

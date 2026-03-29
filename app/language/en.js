@@ -31,6 +31,7 @@ let en = {
     "选择语言": "Select Language",
     "提示": "Tips",
     "登录超时，请重新登录": "Login timed out, please log in again",
+    "请先绑定银行卡": "Please bind a bank card first",
     "确认": "Confirm",
     "取消": "Cancel",
     "确认退出登录？": "Are you sure you want to log out?",
@@ -259,6 +260,7 @@ let en = {
     "已取消": "Cancelled",
     "交易失败": "Transaction failed",
     "请输入消息内容":"Please enter your message",
+    "选择银行卡": "Select Bank Card",
 }
 
 export default en

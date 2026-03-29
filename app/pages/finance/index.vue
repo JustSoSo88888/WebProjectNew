@@ -91,7 +91,7 @@
               <div class="progress-info">
                 <span class="progress-pct">{{ item.total_amount == 0 ? 0 : ((item.surplus_amount / item.total_amount)
                   *
-                  100) }}%</span>
+                  100).toFixed(2) }}%</span>
               </div>
               <div class="progress-bar">
                 <div class="progress-fill"

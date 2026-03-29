@@ -146,20 +146,31 @@
             @confirm="handlePasswordConfirm"></PaymentPasswordPopup>
 
         <!-- 升级成功动画 -->
-        <Transition name="success-fade">
-            <div class="upgrade-success-overlay" v-if="showUpgradeSuccess" @click="showUpgradeSuccess = false">
-                <div class="upgrade-success-modal">
-                    <div class="success-icon">
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <circle cx="12" cy="12" r="10" stroke="#10B981" stroke-width="2" />
-                            <path d="M8 12l3 3 5-6" stroke="#10B981" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
+        <Teleport to="body">
+            <Transition name="success-fade">
+                <div
+                    class="upgrade-success-overlay"
+                    v-if="showUpgradeSuccess"
+                    @click="closeUpgradeSuccess"
+                    @pointerup="closeUpgradeSuccess"
+                    @touchend.prevent="closeUpgradeSuccess"
+                >
+                    <div class="upgrade-success-modal" @click.stop @pointerup.stop @touchend.stop>
+                        <button class="upgrade-close-btn" @click.stop="closeUpgradeSuccess" @pointerup.stop="closeUpgradeSuccess">
+                            ×
+                        </button>
+                        <div class="success-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="10" stroke="#10B981" stroke-width="2" />
+                                <path d="M8 12l3 3 5-6" stroke="#10B981" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <div class="success-title">{{ $lang('升级成功') }}</div>
                     </div>
-                    <div class="success-title">{{ $lang('升级成功') }}</div>
                 </div>
-            </div>
-        </Transition>
+            </Transition>
+        </Teleport>
     </div>
 </template>
 
@@ -196,6 +207,9 @@ definePageMeta({
 })
 const showPaymentPopup = ref(false)
 const showUpgradeSuccess = ref(false)
+const closeUpgradeSuccess = () => {
+    showUpgradeSuccess.value = false
+}
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
 const upLevelData = ref({})
@@ -244,10 +258,10 @@ const getBalanceData = () => {
         } else {
             showMsg(res.message, 'fail')
         }
-
     }).catch(error => {
-        hideLoading();
         showMsg(error.message, 'fail')
+    }).finally(() => {
+        hideLoading();
     })
 }
 
@@ -318,9 +332,17 @@ const handleMenu = (path) => {
 const level = ref(0)
 onMounted(async () => {
     showLoading($lang('加载中'))
-    let res = await getBalance();
-    if (res.success) {
-        level.value = res.data.level
+    try {
+        let res = await getBalance();
+        if (res.success) {
+            level.value = res.data.level
+        } else {
+            showMsg(res.message, 'fail')
+        }
+    } catch (error) {
+        showMsg(error.message, 'fail')
+    } finally {
+        hideLoading();
     }
     handleLevelConfigList();
     getAwardLog()
@@ -847,6 +869,7 @@ const getAwardLog = () => {
 }
 
 .upgrade-success-modal {
+    position: relative;
     background: #fff;
     border-radius: rem(20);
     padding: rem(40) rem(50);
@@ -854,6 +877,22 @@ const getAwardLog = () => {
     animation: modal-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(16, 185, 129, 0.3);
     border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.upgrade-close-btn {
+    position: absolute;
+    top: rem(8);
+    right: rem(10);
+    width: rem(28);
+    height: rem(28);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.06);
+    color: #6b7280;
+    font-size: rem(20);
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .success-icon {

@@ -21,6 +21,41 @@
             </div>
         </div>
 
+        <!-- Bank Card Selection -->
+        <div class="bank-card-section" v-if="bankCards.length > 0">
+            <div class="section-title">{{ $lang('选择银行卡') }}</div>
+            <div class="bank-card-select">
+                <div class="bank-card-info flex flex-between">
+                    <div class="card-name">{{selectedBankCard.user_name}}</div>
+                    <div class="card-number">{{ maskCardNo(selectedBankCard.bank_card_no) }}</div>
+                </div>
+            </div>
+        </div>
+
+        <van-popup v-model:show="showBankCardPicker" position="bottom" round>
+            <div class="picker-header">
+                <span class="picker-cancel" @click="showBankCardPicker = false">{{ $lang('取消') }}</span>
+                <span class="picker-title">{{ $lang('选择银行卡') }}</span>
+                <span class="picker-confirm" @click="showBankCardPicker = false">{{ $lang('确认') }}</span>
+            </div>
+            <div class="picker-list">
+                <div 
+                    v-for="card in bankCards" 
+                    :key="card.id" 
+                    class="picker-item"
+                    :class="{ active: selectedBankCard.id === card.id }"
+                    @click="selectBankCard(card)"
+                >
+                <div class="picker-item-info">
+                        <div class="picker-card-no">{{ maskCardNo(card.bank_card_no) }}</div>
+                    </div>
+                    <svg v-if="selectedBankCard.id === card.id" class="check-icon" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </div>
+        </van-popup>
+
         <!-- Amount Selection -->
         <div class="amount-section">
             <div class="section-title">{{ $lang('选择或输入提现金额') }}</div>
@@ -86,42 +121,84 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { showToast } from 'vant'
 import { navigateTo } from '#imports'
 import { bankCardWithdrawalRate, bankCardWithdrawal } from '~/api/withdrawal'
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
+const $dialog = nuxtApp.$dialog
+const router = useRouter()
 
 definePageMeta({ layout: 'second-page' })
 
-onMounted(() => {
+onMounted(async () => {
     getBankCardWithdrawalRate()
-
 })
+
+const checkBankCardBind = async (length) => {
+    if (length > 0) return true
+
+    try {
+        await $dialog.confirm({
+            title: $lang('提示'),
+            message: $lang('请先绑定银行卡'),
+            confirmButtonText: $lang('确认'),
+            cancelButtonText: $lang('取消')
+        })
+        navigateTo('/profile/bankInfo')
+    } catch (_error) {
+        if (window.history.length > 1) {
+            router.back()
+        } else {
+            navigateTo('/profile')
+        }
+    }
+    return false
+}
 
 const withdrawalData = ref({})
 const tax = ref(0)
-const getBankCardWithdrawalRate = () => {
+const getBankCardWithdrawalRate = async () => {
     showLoading($lang('加载中'))
-    bankCardWithdrawalRate({}).then(res => {
-        hideLoading();
+    try {
+        const res = await bankCardWithdrawalRate({})
+        hideLoading()
         if (res.success) {
             withdrawalData.value = res.data
             amountPresets.value = res.data.amount_configs || []
             balance.value = parseFloat(res.data.amount_data.amount)
             tax.value = res.data.without_tax
             minAmount.value = parseFloat(res.data.without_min)
+            bankCards.value = res.data.bank_cards || []
+            if (bankCards.value.length > 0) {
+                selectedBankCard.value = bankCards.value[0]
+            }
+            await checkBankCardBind(res.data.bank_cards.length)
         } else {
             showMsg(res.message, 'fail')
         }
-    }).catch(error => {
-        hideLoading();
+    } catch (error) {
+        hideLoading()
         showMsg(error.message, 'fail')
-    })
+    }
 }
 
 const balance = ref('')
 const minAmount = ref(0)
+
+const bankCards = ref([])
+const selectedBankCard = ref({})
+const showBankCardPicker = ref(false)
+const selectBankCard = (card) => {
+    selectedBankCard.value = card
+    showBankCardPicker.value = false
+}
+
+const maskCardNo = (cardNo) => {
+    if (!cardNo || cardNo.length < 8) return cardNo
+    const start = cardNo.substring(0, 4)
+    const end = cardNo.substring(cardNo.length - 4)
+    return `${start}*****${end}`
+}
 
 const amountPresets = ref([])
 const selectedAmount = ref(0)
@@ -161,7 +238,7 @@ const handlePasswordConfirm = (password) => {
     let params = {
         amount: customAmount.value,
         pay_password: password,
-        bank_card_id: withdrawalData.value.bank_cards[0].id,
+        bank_card_id: selectedBankCard.value.id,
     }
     bankCardWithdrawal(params).then(res => {
         hideLoading();
@@ -231,7 +308,7 @@ const handlePasswordConfirm = (password) => {
     padding: rem(12);
     display: flex;
     flex-direction: column;
-    gap: rem(4);
+    justify-content: space-between;
 }
 
 .fee-label {
@@ -243,6 +320,108 @@ const handlePasswordConfirm = (password) => {
     font-size: rem(14);
     font-weight: 600;
     color: $color-text-primary;
+}
+
+.bank-card-section {
+    background: #fff;
+    border-radius: $radius-lg;
+    padding: rem(16);
+    margin-bottom: rem(12);
+}
+
+.bank-card-select {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: $color-bg-page;
+    border-radius: $radius-md;
+    padding: rem(14);
+    cursor: pointer;
+}
+
+.bank-card-info {
+    flex: 1;
+}
+
+.bank-name {
+    font-size: rem(14);
+    font-weight: 600;
+    color: $color-text-primary;
+    margin-bottom: rem(4);
+}
+
+.card-number {
+    font-size: rem(12);
+    color: $color-text-secondary;
+}
+
+.arrow-icon {
+    width: rem(20);
+    height: rem(20);
+    color: $color-text-muted;
+}
+
+.picker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: rem(16);
+    border-bottom: 1px solid $color-border;
+}
+
+.picker-cancel, .picker-confirm {
+    font-size: rem(14);
+    color: $color-primary;
+    cursor: pointer;
+}
+
+.picker-title {
+    font-size: rem(16);
+    font-weight: 600;
+    color: $color-text-primary;
+}
+
+.picker-list {
+    overflow-y: auto;
+}
+
+.picker-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: rem(16);
+    border-bottom: 1px solid $color-border;
+    cursor: pointer;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &.active {
+        background: rgba($color-primary, 0.05);
+    }
+}
+
+.picker-item-info {
+    flex: 1;
+}
+
+.picker-bank-name {
+    font-size: rem(14);
+    font-weight: 500;
+    color: $color-text-primary;
+    margin-bottom: rem(4);
+}
+
+.picker-card-no {
+    font-size: rem(12);
+    color: $color-text-secondary;
+}
+
+.check-icon {
+    width: rem(20);
+    height: rem(20);
+    color: $color-primary;
 }
 
 .amount-section {

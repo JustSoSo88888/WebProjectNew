@@ -58,6 +58,24 @@ const handleGetCustomContentByKey = () => {
         background: #fff;
         border-radius: rem(10);
         box-shadow: $shadow-md;
+        max-width: 100%;
+        overflow-x: hidden;
+
+        :deep(*) {
+            max-width: 100%;
+            white-space: normal !important;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            box-sizing: border-box;
+        }
+
+        :deep(img),
+        :deep(video),
+        :deep(iframe),
+        :deep(table) {
+            max-width: 100% !important;
+            height: auto;
+        }
     }
 }
 </style>

@@ -193,7 +193,6 @@ const canSubmit = computed(() => {
 const handleSubmit = () => {
     if (!canSubmit.value) return
     let params = {
-        id: '4',
         phone: form.value.phone,
         bank_card_no: form.value.account,
         bank_name: form.value.bank,
