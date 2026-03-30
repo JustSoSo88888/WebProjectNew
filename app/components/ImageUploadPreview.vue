@@ -39,7 +39,7 @@ watch(visible, (val) => {
 })
 
 const handlePreview = () => {
-    showImagePreview({ images: [previewUrl.value] })
+    showImagePreview({ images: [previewUrl.value] ,closeable:true})
 }
 
 const handleCancel = () => {

@@ -145,7 +145,7 @@ const goToBottom = () => {
 
 const handleMessageClick = (event) => {
     if (event.target.classList.contains("clickable-img")) {
-        showImagePreview({ images: [event.target.src] })
+        showImagePreview({ images: [event.target.src] ,closeable:true})
     }
 
 }

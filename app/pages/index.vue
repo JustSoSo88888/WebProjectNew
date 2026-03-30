@@ -272,25 +272,25 @@ const bannerList = [
     new URL('../assets/img/index/4.jpg', import.meta.url),
 ]
 const activityList = [
-    new URL('../assets/img//activity/1.jpg', import.meta.url),
-    new URL('../assets/img//activity/2.jpg', import.meta.url),
-    new URL('../assets/img//activity/3.jpg', import.meta.url),
-    new URL('../assets/img//activity/4.jpg', import.meta.url),
-    new URL('../assets/img//activity/5.jpeg', import.meta.url),
-    new URL('../assets/img//activity/6.png', import.meta.url),
-    new URL('../assets/img//activity/7.png', import.meta.url),
-    new URL('../assets/img//activity/8.png', import.meta.url),
-    new URL('../assets/img//activity/9.png', import.meta.url),
-    new URL('../assets/img//activity/10.png', import.meta.url),
-    new URL('../assets/img//activity/11.png', import.meta.url),
-    new URL('../assets/img//activity/12.png', import.meta.url),
-    new URL('../assets/img//activity/13.png', import.meta.url),
-    new URL('../assets/img//activity/14.png', import.meta.url),
-    new URL('../assets/img//activity/15.png', import.meta.url),
-    new URL('../assets/img//activity/16.png', import.meta.url),
-    new URL('../assets/img//activity/17.png', import.meta.url),
-    new URL('../assets/img//activity/18.png', import.meta.url),
-    new URL('../assets/img//activity/19.png', import.meta.url),
+    new URL('../assets/img//activity/1.jpg', import.meta.url).href,
+    new URL('../assets/img//activity/2.jpg', import.meta.url).href,
+    new URL('../assets/img//activity/3.jpg', import.meta.url).href,
+    new URL('../assets/img//activity/4.jpg', import.meta.url).href,
+    new URL('../assets/img//activity/5.jpeg', import.meta.url).href,
+    new URL('../assets/img//activity/6.png', import.meta.url).href,
+    new URL('../assets/img//activity/7.png', import.meta.url).href,
+    new URL('../assets/img//activity/8.png', import.meta.url).href,
+    new URL('../assets/img//activity/9.png', import.meta.url).href,
+    new URL('../assets/img//activity/10.png', import.meta.url).href,
+    new URL('../assets/img//activity/11.png', import.meta.url).href,
+    new URL('../assets/img//activity/12.png', import.meta.url).href,
+    new URL('../assets/img//activity/13.png', import.meta.url).href,
+    new URL('../assets/img//activity/14.png', import.meta.url).href,
+    new URL('../assets/img//activity/15.png', import.meta.url).href,
+    new URL('../assets/img//activity/16.png', import.meta.url).href,
+    new URL('../assets/img//activity/17.png', import.meta.url).href,
+    new URL('../assets/img//activity/18.png', import.meta.url).href,
+    new URL('../assets/img//activity/19.png', import.meta.url).href,
 ]
 
 const menuItems = [
@@ -335,7 +335,7 @@ const menuItems = [
 const vipLevels = ref([])
 
 function previewActivity(index) {
-    showImagePreview({ images: activityList, startPosition: index })
+    showImagePreview({ images: activityList, startPosition: index ,closeable:true})
 }
 
 const handleMenu = (path) => {
