@@ -3,7 +3,7 @@
         <!-- Android/Chrome 安装横幅 -->
         <transition name="slide-up">
             <div v-if="showInstallBanner" class="pwa-install-banner">
-                <img src="/logo.png" class="pwa-icon" alt="icon" />
+                <img :src="LOGO" class="pwa-icon" alt="icon" />
                 <div class="pwa-info">
                     <div class="pwa-name">Nova Travel</div>
                     <div class="pwa-desc">{{ $lang('添加到主屏幕，获得更好体验') }}</div>
@@ -80,6 +80,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useAppStore } from '~/stores/app.js'
+import LOGO from '../../public/logo.png';
 
 const DISMISS_KEY = 'NovaTravel_pwa_dismissed';
 
