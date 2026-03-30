@@ -103,7 +103,7 @@
         <div class="activity-section">
             <van-swipe class="activity-swipe" :autoplay="3000" indicator-color="#d97706">
                 <van-swipe-item v-for="(item, index) in activityList" :key="index">
-                    <img :src="item" alt="活动" @click="previewActivity(index)">
+                    <img :src="item" alt="active" @click="previewActivity(index)">
                 </van-swipe-item>
             </van-swipe>
         </div>
@@ -272,8 +272,25 @@ const bannerList = [
     new URL('../assets/img/index/4.jpg', import.meta.url),
 ]
 const activityList = [
-    new URL('../assets/img//activity/activity.jpg', import.meta.url),
-    new URL('../assets/img//activity/activity1.jpg', import.meta.url),
+    new URL('../assets/img//activity/1.jpg', import.meta.url),
+    new URL('../assets/img//activity/2.jpg', import.meta.url),
+    new URL('../assets/img//activity/3.jpg', import.meta.url),
+    new URL('../assets/img//activity/4.jpg', import.meta.url),
+    new URL('../assets/img//activity/5.jpeg', import.meta.url),
+    new URL('../assets/img//activity/6.png', import.meta.url),
+    new URL('../assets/img//activity/7.png', import.meta.url),
+    new URL('../assets/img//activity/8.png', import.meta.url),
+    new URL('../assets/img//activity/9.png', import.meta.url),
+    new URL('../assets/img//activity/10.png', import.meta.url),
+    new URL('../assets/img//activity/11.png', import.meta.url),
+    new URL('../assets/img//activity/12.png', import.meta.url),
+    new URL('../assets/img//activity/13.png', import.meta.url),
+    new URL('../assets/img//activity/14.png', import.meta.url),
+    new URL('../assets/img//activity/15.png', import.meta.url),
+    new URL('../assets/img//activity/16.png', import.meta.url),
+    new URL('../assets/img//activity/17.png', import.meta.url),
+    new URL('../assets/img//activity/18.png', import.meta.url),
+    new URL('../assets/img//activity/19.png', import.meta.url),
 ]
 
 const menuItems = [
