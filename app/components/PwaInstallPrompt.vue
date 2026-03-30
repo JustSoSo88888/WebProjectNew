@@ -92,7 +92,7 @@ const appStore = useAppStore()
 
 const isIos = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
 const isAndroid = () => /android/i.test(navigator.userAgent);
-const isChrome = () => /chrome|chromium|crios/i.test(navigator.userAgent) && !/edg|opr|samsungbrowser/i.test(navigator.userAgent);
+const isChrome = () => /chrome|chromium|crios/i.test(navigator.userAgent) && !/edg|opr|samsungbrowser|qqbrowser|ucbrowser|miuibrowser|huaweibrowser|vivobrowser|oppobrowser/i.test(navigator.userAgent);
 const isPc = () => !isIos() && !isAndroid();
 const isInStandaloneMode = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
@@ -105,7 +105,7 @@ const onBeforeInstallPrompt = (e) => {
 const installPwa = async () => {
     if (!deferredPrompt.value) {
         showInstallBanner.value = false;
-        showIosGuide.value = true;
+        // showIosGuide.value = true;
         return;
     }
     deferredPrompt.value.prompt();
@@ -138,18 +138,16 @@ onMounted(() => {
     if (localStorage.getItem(DISMISS_KEY)) {
         return;
     }
-    if (isPc()) {
-        return;
-    }
 
     if (isIos()) {
         showIosGuide.value = true;
+    } else if (isPc()) {
+        // PC端：只监听安装事件，不显示横幅
+        window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt);
     } else if (isAndroid()) {
         if (isChrome()) {
             window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt);
-            if (!deferredPrompt.value && !showInstallBanner.value) {
-                showInstallBanner.value = true;
-            }
+            showInstallBanner.value = true;
         } else {
             showChromeBanner.value = true;
         }

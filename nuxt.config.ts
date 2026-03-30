@@ -86,49 +86,49 @@ export default defineNuxtConfig({
             scope: '/',
             icons: [
                 {
-                    src: '/logo.png',
+                    src: '/logo.png?v=2',
                     sizes: '64x64',
                     type: 'image/png',
                     purpose: 'any'
                 },
                 {
-                    src: '/logo.png',
+                    src: '/logo.png?v=2',
                     sizes: '120x120',
                     type: 'image/png',
                     purpose: 'any'
                 },
                 {
-                    src: '/logo.png',
+                    src: '/logo.png?v=2',
                     sizes: '144x144',
                     type: 'image/png',
                     purpose: 'any'
                 },
                 {
-                    src: '/logo.png',
+                    src: '/logo.png?v=2',
                     sizes: '152x152',
                     type: 'image/png',
                     purpose: 'any'
                 },
                 {
-                    src: '/logo.png',
+                    src: '/logo.png?v=2',
                     sizes: '192x192',
                     type: 'image/png',
                     purpose: 'any'
                 },
                 {
-                    src: '/logo.png',
+                    src: '/logo.png?v=2',
                     sizes: '384x384',
                     type: 'image/png',
                     purpose: 'any'
                 },
                 {
-                    src: '/logo.png',
+                    src: '/logo.png?v=2',
                     sizes: '512x512',
                     type: 'image/png',
                     purpose: 'any'
                 },
                 {
-                    src: '/logo.png',
+                    src: '/logo.png?v=2',
                     sizes: '512x512',
                     type: 'image/png',
                     purpose: 'maskable'
