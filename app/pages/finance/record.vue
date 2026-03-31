@@ -31,11 +31,11 @@
                                         <span class="info-label">{{ $lang('总天数') }}</span>
                                         <span class="info-value">{{ item.day_number }} {{ $lang('天') }}</span>
                                     </div>
-                                    <div class="info-row">
-                                        <span class="info-label">{{ $lang('有效期') }}</span>
-                                        <span class="info-value highlight">{{ item.pass_day / item.day_number }}
-                                            {{ $lang('有效期') }}</span>
-                                    </div>
+<!--                                    <div class="info-row">-->
+<!--                                        <span class="info-label">{{ $lang('有效期') }}</span>-->
+<!--                                        <span class="info-value highlight">{{ item.pass_day / item.day_number }}-->
+<!--                                            {{ $lang('有效期') }}</span>-->
+<!--                                    </div>-->
                                     <div class="info-row">
                                         <span class="info-label">{{ $lang('每日收益率') }}</span>
                                         <span class="info-value profit">{{ parseFloat(item.daily_income_rate) }}%</span>

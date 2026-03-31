@@ -270,6 +270,7 @@ const bannerList = [
     new URL('../assets/img/index/2.jpg', import.meta.url),
     new URL('../assets/img/index/3.jpg', import.meta.url),
     new URL('../assets/img/index/4.jpg', import.meta.url),
+    new URL('../assets/img/index/5.jpg', import.meta.url),
 ]
 const activityList = [
     new URL('../assets/img//activity/1.png', import.meta.url).href,
@@ -278,7 +279,6 @@ const activityList = [
     new URL('../assets/img//activity/4.jpg', import.meta.url).href,
     new URL('../assets/img//activity/5.jpg', import.meta.url).href,
     new URL('../assets/img//activity/6.jpg', import.meta.url).href,
-    new URL('../assets/img//activity/7.jpg', import.meta.url).href,
     new URL('../assets/img//activity/8.jpg', import.meta.url).href,
     new URL('../assets/img//activity/9.jpg', import.meta.url).href,
     new URL('../assets/img//activity/10.jpg', import.meta.url).href,
