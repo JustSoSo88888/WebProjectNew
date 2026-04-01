@@ -1,10 +1,10 @@
 // 项目基础配置
 const config = {
-  debug: true,//是否处于调试阶段
+  debug: false,//是否处于调试阶段
   // 项目名称
   projectName: 'NovaTravel',
   //正式api
-  baseUrl: '',
+  baseUrl: 'https://novaapi.jadepalacemall.shop/api',
   //测试api
   mockUrl: 'https://ntapi.xgdlandlink.shop/api',
   frontUrl: typeof window !== 'undefined' ? window.location.origin : '',//本地地址
@@ -15,10 +15,10 @@ const config = {
   // 是否启用 DevTools 检测（禁止用户打开 F12）
   // true: 生产环境生效，检测到 devtools 打开时跳转空白页
   // false: 关闭检测（开发调试时设为 false）
-  enableDevtoolsDetector: false,
+  enableDevtoolsDetector: true,
 
   // wss 长连接配置-客服
-  socketUrl: 'wss://servicewss.slotjztilwdmw.shop/ws',
+  socketUrl: 'wss://novaservice.jadepalacemall.shop/ws',
   mockSocketUrl: 'wss://ntservice.xgdlandlink.shop/ws',
 }
 
