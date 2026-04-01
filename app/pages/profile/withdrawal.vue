@@ -169,6 +169,7 @@ const getBankCardWithdrawalRate = async () => {
             tax.value = res.data.without_tax
             minAmount.value = parseFloat(res.data.without_min)
             bankCards.value = res.data.bank_cards || []
+            canWithout.value = res.data.is_without_tax
             if (bankCards.value.length > 0) {
                 selectedBankCard.value = bankCards.value[0]
             }
@@ -184,6 +185,7 @@ const getBankCardWithdrawalRate = async () => {
 
 const balance = ref('')
 const minAmount = ref(0)
+const canWithout  = ref(0)
 
 const bankCards = ref([])
 const selectedBankCard = ref({})
@@ -214,7 +216,7 @@ const actualAmount = computed(() => {
 
 const canSubmit = computed(() => {
     const amount = selectedAmount.value || parseFloat(customAmount.value) || 0
-    return amount >= minAmount.value
+    return amount >= minAmount.value && canWithout.value
 })
 
 const selectAmount = (amount) => {
