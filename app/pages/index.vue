@@ -348,6 +348,7 @@ const handleMenu = (path) => {
 
 const level = ref(0)
 onMounted(async () => {
+    console.log('index.111111')
     showLoading($lang('加载中'))
     try {
         let res = await getBalance();

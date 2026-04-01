@@ -66,7 +66,49 @@ export default defineNuxtConfig({
                 '@vue/devtools-kit',
                 'vant',
             ]
-        }
+        },
+        build: {
+            minify: 'terser',
+            terserOptions: {
+                compress: {
+                    drop_console: true,
+                    drop_debugger: true,
+                    pure_funcs: ['console.log', 'console.info', 'console.warn']
+                },
+                mangle: true
+            }
+        },
+        plugins: [
+            import('vite-plugin-javascript-obfuscator').then(mod => mod.default({
+                // 👇 只混淆你的业务核心代码（绝对不会破坏 Nuxt）
+                include: [
+                    'composables/**/*.*',
+                    'utils/**/*.*',
+                    'stores/**/*.*',
+                    'server/api/**/*.*',
+                    'assets/js/**/*.*'
+                ],
+                exclude: ['node_modules/**', '.nuxt/**', '.output/**'],
+
+                // 👇 最高强度混淆配置（极难逆向）
+                options: {
+                    compact: true,
+                    controlFlowFlattening: true,
+                    controlFlowFlatteningThreshold: 1,
+                    stringArray: true,
+                    stringArrayEncoding: ['base64', 'rc4'],
+                    stringArrayThreshold: 1,
+                    rotateStringArray: true,
+                    shuffleStringArray: true,
+                    splitStrings: true,
+                    antiDebug: false,    // 👈 关闭反调试（避免线上异常）
+                    disableConsoleOutput: false,
+                    renameGlobals: false,// 👈 Nuxt 必须关闭
+                    mangle: true,
+                    keepComment: false
+                }
+            }))
+        ]
     },
     // 开发服务器配置
     devServer: {
