@@ -120,6 +120,12 @@
                     <div class="vip-img-box">
                         <img :src="item.image_url" class="vip-img" />
                         <div class="vip-name">{{ item.name }}</div>
+                        <div class="vip-lock-mask" v-if="item.level > level">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="5" y="11" width="14" height="10" rx="2" stroke="white" stroke-width="2"/>
+                                <path d="M8 11V7a4 4 0 1 1 8 0v4" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
                     </div>
                     <div class="vip-info">
                         <div class="vip-row">
@@ -824,6 +830,23 @@ const getAwardLog = () => {
         position: relative;
         overflow: hidden;
         border-radius: rem(10);
+    }
+
+    .vip-lock-mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .vip-lock-mask svg {
+        width: rem(40);
+        height: rem(40);
     }
 
     .vip-img {
