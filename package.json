@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.11.3",
-    "axios": "^1.13.6",
+    "axios": "^1.14.0",
     "browser-image-compression": "^2.0.2",
     "crypto-js": "^4.2.0",
     "devtools-detector": "^2.0.25",
