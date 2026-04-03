@@ -112,18 +112,20 @@
         <div class="vip-section">
             <div class="section-header">
                 <h2>{{ $lang('会员等级') }}</h2>
-                <van-icon name="warning-o" class="icon"  @click="navigateTo('/profile/levelInfo')"/>
+                <van-icon name="warning-o" class="icon" @click="navigateTo('/profile/levelInfo')" />
             </div>
             <div class="vip-list">
-                <div class="vip-card" :class="{ 'vip-card--current': item.level == level }" v-for="item in vipLevels" :key="item.id">
+                <div class="vip-card" :class="{ 'vip-card--current': item.level == level }" v-for="item in vipLevels"
+                    :key="item.id">
                     <div class="current-badge" v-if="item.level == level">{{ $lang('当前等级') }}</div>
                     <div class="vip-img-box">
                         <img :src="item.image_url" class="vip-img" />
                         <div class="vip-name">{{ item.name }}</div>
                         <div class="vip-lock-mask" v-if="item.level > level">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="5" y="11" width="14" height="10" rx="2" stroke="white" stroke-width="2"/>
-                                <path d="M8 11V7a4 4 0 1 1 8 0v4" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                <rect x="5" y="11" width="14" height="10" rx="2" stroke="white" stroke-width="2" />
+                                <path d="M8 11V7a4 4 0 1 1 8 0v4" stroke="white" stroke-width="2"
+                                    stroke-linecap="round" />
                             </svg>
                         </div>
                     </div>
@@ -142,7 +144,8 @@
                             <div class="amount" translate="no">R$ {{ item.price }}</div>
                         </div>
                     </div>
-                    <button class="vip-buy-btn" v-if="item.level > level" @click="handleUpdateLevel(item)">{{ $lang('立即加入') }}</button>
+                    <button class="vip-buy-btn" v-if="item.level > level" @click="handleUpdateLevel(item)">{{
+                        $lang('立即加入') }}</button>
                 </div>
             </div>
         </div>
@@ -152,31 +155,16 @@
             @confirm="handlePasswordConfirm"></PaymentPasswordPopup>
 
         <!-- 升级成功动画 -->
-        <Teleport to="body">
-            <Transition name="success-fade">
-                <div
-                    class="upgrade-success-overlay"
-                    v-if="showUpgradeSuccess"
-                    @click="closeUpgradeSuccess"
-                    @pointerup="closeUpgradeSuccess"
-                    @touchend.prevent="closeUpgradeSuccess"
-                >
-                    <div class="upgrade-success-modal" @click.stop @pointerup.stop @touchend.stop>
-                        <button class="upgrade-close-btn" @click.stop="closeUpgradeSuccess" @pointerup.stop="closeUpgradeSuccess">
-                            ×
-                        </button>
-                        <div class="success-icon">
-                            <svg viewBox="0 0 24 24" fill="none">
-                                <circle cx="12" cy="12" r="10" stroke="#10B981" stroke-width="2" />
-                                <path d="M8 12l3 3 5-6" stroke="#10B981" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                        <div class="success-title">{{ $lang('升级成功') }}</div>
-                    </div>
-                </div>
-            </Transition>
-        </Teleport>
+        <van-popup v-model:show="showUpgradeSuccess" @close="closeUpgradeSuccess" class="upgrade-success-modal">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" stroke="#10B981" stroke-width="2" />
+                    <path d="M8 12l3 3 5-6" stroke="#10B981" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </div>
+            <div class="success-title">{{ $lang('升级成功') }}</div>
+        </van-popup>
     </div>
 </template>
 
@@ -235,6 +223,7 @@ const handleUpdateLevel = (item) => {
 
 }
 const handlePasswordConfirm = async (val) => {
+
     let param = {
         config_id: upLevelData.value.id,
         pay_password: val
@@ -341,7 +330,7 @@ const menuItems = [
 const vipLevels = ref([])
 
 function previewActivity(index) {
-    showImagePreview({ images: activityList, startPosition: index ,closeable:true})
+    showImagePreview({ images: activityList, startPosition: index, closeable: true })
 }
 
 const handleMenu = (path) => {
@@ -354,7 +343,6 @@ const handleMenu = (path) => {
 
 const level = ref(0)
 onMounted(async () => {
-    console.log('index.111111')
     showLoading($lang('加载中'))
     try {
         let res = await getBalance();
@@ -374,7 +362,6 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
-    levelConfigList
 })
 
 
@@ -711,7 +698,7 @@ const getAwardLog = () => {
         margin-bottom: rem(4);
     }
 
-    .icon{
+    .icon {
         font-size: rem(16);
         font-weight: bold;
         cursor: pointer;
@@ -876,7 +863,7 @@ const getAwardLog = () => {
         padding: rem(6) 0;
         font-size: rem(13);
         color: $color-text-secondary;
-        flex:1;
+        flex: 1;
 
         .amount {
             font-weight: bold;
@@ -910,14 +897,14 @@ const getAwardLog = () => {
 }
 
 .upgrade-success-modal {
-    position: relative;
     background: #fff;
     border-radius: rem(20);
     padding: rem(40) rem(50);
     text-align: center;
-    animation: modal-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(16, 185, 129, 0.3);
     border: 1px solid rgba(16, 185, 129, 0.3);
+    width: rem(300);
+    box-sizing: border-box;
 }
 
 .upgrade-close-btn {
