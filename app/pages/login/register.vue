@@ -150,11 +150,6 @@ const validate = () => {
 }
 
 onMounted(() => {
-  const token = storage.get('token')
-  if (token) {
-    navigateTo('/')
-    return
-  }
   if(route.query.code){
     window.localStorage.setItem('invite', route.query.code);
     form.inviteCode = route.query.code
