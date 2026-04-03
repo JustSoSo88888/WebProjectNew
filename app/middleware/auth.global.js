@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware((to) => {
   const token = storage.get('token')
   const whiteList = ['/login/login']
 
-  if (to.path === '/login/register') {
+  if (to.path === '/login/register', '/login/register') {
     if (token) return navigateTo('/')
     return
   }
