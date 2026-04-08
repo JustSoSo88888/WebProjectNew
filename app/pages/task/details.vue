@@ -7,9 +7,11 @@
                     <div class="loading-spinner"></div>
                     <p>{{ $lang('加载中') }}...</p>
                 </div>
-                <video ref="videoRef" class="video-player" :src="videoSrc" muted loop playsinline autoplay
+                <video ref="videoRef" class="video-player" muted loop playsinline autoplay
                     webkit-playsinline="true" x5-playsinline="true" @play="onVideoPlay"
-                    @canplay="videoLoading = false"></video>
+                    @canplay="videoLoading = false">
+                    <source :src="videoSrc" type="video/mp4">
+                </video>
             </div>
 
 
