@@ -1,9 +1,17 @@
 <template>
     <div class="task-detail">
         <div class="video-container">
-            <video ref="videoRef" class="video-player" :src="videoSrc" muted loop playsinline autoplay
-                webkit-playsinline="true" x5-playsinline="true"
-                @play="onVideoPlay"></video>
+
+            <div style="position: relative;">
+                <div v-if="videoLoading" class="video-loading">
+                    <div class="loading-spinner"></div>
+                    <p>{{ $lang('加载中') }}...</p>
+                </div>
+                <video ref="videoRef" class="video-player" :src="videoSrc" muted loop playsinline autoplay
+                    webkit-playsinline="true" x5-playsinline="true" @play="onVideoPlay"
+                    @canplay="videoLoading = false"></video>
+            </div>
+
 
             <div class="claim-btn" :class="{ 'claim-btn--disabled': !finished }" @click="finished && claimReward()">
                 <span v-if="!finished" class="btn-text">{{ countdown }}s</span>
@@ -53,6 +61,7 @@ const $lang = nuxtApp.$lang
 
 const videoRef = ref(null)
 const videoSrc = ref('')
+const videoLoading = ref(true)
 const finished = ref(false)
 const countdown = ref()
 const orderId = ref(0)
@@ -145,6 +154,42 @@ onMounted(() => {
 .video-player {
     width: 100%;
     object-fit: cover;
+}
+
+.video-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    z-index: 10;
+    color: #fff;
+    font-size: rem(14);
+
+    p {
+        margin-top: rem(12);
+        opacity: 0.7;
+    }
+}
+
+.loading-spinner {
+    width: rem(36);
+    height: rem(36);
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .claim-btn {
