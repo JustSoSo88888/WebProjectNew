@@ -23,6 +23,7 @@ logs
 .env.*
 !.env.example
 dist.tar.gz
+.output.tar.gz
 
 .agent
 .claude
