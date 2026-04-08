@@ -1,7 +1,8 @@
 <template>
     <div class="task-detail">
         <div class="video-container">
-            <video ref="videoRef" class="video-player" :src="videoSrc" muted loop playsinline
+            <video ref="videoRef" class="video-player" :src="videoSrc" muted loop playsinline autoplay
+                webkit-playsinline="true" x5-playsinline="true"
                 @play="onVideoPlay"></video>
 
             <div class="claim-btn" :class="{ 'claim-btn--disabled': !finished }" @click="finished && claimReward()">
@@ -37,7 +38,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, watch, onMounted, nextTick } from 'vue'
 import { navigateTo } from '#imports'
 import { getOrderIncome } from '~/api/product'
 
@@ -94,40 +95,36 @@ const claimReward = () => {
     })
 }
 
+const tryPlay = () => {
+    if (!videoRef.value) return
+    videoRef.value.load()
+    const attempt = () => {
+        videoRef.value?.play().catch(e => {
+            console.log('Play failed:', e)
+            if (e.name === 'NotAllowedError') {
+                // 移动端需要用户交互，添加一次性点击监听
+                document.addEventListener('touchstart', () => {
+                    videoRef.value?.play()
+                }, { once: true })
+            }
+        })
+    }
+    if (videoRef.value.readyState >= 2) {
+        attempt()
+    } else {
+        videoRef.value.addEventListener('canplay', attempt, { once: true })
+    }
+}
+
 onMounted(() => {
     const data = appStore.getTaskData
     if (Object.keys(data).length > 0) {
-        console.log(data);
+        console.log(data)
         videoSrc.value = data.video_url
         countdown.value = data.watch_seconds
         orderId.value = data.id
         incomeAmount.value = data.income_amount
-        // Handle video playback with proper event handling
-        if (videoRef.value) {
-            const playVideo = () => {
-                videoRef.value.play().catch(e => {
-                    console.log('Play failed:', e);
-                    // If play fails due to interruption, try again after delay
-                    if (e.name === 'AbortError') {
-                        setTimeout(() => {
-                            videoRef.value.play().catch(e => console.log('Retry play failed:', e));
-                        }, 300);
-                    }
-                });
-            };
-
-            // If video is already loaded, play immediately
-            if (videoRef.value.readyState >= 2) {
-                playVideo();
-            } else {
-                // Wait for video to be ready
-                const onCanPlay = () => {
-                    videoRef.value.removeEventListener('canplay', onCanPlay);
-                    playVideo();
-                };
-                videoRef.value.addEventListener('canplay', onCanPlay, { once: true });
-            }
-        }
+        nextTick(() => tryPlay())
     } else {
         history.back()
     }
