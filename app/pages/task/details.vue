@@ -105,24 +105,48 @@ const claimReward = () => {
 }
 
 const tryPlay = () => {
-    if (!videoRef.value) return
-    videoRef.value.load()
+    const video = videoRef.value
+    if (!video) return
+
+    // 确保 muted 属性生效（部分浏览器需要通过 JS 设置）
+    video.muted = true
+    video.playsInline = true
+    video.setAttribute('playsinline', '')
+    video.setAttribute('webkit-playsinline', 'true')
+
     const attempt = () => {
-        videoRef.value?.play().catch(e => {
+        video.play().catch(e => {
             console.log('Play failed:', e)
-            if (e.name === 'NotAllowedError') {
-                // 移动端需要用户交互，添加一次性点击监听
-                document.addEventListener('touchstart', () => {
-                    videoRef.value?.play()
-                }, { once: true })
+            // 自动播放被阻止，监听用户交互后再播放
+            const playOnInteraction = () => {
+                video.play().catch(() => {})
+                // 如果视频仍未播放，启动倒计时兜底
+                startCountdownFallback()
             }
+            document.addEventListener('touchstart', playOnInteraction, { once: true })
+            document.addEventListener('click', playOnInteraction, { once: true })
         })
     }
-    if (videoRef.value.readyState >= 2) {
+
+    if (video.readyState >= 2) {
         attempt()
     } else {
-        videoRef.value.addEventListener('canplay', attempt, { once: true })
+        video.addEventListener('canplay', attempt, { once: true })
+        // 超时兜底：5秒后如果还没 canplay，强制尝试播放
+        setTimeout(() => {
+            if (video.readyState < 2) attempt()
+        }, 5000)
     }
+}
+
+// 兜底倒计时：如果 play 事件始终未触发，确保用户不会卡住
+const startCountdownFallback = () => {
+    if (timer) return // 已经在倒计时了
+    setTimeout(() => {
+        if (!timer && !finished.value) {
+            onVideoPlay()
+        }
+    }, 3000)
 }
 
 onMounted(() => {
