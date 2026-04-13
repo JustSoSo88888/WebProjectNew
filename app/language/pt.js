@@ -261,6 +261,8 @@ let pt = {
     "交易失败": "Falha na transação",
     "请输入消息内容":"Por favor, insira sua mensagem",
     "选择银行卡": "Selecionar cartão bancário",
+    "跳转":"Ir para",
+    "Telegram客服":"Atendimento ao cliente do Telegram"
 }
 
 export default pt;
