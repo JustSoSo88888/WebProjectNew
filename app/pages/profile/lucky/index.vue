@@ -25,8 +25,11 @@
                         ref="wheelEl">
                         <div v-for="(prize, index) in prizes" :key="index" class="wheel-item"
                             :style="getItemStyle(index)">
-                            <div class="prize-title">💵</div>
                             <div class="prize-text" translate="no">R$ {{ parseFloat(prize.number) }}</div>
+                            <div class="prize-title">
+                                <img src="../../../assets/img/index/coin.png" alt="">
+                            </div>
+                            
                         </div>
                     </div>
                     <div class="wheel-center" :class="{ disabled: isSpinning || chances <= 0 }" @click="startDraw">
@@ -372,15 +375,22 @@ const startDraw = async () => {
 }
 
 .prize-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;    
     margin-top: rem(10);
     text-align: center;
     font-size: rem(20);
+
+    img{
+        width: rem(30);
+    }
 }
 
 .prize-text {
     text-align: center;
-    font-size: rem(16);
-    margin-top: rem(10);
+    font-size: rem(12);
+    margin-top: rem(20);
     color: #fff;
     font-weight: 600;
     white-space: nowrap;
