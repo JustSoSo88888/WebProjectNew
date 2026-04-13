@@ -16,7 +16,6 @@
                     <span class="chances-text">{{ $lang('剩余次数') }}: <strong>{{ chances }}</strong></span>
                 </div>
             </div>
-
             <div class="wheel-container">
                 <div class="wheel-wrapper">
                     <div class="pointer"></div>
@@ -29,13 +28,25 @@
                             <div class="prize-title">
                                 <img src="../../../assets/img/index/coin.png" alt="">
                             </div>
-                            
+
                         </div>
                     </div>
                     <div class="wheel-center" :class="{ disabled: isSpinning || chances <= 0 }" @click="startDraw">
                         <van-loading v-if="isSpinning" color="#fff" size="24px" />
                         <span v-else>{{ isSpinning ? $lang('抽奖中') : $lang('开始') }}</span>
                     </div>
+                </div>
+            </div>
+
+            <div class="invite-tip">
+                <div class="tip-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                    </svg>
+                </div>
+                <div class="tip-content">
+                    <div class="tip-title">{{ $lang('别错过这个！') }}</div>
+                    <div class="tip-desc">{{ $lang('带上你的VIP朋友，让你离大奖越来越近。你的中奖机会随每一次邀请而成倍增长！') }}</div>
                 </div>
             </div>
 
@@ -331,6 +342,51 @@ const startDraw = async () => {
     margin: rem(24) 0 rem(30);
 }
 
+.invite-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: rem(12);
+    padding: rem(16);
+    background: linear-gradient(135deg, rgba(217, 119, 6, 0.15) 0%, rgba(180, 83, 9, 0.1) 100%);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    border-radius: rem(12);
+    margin-bottom: rem(24);
+}
+
+.tip-icon {
+    flex-shrink: 0;
+    width: rem(36);
+    height: rem(36);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    border-radius: 50%;
+
+    svg {
+        width: rem(20);
+        height: rem(20);
+        color: #fff;
+    }
+}
+
+.tip-content {
+    flex: 1;
+}
+
+.tip-title {
+    font-size: rem(15);
+    font-weight: 600;
+    color: #fbbf24;
+    margin-bottom: rem(4);
+}
+
+.tip-desc {
+    font-size: rem(13);
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
+}
+
 .wheel-wrapper {
     position: relative;
     width: rem(280);
@@ -358,7 +414,7 @@ const startDraw = async () => {
     position: relative;
     overflow: hidden;
     box-shadow: 0 0 0 rem(8) rgba(255, 255, 255, 0.06), 0 0 rem(24) rgba(0, 0, 0, 0.3);
-    
+
 }
 
 .wheel.spinning {
@@ -374,16 +430,16 @@ const startDraw = async () => {
     pointer-events: none;
 }
 
-.prize-title{
+.prize-title {
     display: flex;
     justify-content: center;
-    align-items: center;    
+    align-items: center;
     margin-top: rem(10);
     text-align: center;
     font-size: rem(20);
 
-    img{
-        width: rem(30);
+    img {
+        width: rem(25);
     }
 }
 

@@ -259,10 +259,13 @@ let pt = {
     "已支付": "Pago",
     "已取消": "Cancelado",
     "交易失败": "Falha na transação",
-    "请输入消息内容":"Por favor, insira sua mensagem",
+    "请输入消息内容": "Por favor, insira sua mensagem",
     "选择银行卡": "Selecionar cartão bancário",
-    "跳转":"Ir para",
-    "Telegram客服":"Atendimento ao cliente do Telegram"
+    "跳转": "Ir para",
+    "Telegram客服": "Atendimento ao cliente do Telegram",
+    "别错过这个！": "Não perca essa! ",
+    "带上你的VIP朋友，让你离大奖越来越近。你的中奖机会随每一次邀请而成倍增长！": "Traga seus amigos VIP e fique cada vez mais perto do Grande Prêmio. Suas chances se multiplicam com cada convite!",
+
 }
 
 export default pt;

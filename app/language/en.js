@@ -262,7 +262,9 @@ let en = {
     "请输入消息内容":"Please enter your message",
     "选择银行卡": "Select Bank Card",
     "跳转":"Jump",
-    "Telegram客服":"Telegram Customer Service"
+    "Telegram客服":"Telegram Customer Service",
+    "别错过这个！":"Don't miss out on this!",
+    "带上你的VIP朋友，让你离大奖越来越近。你的中奖机会随每一次邀请而成倍增长！":"Bring your VIP friends along and get closer to the grand prize. Your chances of winning multiply with every invite!",
 }
 
 export default en
