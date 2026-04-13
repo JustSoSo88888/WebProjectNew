@@ -17,21 +17,19 @@
                 </div>
             </div>
 
-            <div class="grid-container">
-                <div class="grid-wrapper">
-                    <div v-for="(item, index) in gridItemsWithPlaceholder" :key="index" class="grid-item" :class="{
-                        active: activeIndex === index,
-                        winner: winnerIndex === index,
-                        clickable: !isSpinning && chances > 0,
-                        'is-center': index === 4
-                    }">
-                        <template v-if="item && index !== 4">
-                            <div class="item-icon">💵</div>
-                            <div class="item-name" translate="no">{{ item.title }}</div>
-                        </template>
+            <div class="wheel-container">
+                <div class="wheel-wrapper">
+                    <div class="pointer"></div>
+                    <div class="wheel" :class="{ spinning: isSpinning }"
+                        :style="{ background: wheelBackground, transform: `rotate(${currentRotation}deg)` }"
+                        ref="wheelEl">
+                        <div v-for="(prize, index) in prizes" :key="index" class="wheel-item"
+                            :style="getItemStyle(index)">
+                            <div class="prize-title">💵</div>
+                            <div class="prize-text" translate="no">R$ {{ parseFloat(prize.number) }}</div>
+                        </div>
                     </div>
-
-                    <div class="center-btn" :class="{ disabled: isSpinning || chances <= 0 }" @click="startDraw">
+                    <div class="wheel-center" :class="{ disabled: isSpinning || chances <= 0 }" @click="startDraw">
                         <van-loading v-if="isSpinning" color="#fff" size="24px" />
                         <span v-else>{{ isSpinning ? $lang('抽奖中') : $lang('开始') }}</span>
                     </div>
@@ -52,7 +50,8 @@
                     <span class="empty-text">{{ $lang('暂无数据') }}</span>
                 </div>
                 <div v-else :class="records.length > 3 ? 'records-scroll' : 'records-list'">
-                    <div :class="records.length > 3 ? 'scroll-inner' : ''" :style="records.length > 3 ? { animationDuration: records.length + 's' } : {}">
+                    <div :class="records.length > 3 ? 'scroll-inner' : ''"
+                        :style="records.length > 3 ? { animationDuration: records.length + 's' } : {}">
                         <div class="record-item" v-for="(record, index) in records" :key="index">
                             <span class="record-name">{{ record.phone }}</span>
                             <span class="record-name">{{ record.create_time }}</span>
@@ -81,7 +80,7 @@
                         </div>
                         <div class="prize-label">{{ $lang('恭喜获得奖励') }}</div>
                     </div>
-                    <button class="prize-confirm-btn" @click="showPrizeModal = false">{{ $lang('收下奖励') }}</button>
+                    <button class="prize-confirm-btn" @click="handleCollectPrize">{{ $lang('收下奖励') }}</button>
                 </div>
             </van-popup>
         </template>
@@ -89,7 +88,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { getMemberInfo, turntableConfig, turntableOpen, rewardOrderList } from '~/api/turntable';
 import { navigateTo } from '#imports'
 definePageMeta({
@@ -137,34 +136,53 @@ const drawLoading = ref(false)
 const recordsLoading = ref(false)
 
 const isSpinning = ref(false)
-const activeIndex = ref(-1)
-const winnerIndex = ref(-1)
 const showPrizeModal = ref(false)
+
+const handleCollectPrize = () => {
+    showPrizeModal.value = false
+    currentRotation.value = 0
+}
+const wheelEl = ref(null)
+const currentRotation = ref(0)
 const wonAmount = ref(0)
 const records = ref([])
 const scrollContainer = ref(null)
 
-
-const gridItems = computed(() => {
-    let items = []
-    if (prizes.value.length >= 8) {
-        items = prizes.value.slice(0, 8)
+const wheelBackground = computed(() => {
+    const count = prizes.value.length || 8
+    const angle = 360 / count
+    let gradient = 'conic-gradient(from 0deg'
+    for (let i = 0; i < count; i++) {
+        const start = i * angle
+        const end = (i + 1) * angle
+        const colors = [
+            'rgba(251, 191, 36, 0.6)',
+            'rgba(217, 119, 6, 0.4)',
+            'rgba(245, 158, 11, 0.7)',
+            'rgba(146, 64, 14, 0.5)',
+            'rgba(120, 53, 15, 0.8)',
+            'rgba(180, 83, 9, 0.35)'
+        ]
+        const color = colors[i % colors.length]
+        gradient += `, ${color} ${start}deg ${end}deg`
     }
-    return items
+    gradient += ')'
+    return gradient
 })
 
-const prizeToGridIndex = [0, 1, 2, 3, 5, 6, 7, 8]
-
-const gridItemsWithPlaceholder = computed(() => {
-    const items = [...gridItems.value]
-    items.splice(4, 0, null)
-    return items
-})
+const getItemStyle = (index) => {
+    const count = prizes.value.length || 8
+    const angle = 360 / count
+    const rotate = index * angle + angle / 2
+    return {
+        transform: `rotate(${rotate}deg)`
+    }
+}
 
 const fetchRecords = async () => {
     recordsLoading.value = true
     try {
-        const res = await rewardOrderList({page:1,rows:10})
+        const res = await rewardOrderList({ page: 1, rows: 10 })
         if (res.success) {
             records.value = res.data.list || []
         } else {
@@ -180,6 +198,7 @@ const fetchRecords = async () => {
 const startDraw = async () => {
     if (isSpinning.value || chances.value <= 0 || drawLoading.value) return
 
+    currentRotation.value = 0
     isSpinning.value = true
     drawLoading.value = true
 
@@ -188,26 +207,29 @@ const startDraw = async () => {
         if (res.success) {
             handleGetMemberInfo();
             const star = res.data.star
-            const gridIndex = prizeToGridIndex[star]
             wonAmount.value = res.data.number || 0
 
-            let current = 0
-            const totalSteps = 20 + star
-            const interval = setInterval(() => {
-                current++
-                activeIndex.value = prizeToGridIndex[current % 8]
-                if (current >= totalSteps) {
-                    clearInterval(interval)
-                    winnerIndex.value = gridIndex
-                    activeIndex.value = -1
-                    isSpinning.value = false
-                    drawLoading.value = false
+            const targetIndex = prizes.value.findIndex(p => p.star == star)
+            if (targetIndex == -1) {
+                isSpinning.value = false
+                drawLoading.value = false
+                showMsg('奖品配置错误', 'fail')
+                return
+            }
 
-                    setTimeout(() => {
-                        showPrizeModal.value = true
-                    }, 500)
-                }
-            }, 80)
+            const totalSegments = prizes.value.length
+            const anglePerSegment = 360 / totalSegments
+            const targetAngle = targetIndex * anglePerSegment + anglePerSegment / 2
+            const extraSpins = 5 * 360
+            const finalAngle = extraSpins + (360 - targetAngle)
+
+            currentRotation.value = finalAngle
+
+            setTimeout(() => {
+                isSpinning.value = false
+                drawLoading.value = false
+                showPrizeModal.value = true
+            }, 4200)
         } else {
             isSpinning.value = false
             drawLoading.value = false
@@ -300,76 +322,79 @@ const startDraw = async () => {
     }
 }
 
-.grid-container {
+.wheel-container {
     display: flex;
     justify-content: center;
     margin: rem(24) 0 rem(30);
 }
 
-.grid-wrapper {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: rem(8);
-    padding: rem(12);
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: rem(16);
+.wheel-wrapper {
     position: relative;
-    width: fit-content;
+    width: rem(280);
+    height: rem(280);
 }
 
-.grid-item {
-    width: rem(88);
-    height: rem(88);
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
-    border-radius: rem(12);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    border: 1px solid transparent;
-
-    &.is-center {
-        visibility: hidden;
-    }
-
-    &.active {
-        background: linear-gradient(145deg, rgba(217, 119, 6, 0.2) 0%, rgba(217, 119, 6, 0.1) 100%);
-        border-color: #d97706;
-        box-shadow: 0 0 20px rgba(217, 119, 6, 0.3);
-    }
-
-    &.winner {
-        border-color: #d97706;
-        background: linear-gradient(145deg, rgba(217, 119, 6, 0.3) 0%, rgba(217, 119, 6, 0.15) 100%);
-        animation: winnerPulse 0.5s ease;
-    }
-
-    &.clickable:active {
-        transform: scale(0.96);
-    }
+.pointer {
+    position: absolute;
+    top: rem(-10);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: rem(16) solid transparent;
+    border-right: rem(16) solid transparent;
+    border-top: rem(28) solid #d97706;
+    z-index: 20;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
-.item-icon {
-    font-size: rem(32);
-    margin-bottom: rem(4);
+.wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 0 rem(8) rgba(255, 255, 255, 0.06), 0 0 rem(24) rgba(0, 0, 0, 0.3);
+    
 }
 
-.item-name {
-    font-size: rem(11);
-    color: rgba(255, 255, 255, 0.7);
-    font-weight: 500;
+.wheel.spinning {
+    transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
-.center-btn {
+.wheel-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.prize-title{
+    margin-top: rem(10);
+    text-align: center;
+    font-size: rem(20);
+}
+
+.prize-text {
+    text-align: center;
+    font-size: rem(20);
+    margin-top: rem(10);
+    color: #fff;
+    font-weight: 600;
+    white-space: nowrap;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    transform-origin: left center;
+}
+
+.wheel-center {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: rem(76);
-    height: rem(76);
+    width: rem(80);
+    height: rem(80);
     background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
     border-radius: 50%;
     display: flex;
@@ -447,8 +472,13 @@ const startDraw = async () => {
 }
 
 @keyframes scrollUp {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-50%); }
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-50%);
+    }
 }
 
 .record-item {
