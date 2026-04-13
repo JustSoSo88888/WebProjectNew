@@ -237,7 +237,7 @@ let en = {
     "会员等级": "Membership level",
     "当前等级": "Current level",
     "等级说明": "Level Explanation",
-    "****9000邀请3级新用户佣金：100 ABCD": "****9000 Level 3 User Invite Commission: 100",
+    "****9000邀请3级新用户佣金：100 ABCD": "Invite Level 3 Commission 100",
     "手续费": "Fee",
     "最低提现金额": "Minimum withdrawal amount",
     "选择或输入提现金额": "Select or enter withdrawal amount",

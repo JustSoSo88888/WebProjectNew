@@ -237,7 +237,7 @@ let pt = {
     "会员等级": "Nível de associação",
     "当前等级": "Nível atual",
     "等级说明": "Explicação do nível",
-    "****9000邀请3级新用户佣金：100 ABCD": "****9000 Convite de usuário de nível 3  Comissão: 100",
+    "****9000邀请3级新用户佣金：100 ABCD": "Convite Nível 3 Comissão 100",
     "手续费": "Taxa de transação",
     "最低提现金额": "Valor mínimo de saque",
     "选择或输入提现金额": "Selecione ou insira o valor do saque",
