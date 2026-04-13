@@ -379,7 +379,7 @@ const startDraw = async () => {
 
 .prize-text {
     text-align: center;
-    font-size: rem(20);
+    font-size: rem(16);
     margin-top: rem(10);
     color: #fff;
     font-weight: 600;
