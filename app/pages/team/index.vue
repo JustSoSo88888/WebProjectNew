@@ -244,8 +244,8 @@ watch(activeTab, async (val) => {
       if (res.success) {
         hideLoading();
         if (res.data.can_invite != 0) {
-          nextTick(() => generateQR())
           showInvite.value = true
+          nextTick(() => generateQR())
         } else {
           showInvite.value = false
         }

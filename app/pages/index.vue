@@ -13,6 +13,27 @@
             <!-- 公告轮播 -->
             <div class="hero-notice">
                 <NoticeMarquee :list="awardList" />
+                <div class="tools">
+                    <button class="tool-icon" @click="showLang = true">
+                        <svg viewBox="0 0 24 24" fill="none" class="lang-icon">
+                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
+                            <path d="M12 3c-2.5 3-4 5.5-4 9s1.5 6 4 9M12 3c2.5 3 4 5.5 4 9s-1.5 6-4 9M3 12h18"
+                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                        </svg>
+                    </button>
+                    <!-- <button class="tool-icon" @click="navigateTo('/profile/email')">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                            stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                        <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button> -->
+                    <button class="tool-icon" @click="navigateTo('/chat')">
+                        <van-icon name="service-o" size=".35rem" />
+                        <span class="dot" v-if="appStore.getUnReadCount > 0">{{ appStore.getUnReadCount }}</span>
+                    </button>
+                </div>
             </div>
 
             <!-- 顶部工具栏 -->
@@ -22,27 +43,7 @@
 
             </div>
 
-            <div class="tools">
-                <button class="tool-icon" @click="showLang = true">
-                    <svg viewBox="0 0 24 24" fill="none" class="lang-icon">
-                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
-                        <path d="M12 3c-2.5 3-4 5.5-4 9s1.5 6 4 9M12 3c2.5 3 4 5.5 4 9s-1.5 6-4 9M3 12h18"
-                            stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-                    </svg>
-                </button>
-                <!-- <button class="tool-icon" @click="navigateTo('/profile/email')">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                            stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-                        <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8"
-                            stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </button> -->
-                <button class="tool-icon" @click="navigateTo('/chat')">
-                    <van-icon name="service-o" size=".35rem" />
-                    <span class="dot" v-if="appStore.getUnReadCount > 0">{{ appStore.getUnReadCount }}</span>
-                </button>
-            </div>
+
             <!-- 快捷操作卡片 -->
             <div class="quick-cards">
                 <button class="qc-item qc-recharge" @click="navigateTo('/profile/recharge')">
@@ -431,7 +432,7 @@ const getAwardLog = () => {
 
 .hero-notice {
     position: absolute;
-    top: rem(60);
+    top: rem(50);
     left: 0;
     right: 0;
     z-index: 3;
@@ -478,11 +479,10 @@ const getAwardLog = () => {
 }
 
 .tools {
-    position: absolute;
-    right: rem(10);
-    top: rem(110);
-    z-index: 1;
-    gap: rem(8);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-top: rem(10);
 
     .tool-icon {
         width: rem(36);

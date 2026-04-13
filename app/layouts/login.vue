@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useAppStore } from '~/stores/app.js'
 import LangModal from '~/components/LangModal.vue'
 import { storage } from '~/utils/index'
@@ -21,7 +21,9 @@ const showLang = ref(false)
 const currentLang = ref(storage.get('locale') || 'pt')
 const currentLangData = computed(() => langList.value[currentLang.value])
 const currentLangIcon = computed(() => currentLangData.value?.icon)
-
+onMounted(() => {
+  appStore.setShowService(false)
+})
 const handleLangChange = (lang) => {
   if (currentLang.value == lang) return;
   storage.set('locale', lang)

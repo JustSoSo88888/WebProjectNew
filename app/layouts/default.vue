@@ -13,12 +13,29 @@
 import { ref,onMounted } from 'vue'; 
 import { hasSetPayPassword } from '~/api/member';
 import MsgPopup from '~/components/MsgPopup.vue';
+import { getServiceUrl } from '~/api/system';
 const nuxtApp = useNuxtApp()
+const appStore = useAppStore()
 const $lang = nuxtApp.$lang
 const $dialog = nuxtApp.$dialog
 onMounted(() =>{
     getHasSetPayPassword();
+    handleContactService();
 })
+
+const handleContactService = () => {
+    getServiceUrl().then(res => {
+        if(res.success){
+            if(res.data.telegram_url){
+                appStore.setShowService(true)
+            }else{
+                appStore.setShowService(false)
+            }
+        }   
+    }).catch(error => { 
+
+    })
+}
 
 const getHasSetPayPassword = () => {
     hasSetPayPassword({}).then(res => {

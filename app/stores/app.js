@@ -16,6 +16,7 @@ export const useAppStore = defineStore('app', {
     unReadCount: 0,
     socketStatus: 'disconnected',
     taskData:{},
+    showService: false,
   }),
   getters: {
     getIsMobile: state => state.isMobile,
@@ -25,8 +26,12 @@ export const useAppStore = defineStore('app', {
     getUnReadCount: state => state.unReadCount,
     getSocketStatus: state => state.socketStatus,
     getTaskData:state => state.taskData,
+    getShowService: state => state.showService,
   },
   actions: {
+    setShowService(val) {
+      this.showService = val
+    },
     setIsPWAshow(val) {
       this.isPWAShow = val
     },
