@@ -265,6 +265,8 @@ let pt = {
     "Telegram客服": "Atendimento ao cliente do Telegram",
     "别错过这个！": "Não perca essa! ",
     "带上你的VIP朋友，让你离大奖越来越近。你的中奖机会随每一次邀请而成倍增长！": "Traga seus amigos VIP e fique cada vez mais perto do Grande Prêmio. Suas chances se multiplicam com cada convite!",
+    "请点击确认前往充值页面": "Clique em Confirmar para ir para a página de recarga",
+    "您即将跳转至支付页面": "Você será redirecionado para a página de pagamento",
 
 }
 

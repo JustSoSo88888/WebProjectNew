@@ -69,6 +69,21 @@
             </button>
         </div>
 
+        <van-popup v-model:show="showRechargeConfirm" @close="showRechargeConfirm = false"
+            class="upgrade-success-modal">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" stroke="#10B981" stroke-width="2" />
+                    <path d="M8 12l3 3 5-6" stroke="#10B981" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </div>
+            <div class="success-title">{{ $lang('请点击确认前往充值页面') }}</div>
+            <div class="confirm-btn-wrap">
+                <button class="confirm-btn" @click="confirmRecharge">{{ $lang('确认') }}</button>
+            </div>
+        </van-popup>
+
     </div>
 </template>
 
@@ -194,11 +209,18 @@ const handleSubmit = async () => {
     let res = await memberRecharge(params)
     hideLoading();
     if (res.success) {
-        window.open(res.data.paymentInfo, '_blank')
+        paymentUrl.value = res.data.paymentInfo
+        showRechargeConfirm.value = true
     } else {
         showMsg(res.message, 'fail')
     }
-    // TODO: 调用充值接口
+}
+
+const showRechargeConfirm = ref(false)
+const paymentUrl = ref('')
+
+const confirmRecharge = () => {
+    window.open(paymentUrl.value, '_blank')
 }
 </script>
 
@@ -498,6 +520,55 @@ const handleSubmit = async () => {
     }
 
     &:not(:disabled):active {
+        opacity: 0.9;
+    }
+}
+
+.upgrade-success-modal {
+    background: #fff;
+    border-radius: rem(20);
+    padding: rem(40) rem(50);
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(16, 185, 129, 0.3);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    width: rem(300);
+    box-sizing: border-box;
+}
+
+.success-icon {
+    width: rem(80);
+    height: rem(80);
+    margin: 0 auto rem(20);
+
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.success-title {
+    font-size: rem(20);
+    font-weight: 600;
+    color: #333;
+    margin-bottom: rem(20);
+}
+
+.confirm-btn-wrap {
+    display: flex;
+    justify-content: center;
+}
+
+.confirm-btn {
+    background: $color-primary;
+    color: #fff;
+    border: none;
+    border-radius: rem(25);
+    padding: rem(12) rem(40);
+    font-size: rem(16);
+    font-weight: 600;
+    cursor: pointer;
+
+    &:active {
         opacity: 0.9;
     }
 }
