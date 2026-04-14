@@ -312,6 +312,10 @@ const handleSubmit = async () => {
     &.focused {
         border-color: $color-primary;
         background: #fff;
+
+        input{
+            border-color:  transparent !important;
+        }
     }
 }
 
@@ -331,18 +335,24 @@ const handleSubmit = async () => {
     font-weight: 600;
     color: $color-text-primary;
     background: transparent;
+    padding: 0 !important;
 
     &::placeholder {
         color: $color-text-placeholder;
         font-weight: 400;
         font-size: rem(14);
     }
+    
 
     // 隐藏数字输入框箭头
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
         -webkit-appearance: none;
     }
+}
+
+.input-wrap:focus{
+    border-color: transparent !important;
 }
 
 // ── 充值通道 ─────────────────────────────────────────────────
