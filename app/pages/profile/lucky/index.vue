@@ -197,7 +197,7 @@ const segmentImages = [
     'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-04-01/626fc79743429b52cdce5efba9477d71',
     'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-03-29/01253f4bc1ab9b3eb92abf17aea4bf87',
     'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-03-30/d259033462bd2a09fd9a5f15e20d3898',
-    'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-03-30/d259033462bd2a09fd9a5f15e20d3898',
+    'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-03-29/f0d0b070be593820651230120b0374be',
     'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-03-29/3ca4087e5b9589e21dcaa07653fe9d44',
     'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-03-29/402e7a220c663e14a569ef864df51748',
 ]
