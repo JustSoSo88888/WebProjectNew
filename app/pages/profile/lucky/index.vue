@@ -20,15 +20,38 @@
                 <div class="wheel-wrapper">
                     <div class="pointer"></div>
                     <div class="wheel" :class="{ spinning: isSpinning }"
-                        :style="{ background: wheelBackground, transform: `rotate(${currentRotation}deg)` }"
+                        :style="{ transform: `rotate(${currentRotation}deg)` }"
                         ref="wheelEl">
-                        <div v-for="(prize, index) in prizes" :key="index" class="wheel-item"
-                            :style="getItemStyle(index)">
-                            <div class="prize-text" translate="no">R$ {{ parseFloat(prize.number) }}</div>
-                            <div class="prize-title">
-                                <img src="../../../assets/img/index/coin.png" alt="">
+                        <!-- SVG 扇形背景层 -->
+                        <svg class="wheel-svg" viewBox="0 0 300 300">
+                            <defs>
+                                <clipPath v-for="(prize, index) in prizes" :key="'clip-'+index" :id="'sector-clip-'+index">
+                                    <path :d="getSectorPath(index, 150)" />
+                                </clipPath>
+                            </defs>
+                            <g v-for="(prize, index) in prizes" :key="'seg-'+index">
+                                <image
+                                    :clip-path="`url(#sector-clip-${index})`"
+                                    :href="segmentImages[index % segmentImages.length]"
+                                    x="0" y="0" width="300" height="300"
+                                    preserveAspectRatio="xMidYMid slice"
+                                />
+                                <path :d="getSectorPath(index, 150)" fill="rgba(0,0,0,0.35)" />
+                                <line
+                                    :x1="150" :y1="150"
+                                    :x2="getSectorLineEnd(index).x"
+                                    :y2="getSectorLineEnd(index).y"
+                                    stroke="rgba(255,255,255,0.15)" stroke-width="1"
+                                />
+                            </g>
+                        </svg>
+                        <!-- 文字内容层 -->
+                        <div class="prize-list-layer">
+                            <div v-for="(prize, index) in prizes" :key="'text-'+index" class="prize-item"
+                                :style="getPrizePosition(index)">
+                                <div class="prize-text" translate="no">R$ {{ parseFloat(prize.number) }}</div>
+                                <img class="prize-icon" src="../../../assets/img/index/coin.png" alt="">
                             </div>
-
                         </div>
                     </div>
                     <div class="wheel-center" :class="{ disabled: isSpinning || chances <= 0 }" @click="startDraw">
@@ -87,7 +110,7 @@
                 <div class="prize-modal-content">
                     <div class="prize-bg">
                         <div class="prize-glow"></div>
-                        <div class="prize-icon">🎁</div>
+                        <div class="modal-prize-icon">🎁</div>
                         <div class="prize-amount-wrapper">
                             <span class="prize-currency">R$</span>
                             <span class="prize-amount" :class="{ 'animate': showPrizeModal }">{{ wonAmount }}</span>
@@ -162,34 +185,66 @@ const wonAmount = ref(0)
 const records = ref([])
 const scrollContainer = ref(null)
 
-const wheelBackground = computed(() => {
-    const count = prizes.value.length || 8
-    const angle = 360 / count
-    let gradient = 'conic-gradient(from 0deg'
-    for (let i = 0; i < count; i++) {
-        const start = i * angle
-        const end = (i + 1) * angle
-        const colors = [
-            'rgba(251, 191, 36, 0.6)',
-            'rgba(217, 119, 6, 0.4)',
-            'rgba(245, 158, 11, 0.7)',
-            'rgba(146, 64, 14, 0.5)',
-            'rgba(120, 53, 15, 0.8)',
-            'rgba(180, 83, 9, 0.35)'
-        ]
-        const color = colors[i % colors.length]
-        gradient += `, ${color} ${start}deg ${end}deg`
-    }
-    gradient += ')'
-    return gradient
-})
+// 8张风景背景图片
+const segmentImages = [
+    'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-04-03/24a760b5810014ce304f52f6c113d1a4',
+    'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-04-03/ee06a29693e0cef3d2d38e764ed3d4a4',
+    'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-04-03/1a68e9620704171f3251746d8fd6cd2e',
+    'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-04-03/9ea5581394d97ca58489b3ffda146688',
+    'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-04-03/d20a84497af2c0c7f27842c8d1f1a578',
+    'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-04-03/23d7a9cca14b9636ca4a21741c2b1891',
+    'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-04-03/9d4cbdc3b5b9ddd54f65c61a2d5a32b0',
+    'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-04-01/626fc79743429b52cdce5efba9477d71',
+    'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-03-29/01253f4bc1ab9b3eb92abf17aea4bf87',
+    'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-03-30/d259033462bd2a09fd9a5f15e20d3898',
+    'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-03-30/d259033462bd2a09fd9a5f15e20d3898',
+    'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-03-29/3ca4087e5b9589e21dcaa07653fe9d44',
+    'https://transitswap.s3.ap-southeast-1.amazonaws.com/upload/image/2026-03-29/402e7a220c663e14a569ef864df51748',
+]
 
-const getItemStyle = (index) => {
+// 生成SVG扇形路径
+const getSectorPath = (index, radius) => {
     const count = prizes.value.length || 8
     const angle = 360 / count
-    const rotate = index * angle + angle / 2
+    const startAngle = index * angle - 90
+    const endAngle = startAngle + angle
+    const startRad = (startAngle * Math.PI) / 180
+    const endRad = (endAngle * Math.PI) / 180
+    const cx = radius
+    const cy = radius
+    const x1 = cx + radius * Math.cos(startRad)
+    const y1 = cy + radius * Math.sin(startRad)
+    const x2 = cx + radius * Math.cos(endRad)
+    const y2 = cy + radius * Math.sin(endRad)
+    const largeArc = angle > 180 ? 1 : 0
+    return `M ${cx} ${cy} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`
+}
+
+// 计算奖品文字+图标在扇形中心的位置
+const getPrizePosition = (index) => {
+    const count = prizes.value.length || 8
+    const angle = 360 / count
+    const midAngle = index * angle + angle / 2 - 90
+    const midRad = (midAngle * Math.PI) / 180
+    // 放在半径60%处，避开中心按钮
+    const dist = 0.6
+    const x = 50 + dist * 50 * Math.cos(midRad)
+    const y = 50 + dist * 50 * Math.sin(midRad)
     return {
-        transform: `rotate(${rotate}deg)`
+        left: `${x}%`,
+        top: `${y}%`,
+        transform: `translate(-50%, -50%) rotate(${index * angle + angle / 2}deg)`
+    }
+}
+
+// 计算扇形分割线终点坐标
+const getSectorLineEnd = (index) => {
+    const count = prizes.value.length || 8
+    const angle = 360 / count
+    const rad = (index * angle - 90) * Math.PI / 180
+    return {
+        x: 150 + 150 * Math.cos(rad),
+        y: 150 + 150 * Math.sin(rad)
     }
 }
 
@@ -227,7 +282,6 @@ const startDraw = async () => {
             if (targetIndex == -1) {
                 isSpinning.value = false
                 drawLoading.value = false
-                showMsg('奖品配置错误', 'fail')
                 return
             }
 
@@ -414,44 +468,51 @@ const startDraw = async () => {
     position: relative;
     overflow: hidden;
     box-shadow: 0 0 0 rem(8) rgba(255, 255, 255, 0.06), 0 0 rem(24) rgba(0, 0, 0, 0.3);
-
 }
 
 .wheel.spinning {
     transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
-.wheel-item {
+.wheel-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.prize-list-layer {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
+    z-index: 2;
 }
 
-.prize-title {
+.prize-item {
+    position: absolute;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    margin-top: rem(10);
-    text-align: center;
-    font-size: rem(20);
-
-    img {
-        width: rem(25);
-    }
+    gap: rem(2);
+    white-space: nowrap;
 }
 
 .prize-text {
-    text-align: center;
-    font-size: rem(12);
-    margin-top: rem(20);
+    font-size: rem(14);
     color: #fff;
-    font-weight: 600;
-    white-space: nowrap;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-    transform-origin: left center;
+    font-weight: 700;
+    text-shadow: 0 rem(1) rem(3) rgba(0, 0, 0, 0.8);
+    line-height: 1;
+    margin-top: rem(-20);
+}
+
+.prize-icon {
+    width: rem(30);
+    height: rem(30);
+    margin-top: rem(10);
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
 }
 
 .wheel-center {
@@ -622,7 +683,7 @@ const startDraw = async () => {
     }
 }
 
-.prize-icon {
+.modal-prize-icon {
     font-size: rem(48);
     margin-bottom: rem(12);
     animation: bounce 0.6s ease infinite alternate;
