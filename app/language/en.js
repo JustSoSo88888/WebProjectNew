@@ -265,7 +265,7 @@ let en = {
     "Telegram客服":"Telegram Customer Service",
     "别错过这个！":"Don't miss out on this!",
     "带上你的VIP朋友，让你离大奖越来越近。你的中奖机会随每一次邀请而成倍增长！":"Bring your VIP friends along and get closer to the grand prize. Your chances of winning multiply with every invite!",
-    "请点击确认前往充值页面":"Click Confirm to go to the recharge page",
+    "请点击确认前往支付页面":"Click Confirm to go to the payment page",
     "您即将跳转至支付页面":"You will be redirected to the payment page",
 }
 

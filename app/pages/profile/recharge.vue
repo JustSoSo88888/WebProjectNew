@@ -78,7 +78,7 @@
                         stroke-linejoin="round" />
                 </svg>
             </div>
-            <div class="success-title">{{ $lang('请点击确认前往充值页面') }}</div>
+            <div class="success-title">{{ $lang('请点击确认前往支付页面') }}</div>
             <div class="confirm-btn-wrap">
                 <button class="confirm-btn" @click="confirmRecharge">{{ $lang('确认') }}</button>
             </div>
