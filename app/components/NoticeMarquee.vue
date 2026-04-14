@@ -13,8 +13,8 @@
                 <template v-for="(item, index) in list" :key="index">
                     <span class="notice-item">
                         {{ replaceMap($lang('****9000邀请3级新用户佣金：100 ABCD'), {
-                            "****9000": '',
-                            "3": item.generation,
+                            "****9000": String(item.phone).slice(0, 2) + '***' + String(item.phone).slice(-2),
+                            "3": item.level,
                             "100": item.amount
                         }) }}
                     </span>

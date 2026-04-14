@@ -395,22 +395,34 @@ const getMessageUnreadCount = () => {
 }
 //邀请收益列表
 const awardList = ref([])
-const getAwardLog = () => {
-    showLoading($lang('加载中'))
-    awardLog({ page: 1, pageSize: 10 }).then(res => {
-        hideLoading();
-        if (res.success) {
-            if (res.data.rows && res.data.rows.length > 0) {
-                awardList.value = [...res.data.rows, ...res.data.rows]
-            }
-        } else {
-            showMsg(res.message, 'fail')
-        }
 
-    }).catch(error => {
-        hideLoading();
-        showMsg(error.message, 'fail')
-    })
+const getAwardLog = () => {
+    // 随机生成10组测试数据
+    const generateRandomPhone = () => {
+        const areaCodes = ['11', '21', '31', '41', '51', '61', '71', '81', '91']
+        const areaCode = areaCodes[Math.floor(Math.random() * areaCodes.length)]
+        const number = Math.floor(Math.random() * 900000000 + 100000000)
+        return `${areaCode}${number}`
+    }
+
+    const levelConfig = {
+        1: 32.4,
+        2: 100.8,
+        3: 312
+    }
+
+    const mockData = []
+    for (let i = 0; i < 10; i++) {
+        const level = Math.floor(Math.random() * 3) + 1
+        mockData.push({
+            phone: generateRandomPhone(),
+            level: level,
+            amount: levelConfig[level]
+        })
+    }
+    
+    // 复制一份实现滚动效果
+    awardList.value = [...mockData, ...mockData]
 }
 </script>
 
