@@ -97,7 +97,7 @@ let en = {
     "关于我们": "About Us",
     "手册": "Manual",
     "帮助": "Help",
-    "总充值": "Total Recharge",
+    "总充值": "Total Deposit",
     "总提现": "Total Withdrawal",
     "注册时间": "Registration Time",
     "团队详情": "Team Details",
@@ -267,6 +267,7 @@ let en = {
     "带上你的VIP朋友，让你离大奖越来越近。你的中奖机会随每一次邀请而成倍增长！":"Bring your VIP friends along and get closer to the grand prize. Your chances of winning multiply with every invite!",
     "请点击确认前往支付页面":"Click Confirm to go to the payment page",
     "您即将跳转至支付页面":"You will be redirected to the payment page",
+    "只有VIP用户可提现,请前往充值页充值！":"Only VIP users can withdraw funds. Please go to the deposit page to deposit!",
 }
 
 export default en

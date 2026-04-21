@@ -201,8 +201,6 @@ onMounted(async () => {
 const estimatedProfit = computed(() => {
     if (!investAmount.value) return '0.00'
     const amount = parseFloat(investAmount.value)
-    console.log();
-
     const dailyProfit = amount * (detail.value.daily_income_rate / 100)
     return (dailyProfit * detail.value.day_number).toFixed(2)
 })

@@ -26,7 +26,7 @@
             <div class="section-title">{{ $lang('选择银行卡') }}</div>
             <div class="bank-card-select">
                 <div class="bank-card-info flex flex-between">
-                    <div class="card-name">{{selectedBankCard.user_name}}</div>
+                    <div class="card-name">{{ selectedBankCard.user_name }}</div>
                     <div class="card-number">{{ maskCardNo(selectedBankCard.bank_card_no) }}</div>
                 </div>
             </div>
@@ -39,18 +39,14 @@
                 <span class="picker-confirm" @click="showBankCardPicker = false">{{ $lang('确认') }}</span>
             </div>
             <div class="picker-list">
-                <div 
-                    v-for="card in bankCards" 
-                    :key="card.id" 
-                    class="picker-item"
-                    :class="{ active: selectedBankCard.id === card.id }"
-                    @click="selectBankCard(card)"
-                >
-                <div class="picker-item-info">
+                <div v-for="card in bankCards" :key="card.id" class="picker-item"
+                    :class="{ active: selectedBankCard.id === card.id }" @click="selectBankCard(card)">
+                    <div class="picker-item-info">
                         <div class="picker-card-no">{{ maskCardNo(card.bank_card_no) }}</div>
                     </div>
                     <svg v-if="selectedBankCard.id === card.id" class="check-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </div>
             </div>
@@ -86,7 +82,7 @@
 
 
         <!-- Submit Button -->
-        <button class="submit-btn" :disabled="!canSubmit" @click="handleSubmit">
+        <button class="submit-btn" :disabled="!canSubmit"  @click="handleSubmit">
             {{ $lang('确认提现') }}
         </button>
 
@@ -110,7 +106,8 @@
                 <div class="modal-title">{{ $lang('提现申请已提交') }}</div>
                 <div class="modal-desc">{{ $lang('您的提现申请已提交，请耐心等待') }}</div>
                 <div class="modal-actions">
-                    <button class="modal-btn modal-btn--confirm" @click="showSuccessModal = false">{{ $lang('确认') }}</button>
+                    <button class="modal-btn modal-btn--confirm" @click="showSuccessModal = false">{{ $lang('确认')
+                    }}</button>
                 </div>
             </div>
         </van-popup>
@@ -123,6 +120,8 @@
 import { ref, computed, onMounted } from 'vue'
 import { navigateTo } from '#imports'
 import { bankCardWithdrawalRate, bankCardWithdrawal } from '~/api/withdrawal'
+import { getBalance } from '~/api/member'
+import { storage } from '~/utils'
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
 const $dialog = nuxtApp.$dialog
@@ -132,7 +131,29 @@ definePageMeta({ layout: 'second-page' })
 
 onMounted(async () => {
     getBankCardWithdrawalRate()
+    handelGetBance()
 })
+const level = ref(0)
+const handelGetBance = () => {
+    getBalance({}).then(res => {
+        if (res.success) {
+            level.value = res.data.level
+            let userData = storage.get('user_data') ? JSON.parse(storage.get('user_data')) : {}
+            if (Object.keys(userData).length > 0 && userData.level != level.value) {
+                userData.level = level.value
+                storage.set('user_data', JSON.stringify(userData))
+            }
+        } else {
+            let userData = storage.get('user_data') ? JSON.parse(storage.get('user_data')) : {}
+            if (Object.keys(userData).length > 0) {
+                level.value = userData.level
+            }
+            showMsg(res.message, 'fail')
+        }
+    }).catch(error => {
+        showMsg(error.message, 'fail')
+    })
+}
 
 const checkBankCardBind = async (length) => {
     if (length > 0) return true
@@ -185,7 +206,7 @@ const getBankCardWithdrawalRate = async () => {
 
 const balance = ref('')
 const minAmount = ref(0)
-const canWithout  = ref(0)
+const canWithout = ref(0)
 
 const bankCards = ref([])
 const selectedBankCard = ref({})
@@ -230,6 +251,18 @@ const onCustomInput = () => {
 
 const showPaymentPopup = ref(false)
 const handleSubmit = () => {
+    if (level.value == 0) {
+        $dialog.confirm({
+            title: $lang('提示'),
+            message: $lang('只有VIP用户可提现,请前往充值页充值！'),
+            confirmText: $lang('确认'),
+            cancelText: $lang('取消')
+        }).then(() => {
+            navigateTo('/profile/recharge')
+        }).catch(() => {
+        })
+        return
+    }
     showPaymentPopup.value = true
 
 }
@@ -371,7 +404,8 @@ const handlePasswordConfirm = (password) => {
     border-bottom: 1px solid $color-border;
 }
 
-.picker-cancel, .picker-confirm {
+.picker-cancel,
+.picker-confirm {
     font-size: rem(14);
     color: $color-primary;
     cursor: pointer;

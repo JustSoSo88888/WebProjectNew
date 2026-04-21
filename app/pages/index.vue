@@ -182,6 +182,7 @@ import ConnectionStatus from '~/components/ConnectionStatus.vue'
 import { levelConfigList, updateLevel } from '~/api/level'
 import { getBalance } from '~/api/member'
 import PaymentPasswordPopup from '~/components/PaymentPasswordPopup.vue'
+import { storage } from '~/utils'
 
 const appStore = useAppStore()
 
@@ -251,6 +252,11 @@ const getBalanceData = () => {
     getBalance({}).then(res => {
         if (res.success) {
             level.value = res.data.level
+            let userData = storage.get('user_data') ? JSON.parse(storage.get('user_data')) : {}
+            if (Object.keys(userData).length > 0 && userData.level != level.value) {
+                userData.level = level.value
+                storage.set('user_data', JSON.stringify(userData))
+            }
         } else {
             showMsg(res.message, 'fail')
         }
@@ -349,6 +355,11 @@ onMounted(async () => {
         let res = await getBalance();
         if (res.success) {
             level.value = res.data.level
+            let userData = storage.get('user_data') ? JSON.parse(storage.get('user_data')) : {}
+            if (Object.keys(userData).length > 0 && userData.level != level.value) {
+                userData.level = level.value
+                storage.set('user_data', JSON.stringify(userData))
+            }
         } else {
             showMsg(res.message, 'fail')
         }
@@ -420,7 +431,7 @@ const getAwardLog = () => {
             amount: levelConfig[level]
         })
     }
-    
+
     // 复制一份实现滚动效果
     awardList.value = [...mockData, ...mockData]
 }
