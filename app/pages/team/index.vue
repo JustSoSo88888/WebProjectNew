@@ -152,19 +152,19 @@ const getBsicData = () => {
       teamData.value = res.data;
       teamGroups.value[0].taskIncome = res.data.one_generation_order_award_amount//一级任务推荐收入
       teamGroups.value[0].referralIncome = res.data.one_generation_meal_award_amount
-      teamGroups.value[0].number = res.data.one_sub_count
-      teamGroups.value[0].registerCount = res.data.one_sub_count
+      teamGroups.value[0].number = res.data.one_effective_sub_count
+      teamGroups.value[0].registerCount = Number(res.data.one_sub_count) + Number(res.data.one_effective_sub_count)
 
       teamGroups.value[1].taskIncome = res.data.two_generation_order_award_amount//二级任务推荐收入
       teamGroups.value[1].referralIncome = res.data.two_generation_meal_award_amount
-      teamGroups.value[1].number = res.data.two_sub_count
-      teamGroups.value[1].registerCount = res.data.two_sub_count
+      teamGroups.value[1].number = res.data.two_effective_sub_count
+      teamGroups.value[1].registerCount = Number(res.data.two_sub_count) + Number(res.data.two_effective_sub_count)
 
       teamGroups.value[2].taskIncome = res.data.three_generation_order_award_amount//三级任务推荐收入
       teamGroups.value[2].referralIncome = res.data.three_generation_meal_award_amount
-      teamGroups.value[2].number = res.data.three_sub_count
-      teamGroups.value[2].registerCount = res.data.three_sub_count
-      totalCount.value = Number(res.data.three_sub_count) + Number(res.data.two_sub_count) + Number(res.data.one_sub_count)
+      teamGroups.value[2].number = res.data.three_effective_sub_count
+      teamGroups.value[2].registerCount = Number(res.data.three_sub_count) + Number(res.data.three_effective_sub_count)
+      totalCount.value = Number(res.data.one_effective_sub_count) + Number(res.data.two_effective_sub_count) + Number(res.data.three_effective_sub_count) + Number(res.data.one_sub_count) + Number(res.data.two_sub_count) + Number(res.data.three_sub_count)
     } else {
       showMsg(res.message, 'fail')
     }
@@ -276,7 +276,7 @@ async function copyText(text, type) {
   try {
     await navigator.clipboard.writeText(text)
     copied.value = type
-    showMsg($lang('复制成功'),'success')
+    showMsg($lang('复制成功'), 'success')
     setTimeout(() => { copied.value = '' }, 2000)
   } catch {
     showMsg($lang('复制失败，请手动复制'), 'fail')
@@ -529,6 +529,7 @@ async function copyText(text, type) {
     opacity: 0.85;
   }
 }
+
 .upgrade-tip {
   padding: rem(24) rem(16);
   height: rem(100);
@@ -543,5 +544,4 @@ async function copyText(text, type) {
   margin: 0 rem(14);
   border: 1px dashed $color-border;
 }
-
 </style>

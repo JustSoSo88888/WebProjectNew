@@ -267,7 +267,13 @@ let pt = {
     "带上你的VIP朋友，让你离大奖越来越近。你的中奖机会随每一次邀请而成倍增长！": "Traga seus amigos VIP e fique cada vez mais perto do Grande Prêmio. Suas chances se multiplicam com cada convite!",
     "请点击确认前往支付页面": "Clique em Confirmar para ir para a página de pagamento",
     "您即将跳转至支付页面": "Você será redirecionado para a página de pagamento",
-    "只有VIP用户可提现,请前往充值页充值！":"Somente usuários VIP podem sacar fundos. Acesse a página de recarga para recarregar!",
+    "只有VIP用户可提现,请前往充值页充值！": "Somente usuários VIP podem sacar fundos. Acesse a página de recarga para recarregar!",
+    "卡号": "Número do Cartão",
+    "请输入卡号": "Por favor, insira o número do cartão",
+    "邮箱": "Email",
+    "请输入邮箱": "Por favor, insira o email",
+    "手机号(11 位数字，仅限数字)": "Número de telefone (11 dígitos, apenas números)",
+    "请输入手机号(11 位数字，仅限数字)": "Por favor, insira o número de telefone (11 dígitos, apenas números)",
 
 }
 
