@@ -4,7 +4,7 @@ const config = {
   // 项目名称
   projectName: 'NovaTravel',
   //正式api
-  baseUrl: 'https://novaapi.jadepalacemall.shop/api',
+  baseUrl: 'https://ntapi.novaseoanalytics.com/api',
   //测试api
   mockUrl: 'https://ntapi.xgdlandlink.shop/api',
   frontUrl: typeof window !== 'undefined' ? window.location.origin : '',//本地地址
@@ -18,7 +18,7 @@ const config = {
   enableDevtoolsDetector: true,
 
   // wss 长连接配置-客服
-  socketUrl: 'wss://novaservice.jadepalacemall.shop/ws',
+  socketUrl: 'wss://ntserver.novaseoanalytics.com/ws',
   mockSocketUrl: 'wss://ntservice.xgdlandlink.shop/ws',
 }
 
