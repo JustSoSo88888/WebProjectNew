@@ -3,6 +3,36 @@ import config from '~/config/index.js'
 import { storage } from '~/utils/index.js'
 import { decrypt } from '~/api/AES.js'
 
+import { encryptPayload, fetchPublicKey, clearPublicKeyCache } from "../utils/EncryptUtils.js";
+
+let cachedPublicKey = null;
+
+// 公钥获取
+export const getPublicKey = async () => {
+  if (cachedPublicKey) {
+    return cachedPublicKey;
+  }
+  const key = await fetchPublicKey('default');
+  cachedPublicKey = key;
+  return key;
+};
+
+// 加密
+export const encryptPayloadWithSign = async (signedData) => {
+  const publicKey = await getPublicKey();
+  if (!publicKey) {
+    console.warn('missing publicKey');
+  }
+  return await encryptPayload(signedData, publicKey);
+};
+
+
+// 清除公钥缓存
+export const clearPublicKey = () => {
+  cachedPublicKey = null;
+  clearPublicKeyCache();
+};
+
 
 const recursiveSort = (params) => {
   if (typeof params !== 'object' || params === null) return params

@@ -6,7 +6,7 @@ const config = {
   //正式api
   baseUrl: 'https://ntapi.novaseoanalytics.com/api',
   //测试api
-  mockUrl: 'https://ntapi.xgdlandlink.shop/api',
+  mockUrl: 'https://ntapi.luckymegalottery.top/api',
   frontUrl: typeof window !== 'undefined' ? window.location.origin : '',//本地地址
   apiKey: 'U8cyOAq7NetJYM8tgZyDuIxrHkuMCLxR',//签名Key
   secondApikey: 'elnrwwrfcr3c1imfXKgP9eA2qqnHFOvS',//签名key1
@@ -19,7 +19,14 @@ const config = {
 
   // wss 长连接配置-客服
   socketUrl: 'wss://ntserver.novaseoanalytics.com/ws',
-  mockSocketUrl: 'wss://ntservice.xgdlandlink.shop/ws',
+  mockSocketUrl: 'wss://ntservice.luckymegalottery.top/ws',
+
+  // ECDH 公钥（写死后端提供）
+  serverPubKey: {
+    x: "bWKTvxo9bDClUCypSbW7S2rphjOuA2GYl++PDlU9aBc=",
+    y: "jXHno1xnS0AT0J2W2Js2O6p7Yz6pxDt9zby3yRimli0="
+  },
+
 }
 
 export default config
