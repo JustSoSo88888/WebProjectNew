@@ -18,7 +18,7 @@ const config = {
   enableDevtoolsDetector: true,
 
   // wss 长连接配置-客服
-  socketUrl: 'wss://ntserver.novaseoanalytics.com/ws',
+  socketUrl: 'wss://ntserver.justtainsaifyy.shop/ws',
   mockSocketUrl: 'wss://ntservice.luckymegalottery.top/ws',
 
   // ECDH 公钥（写死后端提供）
