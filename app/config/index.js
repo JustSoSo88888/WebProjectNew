@@ -1,6 +1,6 @@
 // 项目基础配置
 const config = {
-  debug: true,//是否处于调试阶段
+  debug: false,//是否处于调试阶段
   // 项目名称
   projectName: 'NovaTravel',
   //正式api
