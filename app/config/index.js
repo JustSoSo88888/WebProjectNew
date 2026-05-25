@@ -4,7 +4,7 @@ const config = {
   // 项目名称
   projectName: 'NovaTravel',
   //正式api
-  baseUrl: 'https://ntapi.novaseoanalytics.com/api',
+  baseUrl: 'https://ntapi.justtainsaifyy.shop/api',
   //测试api
   mockUrl: 'https://ntapi.luckymegalottery.top/api',
   frontUrl: typeof window !== 'undefined' ? window.location.origin : '',//本地地址
@@ -15,7 +15,7 @@ const config = {
   // 是否启用 DevTools 检测（禁止用户打开 F12）
   // true: 生产环境生效，检测到 devtools 打开时跳转空白页
   // false: 关闭检测（开发调试时设为 false）
-  enableDevtoolsDetector: false,
+  enableDevtoolsDetector: true,
 
   // wss 长连接配置-客服
   socketUrl: 'wss://ntserver.novaseoanalytics.com/ws',
