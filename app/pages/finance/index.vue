@@ -85,7 +85,7 @@
           <div class="product-bottom">
             <div class="product-stat">
               <span class="stat-label">{{ $lang('最低存款') }}</span>
-              <span class="stat-val" translate="no">PKR{{ parseFloat(item.min_amount) }}</span>
+              <span class="stat-val" translate="no">PKR {{ parseFloat(item.min_amount) }}</span>
             </div>
             <div class="product-progress-wrap">
               <div class="progress-info">

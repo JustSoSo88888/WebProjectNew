@@ -29,10 +29,10 @@
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </button> -->
-                    <button class="tool-icon" @click="navigateTo('/chat')">
+                    <!-- <button class="tool-icon" @click="navigateTo('/chat')">
                         <van-icon name="service-o" size=".35rem" />
                         <span class="dot" v-if="appStore.getUnReadCount > 0">{{ appStore.getUnReadCount }}</span>
-                    </button>
+                    </button> -->
                 </div>
             </div>
 
@@ -46,19 +46,6 @@
 
             <!-- 快捷操作卡片 -->
             <div class="quick-cards">
-                <button class="qc-item qc-recharge" @click="navigateTo('/profile/recharge')">
-                    <div class="qc-glow qc-glow--recharge"></div>
-                    <div class="qc-icon">
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" />
-                            <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                    <div class="qc-content">
-                        <span class="qc-label">{{ $lang('充值') }}</span>
-                    </div>
-                </button>
                 <button class="qc-item qc-withdraw" @click="navigateTo('/profile/withdrawal')">
                     <div class="qc-glow qc-glow--withdraw"></div>
                     <div class="qc-icon">
@@ -70,6 +57,19 @@
                     </div>
                     <div class="qc-content">
                         <span class="qc-label">{{ $lang('提现') }}</span>
+                    </div>
+                </button>
+                <button class="qc-item qc-lucky" @click="navigateTo('/profile/lucky')">
+                    <div class="qc-glow qc-glow--lucky"></div>
+                    <div class="qc-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" />
+                            <path d="M12 3v9l6 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <div class="qc-content">
+                        <span class="qc-label">{{ $lang('幸运转盘') }}</span>
                     </div>
                 </button>
                 <button class="qc-item qc-profit" @click="navigateTo('/profile/article')">
@@ -315,10 +315,10 @@ const menuItems = [
         path: 'gift'
     },
     {
-        label: $lang('幸运转盘'),
+        label: $lang('客服'),
         bg: '#FFF1F2',
-        icon: '<circle cx="12" cy="12" r="9" stroke="#DC2626" stroke-width="1.8"/><path d="M12 3v9l6 3" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round"/>',
-        path: '/profile/lucky'
+        icon: '<path d="M4 13a8 8 0 0 1 16 0" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round"/><path d="M5 13h2a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H6a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2z" stroke="#DC2626" stroke-width="1.8" stroke-linejoin="round"/><path d="M19 13h-2a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h1a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2z" stroke="#DC2626" stroke-width="1.8" stroke-linejoin="round"/><path d="M16 19c0 1.1-1.8 2-4 2" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round"/>',
+        path: '/chat'
     },
     {
         label: $lang('邀请'),
@@ -634,6 +634,10 @@ const getAwardLog = () => {
             background: linear-gradient(180deg, #F59E0B 0%, #D97706 100%);
         }
 
+        &--lucky {
+            background: linear-gradient(180deg, #FB7185 0%, #DC2626 100%);
+        }
+
         &--withdraw {
             background: linear-gradient(180deg, #10B981 0%, #059669 100%);
         }
@@ -694,6 +698,11 @@ const getAwardLog = () => {
     &.qc-recharge .qc-icon {
         background: linear-gradient(135deg, #FBBF24 0%, #D97706 50%, #B45309 100%);
         box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
+    }
+
+    &.qc-lucky .qc-icon {
+        background: linear-gradient(135deg, #FB7185 0%, #EF4444 50%, #DC2626 100%);
+        box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
     }
 
     &.qc-withdraw .qc-icon {
