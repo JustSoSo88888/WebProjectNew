@@ -21,7 +21,7 @@
                                 <div class="record-info">
                                     <div class="info-row">
                                         <span class="info-label">{{ $lang('成本') }}</span>
-                                        <span class="info-value" translate="no">R$ {{ parseFloat(item.price) }}</span>
+                                        <span class="info-value" translate="no">PKR {{ parseFloat(item.price) }}</span>
                                     </div>
                                     <div class="info-row">
                                         <span class="info-label">{{ $lang('时间') }}</span>
@@ -42,7 +42,7 @@
                                     </div>
                                     <div class="info-row">
                                         <span class="info-label">{{ $lang('总收益') }}</span>
-                                        <span class="info-value profit">R$ {{ parseFloat(item.income_amount) }}</span>
+                                        <span class="info-value profit">PKR {{ parseFloat(item.income_amount) }}</span>
                                     </div>
                                 </div>
                             </div>

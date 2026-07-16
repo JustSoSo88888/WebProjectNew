@@ -1,11 +1,13 @@
 import en from '../language/en'
 import pt from '../language/pt'
+import ur from '../language/ur'
 import {storage} from '~/utils/index'
 import config from '~/config'
 
 const $ccLanguage = {
     en,
-    pt
+    pt,
+    ur
 }
 
 const langEvent = (text) => {

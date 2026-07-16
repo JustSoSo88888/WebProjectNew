@@ -134,7 +134,7 @@
                         <div class="vip-row">
                             <div>{{ $lang('奖励') }}</div>
                             <div class="amount" translate="n
-                        ">R$ {{ item.income_amount }}</div>
+                        ">PKR {{ item.income_amount }}</div>
                         </div>
                         <div class="vip-row">
                             <div>{{ $lang('任务') }}</div>
@@ -142,7 +142,7 @@
                         </div>
                         <div class="vip-row">
                             <div>{{ $lang('价格') }}</div>
-                            <div class="amount" translate="no">R$ {{ item.price }}</div>
+                            <div class="amount" translate="no">PKR {{ item.price }}</div>
                         </div>
                     </div>
                     <button class="vip-buy-btn" v-if="item.level > level" @click="handleUpdateLevel(item)">{{

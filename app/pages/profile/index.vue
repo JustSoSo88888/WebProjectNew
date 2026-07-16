@@ -61,7 +61,7 @@
             <div class="wallet-row">
                 <div class="wallet-item" @click="getBalanceData">
                     <div class="wallet-label">{{ $lang('余额') }}</div>
-                    <div class="wallet-amount" translate="no">R${{ balance }} <van-icon name="replay"
+                    <div class="wallet-amount" translate="no">PKR{{ balance }} <van-icon name="replay"
                             style="font-weight: bold;" /></div>
                 </div>
                 <div class="wallet-divider"></div>
@@ -86,37 +86,37 @@
                     <div class="earnings-grid">
                         <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('昨日收入') }}</div>
-                            <div class="earnings-val earnings-val--blue" translate="no">R${{
+                            <div class="earnings-val earnings-val--blue" translate="no">PKR{{
                                 parseFloat(awardTotalData.yesterday_income) }}</div>
                         </div>
                         <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('今日收入') }}</div>
-                            <div class="earnings-val earnings-val--purple" translate="no">R${{
+                            <div class="earnings-val earnings-val--purple" translate="no">PKR{{
                                 parseFloat(awardTotalData.today_income) }}</div>
                         </div>
                         <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('7日收入') }}</div>
-                            <div class="earnings-val earnings-val--light" translate="no">R${{
+                            <div class="earnings-val earnings-val--light" translate="no">PKR{{
                                 parseFloat(awardTotalData.week_income) }}</div>
                         </div>
                         <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('本月收入') }}</div>
-                            <div class="earnings-val earnings-val--info" translate="no">R${{
+                            <div class="earnings-val earnings-val--info" translate="no">PKR{{
                                 parseFloat(awardTotalData.today_income) }}</div>
                         </div>
                         <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('团队任务收入') }}</div>
-                            <div class="earnings-val earnings-val--danger">R${{
+                            <div class="earnings-val earnings-val--danger">PKR{{
                                 parseFloat(awardTotalData.order_referral_income) }}</div>
                         </div>
                         <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('团队邀请收入') }}</div>
-                            <div class="earnings-val earnings-val--dark">R${{
+                            <div class="earnings-val earnings-val--dark">PKR{{
                                 parseFloat(awardTotalData.meal_referral_income) }}</div>
                         </div>
                         <div class="earnings-item earnings-item--full">
                             <div class="earnings-label">{{ $lang('总收入') }}</div>
-                            <div class="earnings-val earnings-val--green">R${{ parseFloat(awardTotalData.total_income)
+                            <div class="earnings-val earnings-val--green">PKR{{ parseFloat(awardTotalData.total_income)
                                 }}</div>
                         </div>
                     </div>

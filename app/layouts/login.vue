@@ -4,7 +4,7 @@
       <img v-if="currentLangIcon" :src="currentLangIcon" class="lang-icon" />
     </button>
     <slot />
-    <PwaInstallPrompt />
+    <!-- <PwaInstallPrompt /> -->
     <LangModal v-model="showLang" v-model:currentLang="currentLang" @change="handleLangChange" />
   </div>
 </template>

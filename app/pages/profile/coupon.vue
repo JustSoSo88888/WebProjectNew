@@ -10,7 +10,7 @@
                         <div class="coupon-main">
                             <div class="coupon-value">
                                 <div class="coupon-amount" translate="n
-                                ">R$ {{ parseFloat(item.limit_deductible_amount) }}</div>
+                                ">PKR {{ parseFloat(item.limit_deductible_amount) }}</div>
                             </div>
                             <div class="coupon-info">
                                 <div class="coupon-title">{{ item.title }}</div>

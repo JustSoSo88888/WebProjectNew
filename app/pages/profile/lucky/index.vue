@@ -49,7 +49,7 @@
                         <div class="prize-list-layer">
                             <div v-for="(prize, index) in prizes" :key="'text-'+index" class="prize-item"
                                 :style="getPrizePosition(index)">
-                                <div class="prize-text" translate="no">R$ {{ parseFloat(prize.number) }}</div>
+                                <div class="prize-text" translate="no">PKR {{ parseFloat(prize.number) }}</div>
                                 <img class="prize-icon" src="../../../assets/img/index/coin.png" alt="">
                             </div>
                         </div>
@@ -92,13 +92,13 @@
                         <div class="record-item" v-for="(record, index) in records" :key="index">
                             <span class="record-name">{{ record.phone }}</span>
                             <span class="record-name">{{ record.create_time }}</span>
-                            <span class="record-prize" translate="no">+ R${{ parseFloat(record.number) }}</span>
+                            <span class="record-prize" translate="no">+ PKR{{ parseFloat(record.number) }}</span>
                         </div>
                         <template v-if="records.length > 3">
                             <div class="record-item" v-for="(record, index) in records" :key="'copy-' + index">
                                 <span class="record-name">{{ record.phone }}</span>
                                 <span class="record-name">{{ record.create_time }}</span>
-                                <span class="record-prize" translate="no">+ R${{ parseFloat(record.number) }}</span>
+                                <span class="record-prize" translate="no">+ PKR {{ parseFloat(record.number) }}</span>
                             </div>
                         </template>
                     </div>
@@ -112,7 +112,7 @@
                         <div class="prize-glow"></div>
                         <div class="modal-prize-icon">🎁</div>
                         <div class="prize-amount-wrapper">
-                            <span class="prize-currency">R$</span>
+                            <span class="prize-currency">PKR</span>
                             <span class="prize-amount" :class="{ 'animate': showPrizeModal }">{{ wonAmount }}</span>
                         </div>
                         <div class="prize-label">{{ $lang('恭喜获得奖励') }}</div>

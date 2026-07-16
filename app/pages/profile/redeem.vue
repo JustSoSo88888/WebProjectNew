@@ -15,7 +15,7 @@
                             </div>
                             <div class="redeem-amount-box">
                                 <div>{{ $lang('奖励') }}</div>
-                                <div class="redeem-amount" translate="no">+R$ {{ parseFloat(item.amount) }}</div>
+                                <div class="redeem-amount" translate="no">+PKR {{ parseFloat(item.amount) }}</div>
                             </div>
                         </div>
                     </template>

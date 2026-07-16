@@ -4,7 +4,7 @@
             <NuxtPage />
         </div>
         <BottomNav/>
-        <PwaInstallPrompt/>
+        <!-- <PwaInstallPrompt/> -->
         <MsgPopup></MsgPopup>
     </div>
 </template>

@@ -12,7 +12,7 @@
                         </div>
                         <div class="rigit">
                             <div class="title">{{ $lang('奖励') }}</div>
-                            <div translate="no" class="amount">+ R${{ parseFloat(item.number) }}</div>
+                            <div translate="no" class="amount">+ PKR{{ parseFloat(item.number) }}</div>
                         </div>
                         
                         

@@ -41,7 +41,7 @@
                 </div>
                 <div class="success-title">{{ $lang('兑换成功') }}</div>
                 <div class="success-amount">
-                    <span class="success-currency">R$</span>
+                    <span class="success-currency">PKR</span>
                     <span class="success-value">{{ parseFloat(rewardAmount) }}</span>
                 </div>
                 <button class="success-btn" @click="close">{{ $lang('我知道了') }}</button>

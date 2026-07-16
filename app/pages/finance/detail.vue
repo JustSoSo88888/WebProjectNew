@@ -21,7 +21,7 @@
             </div>
             <div class="stat-divider"></div>
             <div class="stat-item">
-                <span class="stat-value">R$ {{ detail.min_amount }}</span>
+                <span class="stat-value">PKR {{ detail.min_amount }}</span>
                 <span class="stat-label">{{ $lang('最低金额') }}</span>
             </div>
         </div>
@@ -41,10 +41,10 @@
             <div class="form-item">
                 <label class="form-label">{{ $lang('投资金额') }}</label>
                 <div class="amount-input-wrap">
-                    <span class="currency">R$</span>
+                    <span class="currency">PKR</span>
                     <input v-model="investAmount" type="number" class="amount-input" :placeholder="$lang('请输入投资金额')" />
                 </div>
-                <div class="amount-hint">{{$lang('最低投资金额')}}：R$ {{ detail.min_amount }}</div>
+                <div class="amount-hint">{{$lang('最低投资金额')}}：PKR {{ detail.min_amount }}</div>
             </div>
 
             <!-- Select Coupon -->
@@ -53,7 +53,7 @@
                 <div class="coupon-select" @click="handleShowCouponPicker">
                     <span class="coupon-value">
                         {{ selectedCoupon ? `${selectedCoupon.title} -
-                        R$${parseFloat(selectedCoupon.limit_deductible_amount)}` :  $lang('选择优惠券')}}
+                        PKR ${parseFloat(selectedCoupon.limit_deductible_amount)}` :  $lang('选择优惠券')}}
                     </span>
                     <svg viewBox="0 0 24 24" fill="none">
                         <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -61,7 +61,7 @@
                     </svg>
                 </div>
                 <div class="coupon-hint" v-if="selectedCoupon">
-                    {{$lang('已优惠')}}：R$ {{ parseFloat(selectedCoupon.limit_deductible_amount) }}
+                    {{$lang('已优惠')}}：PKR {{ parseFloat(selectedCoupon.limit_deductible_amount) }}
                 </div>
             </div>
 
@@ -69,19 +69,19 @@
             <div class="discount-preview" v-if="investAmount >= detail.min_amount">
                 <div class="preview-row">
                     <span>{{ $lang('投资金额') }}</span>
-                    <span>R$ {{ investAmount || 0 }}</span>
+                    <span>PKR {{ investAmount || 0 }}</span>
                 </div>
                 <div class="preview-row" v-if="selectedCoupon">
                     <span>{{ $lang('优惠') }}</span>
-                    <span class="discount">-R$ {{ parseFloat(selectedCoupon.limit_deductible_amount) }}</span>
+                    <span class="discount">-PKR {{ parseFloat(selectedCoupon.limit_deductible_amount) }}</span>
                 </div>
                 <div class="preview-row total">
                     <span>{{ $lang('实付金额') }}</span>
-                    <span class="total-value">R$ {{ actualAmount }}</span>
+                    <span class="total-value">PKR {{ actualAmount }}</span>
                 </div>
                 <div class="preview-row profit">
                     <span>{{ $lang('预计总收益') }}</span>
-                    <span class="profit-value">+R$ {{ estimatedProfit }}</span>
+                    <span class="profit-value">+PKR {{ estimatedProfit }}</span>
                 </div>
             </div>
         </div>
@@ -90,7 +90,7 @@
         <div class="bottom-bar">
             <div class="profit-info">
                 <span class="profit-label">{{ $lang('预计总收益') }}</span>
-                <span class="profit-amount">+R$ {{ estimatedProfit }}</span>
+                <span class="profit-amount">+PKR {{ estimatedProfit }}</span>
             </div>
             <button class="invest-btn" :disabled="!canInvest" @click="handleInvest">
                 {{ $lang('立即投资') }}
@@ -126,7 +126,7 @@
                         :class="{ selected: selectedCoupon?.id === coupon.id }" @click="selectCoupon(coupon)">
                         <div class="option-info">
                             <span class="option-title">{{ coupon.title }}</span>
-                            <span class="option-value">R${{ parseFloat(coupon.limit_deductible_amount) }}</span>
+                            <span class="option-value">PKR{{ parseFloat(coupon.limit_deductible_amount) }}</span>
                         </div>
                         <div class="option-check" v-if="selectedCoupon?.id === coupon.id">
                             <svg viewBox="0 0 24 24" fill="none">
@@ -289,7 +289,7 @@ const handlePasswordConfirm = async (val) => {
 }
 const handleInvest = async () => {
     if (!canInvest.value) {
-        showMsg(`${$lang('最低投资金额为')} R$ ${detail.value.min_amount}`,'fail')
+        showMsg(`${$lang('最低投资金额为')} PKR ${detail.value.min_amount}`,'fail')
         return
     }
     showPaymentPopup.value = true

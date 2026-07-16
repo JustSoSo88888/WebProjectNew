@@ -5,7 +5,7 @@
         <div class="balance-card">
             <div class="balance-label">{{ $lang('当前余额') }}</div>
             <div class="balance-amount">
-                <span class="balance-unit">R$</span>
+                <span class="balance-unit">PKR</span>
                 <span class="balance-value">{{ balance }}</span>
             </div>
         </div>
@@ -19,13 +19,13 @@
                         :class="{ active: selectedAmount === parseFloat(item.amount) && !customActive }"
                         @click="selectPreset(parseFloat(item.amount))"
                         v-if="parseFloat(item.amount) >= parseFloat(minAmount) && parseFloat(item.amount) <= parseFloat(maxAmount)">
-                        <span class="preset-unit">R$</span>{{ parseFloat(item.amount) }}
+                        <span class="preset-unit">PKR</span>{{ parseFloat(item.amount) }}
                     </button>
                 </template>
 
             </div>
             <div class="input-wrap" :class="{ focused: inputFocused }">
-                <span class="input-prefix">R$</span>
+                <span class="input-prefix">PKR</span>
                 <input v-model="customAmount" type="number" inputmode="decimal" class="amount-input"
                     :placeholder="$lang('输入其他金额')" @focus="onInputFocus" @blur="inputFocused = false" @input="onCustomInput" />
             </div>
@@ -39,7 +39,7 @@
                     :class="{ active: selectedChannel === channel.id }" @click="handleSelectedChannel(channel)">
                     <div class="channel-info">
                         <div class="channel-name">{{ channel.channel }}</div>
-                        <div class="channel-range" translate="">R${{ parseFloat(channel.min_amount) }}-R${{
+                        <div class="channel-range" translate="">PKR{{ parseFloat(channel.min_amount) }}-PKR{{
                             parseFloat(channel.max_amount) }}</div>
                     </div>
                     <div class="channel-radio">

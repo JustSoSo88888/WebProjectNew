@@ -40,7 +40,7 @@
                                     <div class="item-main">
                                         <span class="col-id">{{ item.order_no }}</span>
                                         <span class="col-amount positive" translate="no">
-                                            +R${{ parseFloat(item.amount) }}
+                                            +PKR{{ parseFloat(item.amount) }}
                                         </span>
                                         <span class="col-status" :class="getType(item.status).class">{{
                                                 getType(item.status).text
@@ -56,7 +56,7 @@
                                     <div class="item-main">
                                         <span class="col-id">{{ item.order_no }}</span>
                                         <span class="col-amount" translate="no">
-                                            -R${{ parseFloat(item.amount) }}
+                                            -PKR{{ parseFloat(item.amount) }}
                                         </span>
                                         <span class="col-status" :class="getWithdrawType(item.status).class">{{
                                                 getWithdrawType(item.status).text

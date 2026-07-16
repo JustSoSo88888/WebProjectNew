@@ -3,8 +3,9 @@ import { storage } from '~/utils/index'
 import config from '~/config'
 
 const importLangImages = () => ({
+  'ur': { icon: new URL('../assets/img/language/ur.png', import.meta.url).href, label: 'Pakistani', id: 'ur' },
   'en': { icon: new URL('../assets/img/language/en.png', import.meta.url).href, label: 'English', id: 'en' },
-  'pt': { icon: new URL('../assets/img/language/pt.png', import.meta.url).href, label: 'Português', id: 'pt' },
+  // 'pt': { icon: new URL('../assets/img/language/pt.png', import.meta.url).href, label: 'Português', id: 'pt' },
 })
 
 export const useAppStore = defineStore('app', {
