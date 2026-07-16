@@ -38,18 +38,18 @@
                     </div>
                 </div>
                 <div class="header-actions">
-                    <button class="action-btn action-btn--recharge" @click="navigateTo('/profile/recharge')">
+                    <!-- <button class="action-btn action-btn--recharge" @click="navigateTo('/profile/recharge')">
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="M12 5v14M5 12l7-7 7 7" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                         {{ $lang('充值') }}
-                    </button>
+                    </button> -->
                     <button class="action-btn action-btn--withdraw" @click="navigateTo('/profile/withdrawal')">
-                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <!-- <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="M12 19V5M5 12l7 7 7-7" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
+                        </svg> -->
                         {{ $lang('提现') }}
                     </button>
                 </div>

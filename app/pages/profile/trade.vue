@@ -51,7 +51,7 @@ const list = ref([])
 const activeTab = ref(0)
 const tabList = ref(
     [
-        { type: 8, label: $lang('充值') },
+        // { type: 8, label: $lang('充值') },
         { type: 7, label: $lang('注册赠送') },
         { type: 11, label: $lang('提现') },
         { type: 12, label: $lang('提现驳回') },
