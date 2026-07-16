@@ -274,6 +274,7 @@ let en = {
     "请输入邮箱": "Please enter email",
     "手机号(11 位数字，仅限数字)": "Phone Number (11 digits, numbers only)",
     "请输入手机号(11 位数字，仅限数字)": "Please enter phone number (11 digits, numbers only)",
+    "只有VIP用户可提现,请联系客服！":"Only VIP users can withdraw. Please contact customer service!",
 }
 
 export default en

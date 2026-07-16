@@ -274,6 +274,7 @@ let pt = {
     "请输入邮箱": "Por favor, insira o email",
     "手机号(11 位数字，仅限数字)": "Número de telefone (11 dígitos, apenas números)",
     "请输入手机号(11 位数字，仅限数字)": "Por favor, insira o número de telefone (11 dígitos, apenas números)",
+    "只有VIP用户可提现,请联系客服！":"Apenas usuários VIP podem realizar saques. Entre em contato com o atendimento ao cliente!",
 
 }
 

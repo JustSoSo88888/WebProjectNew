@@ -254,11 +254,11 @@ const handleSubmit = () => {
     if (level.value == 0) {
         $dialog.confirm({
             title: $lang('提示'),
-            message: $lang('只有VIP用户可提现,请前往充值页充值！'),
+            message: $lang('只有VIP用户可提现,请联系客服！'),
             confirmText: $lang('确认'),
             cancelText: $lang('取消')
         }).then(() => {
-            navigateTo('/profile/recharge')
+            navigateTo('/chat')
         }).catch(() => {
         })
         return
