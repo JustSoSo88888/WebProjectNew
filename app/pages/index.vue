@@ -296,11 +296,17 @@ const activityList = [
 ]
 
 const menuItems = [
+    // {
+    //     label: $lang('新闻'),
+    //     bg: '#EFF6FF',
+    //     icon: '<path d="M4 6h16M4 10h16M4 14h10" stroke="#2563EB" stroke-width="1.8" stroke-linecap="round"/>',
+    //     path: '/profile/news'
+    // },
     {
-        label: $lang('新闻'),
-        bg: '#EFF6FF',
-        icon: '<path d="M4 6h16M4 10h16M4 14h10" stroke="#2563EB" stroke-width="1.8" stroke-linecap="round"/>',
-        path: '/profile/news'
+        label: $lang('客服'),
+        bg: '#FFF1F2',
+        icon: '<path d="M4 13a8 8 0 0 1 16 0" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round"/><path d="M5 13h2a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H6a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2z" stroke="#DC2626" stroke-width="1.8" stroke-linejoin="round"/><path d="M19 13h-2a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h1a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2z" stroke="#DC2626" stroke-width="1.8" stroke-linejoin="round"/><path d="M16 19c0 1.1-1.8 2-4 2" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round"/>',
+        path: '/chat'
     },
     {
         label: $lang('关于我们'),
@@ -314,24 +320,19 @@ const menuItems = [
         icon: '<path d="M20 12v10H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" stroke="#D97706" stroke-width="1.6" stroke-linejoin="round"/>',
         path: 'gift'
     },
-    {
-        label: $lang('客服'),
-        bg: '#FFF1F2',
-        icon: '<path d="M4 13a8 8 0 0 1 16 0" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round"/><path d="M5 13h2a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H6a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2z" stroke="#DC2626" stroke-width="1.8" stroke-linejoin="round"/><path d="M19 13h-2a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h1a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2z" stroke="#DC2626" stroke-width="1.8" stroke-linejoin="round"/><path d="M16 19c0 1.1-1.8 2-4 2" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round"/>',
-        path: '/chat'
-    },
-    {
-        label: $lang('邀请'),
-        bg: '#F0FDF4',
-        icon: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="#059669" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#059669" stroke-width="1.8"/><path d="M19 8v6M22 11h-6" stroke="#059669" stroke-width="1.8" stroke-linecap="round"/>',
-        path: '/team?tab=invite'
-    },
-    {
-        label: $lang('手册'),
-        bg: '#F0F9FF',
-        icon: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="#0284C7" stroke-width="1.8" stroke-linecap="round"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="#0284C7" stroke-width="1.8" stroke-linejoin="round"/>',
-        path: '/profile/help'
-    },
+    
+    // {
+    //     label: $lang('邀请'),
+    //     bg: '#F0FDF4',
+    //     icon: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="#059669" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#059669" stroke-width="1.8"/><path d="M19 8v6M22 11h-6" stroke="#059669" stroke-width="1.8" stroke-linecap="round"/>',
+    //     path: '/team?tab=invite'
+    // },
+    // {
+    //     label: $lang('手册'),
+    //     bg: '#F0F9FF',
+    //     icon: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="#0284C7" stroke-width="1.8" stroke-linecap="round"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="#0284C7" stroke-width="1.8" stroke-linejoin="round"/>',
+    //     path: '/profile/help'
+    // },
 ]
 
 const vipLevels = ref([])

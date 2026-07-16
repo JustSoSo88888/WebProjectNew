@@ -104,7 +104,7 @@
                             <div class="earnings-val earnings-val--info" translate="no">PKR {{
                                 parseFloat(awardTotalData.today_income) }}</div>
                         </div>
-                        <div class="earnings-item">
+                        <!-- <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('团队任务收入') }}</div>
                             <div class="earnings-val earnings-val--danger">PKR {{
                                 parseFloat(awardTotalData.order_referral_income) }}</div>
@@ -113,7 +113,7 @@
                             <div class="earnings-label">{{ $lang('团队邀请收入') }}</div>
                             <div class="earnings-val earnings-val--dark">PKR {{
                                 parseFloat(awardTotalData.meal_referral_income) }}</div>
-                        </div>
+                        </div> -->
                         <div class="earnings-item earnings-item--full">
                             <div class="earnings-label">{{ $lang('总收入') }}</div>
                             <div class="earnings-val earnings-val--green">PKR {{ parseFloat(awardTotalData.total_income)
@@ -305,13 +305,13 @@ const menuItems = [
     //     route: '/profile/email',
     //     badge: '5',
     // },
-    {
-        key: 'invite',
-        label: $lang('邀请'),
-        iconBg: 'linear-gradient(135deg,#F0FDF4,#DCFCE7)',
-        icon: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#059669" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#059669" stroke-width="1.8"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#059669" stroke-width="1.8" stroke-linecap="round"/>',
-        route: '/team?tab=invite',
-    },
+    // {
+    //     key: 'invite',
+    //     label: $lang('邀请'),
+    //     iconBg: 'linear-gradient(135deg,#F0FDF4,#DCFCE7)',
+    //     icon: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#059669" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#059669" stroke-width="1.8"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#059669" stroke-width="1.8" stroke-linecap="round"/>',
+    //     route: '/team?tab=invite',
+    // },
     {
         key: 'lang',
         label: $lang('语言'),

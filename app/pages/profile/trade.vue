@@ -56,7 +56,7 @@ const tabList = ref(
         { type: 11, label: $lang('提现') },
         { type: 12, label: $lang('提现驳回') },
         { type: 13, label: $lang('提现失败') },
-        { type: 14, label: $lang('团队收益') },
+        // { type: 14, label: $lang('团队收益') },
         { type: 17, label: $lang('理财收益') },
         { type: 18, label: $lang('理财到期') },
         { type: 19, label: $lang('理财收益结算') },
