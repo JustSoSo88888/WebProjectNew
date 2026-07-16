@@ -90,7 +90,7 @@ const errors = reactive({ phone: '', password: '' })
 const focus = ref('')
 const showPwd = ref(false)
 const loading = ref(false)
-const areaCode = ref(55)
+const areaCode = ref(92)
 
 const validate = () => {
     errors.phone = ''

@@ -134,7 +134,7 @@ const focus = ref('')
 const showPwd = ref(false)
 const showConfirm = ref(false)
 const loading = ref(false)
-const areaCode = ref(55)
+const areaCode = ref(92)
 
 const validate = () => {
   errors.phone = ''
