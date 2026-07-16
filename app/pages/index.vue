@@ -59,17 +59,15 @@
                         <span class="qc-label">{{ $lang('提现') }}</span>
                     </div>
                 </button>
-                <button class="qc-item qc-lucky" @click="navigateTo('/profile/lucky')">
+                <button class="qc-item qc-lucky" @click="handleMenu('gift')">
                     <div class="qc-glow qc-glow--lucky"></div>
                     <div class="qc-icon">
                         <svg viewBox="0 0 24 24" fill="none">
-                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" />
-                            <path d="M12 3v9l6 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
+                            <path d="M20 12v10H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/>
                         </svg>
                     </div>
                     <div class="qc-content">
-                        <span class="qc-label">{{ $lang('幸运转盘') }}</span>
+                        <span class="qc-label">{{ $lang('现金礼物') }}</span>
                     </div>
                 </button>
                 <button class="qc-item qc-profit" @click="navigateTo('/profile/article')">
@@ -296,12 +294,12 @@ const activityList = [
 ]
 
 const menuItems = [
-    // {
-    //     label: $lang('新闻'),
-    //     bg: '#EFF6FF',
-    //     icon: '<path d="M4 6h16M4 10h16M4 14h10" stroke="#2563EB" stroke-width="1.8" stroke-linecap="round"/>',
-    //     path: '/profile/news'
-    // },
+    {
+        label: $lang('新闻'),
+        bg: '#EFF6FF',
+        icon: '<path d="M4 6h16M4 10h16M4 14h10" stroke="#2563EB" stroke-width="1.8" stroke-linecap="round"/>',
+        path: '/profile/news'
+    },
     {
         label: $lang('客服'),
         bg: '#FFF1F2',
@@ -314,12 +312,12 @@ const menuItems = [
         icon: '<circle cx="12" cy="12" r="9" stroke="#7C3AED" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round"/>',
         path: '/profile/aboutUs'
     },
-    {
-        label: $lang('现金礼物'),
-        bg: '#FFF7ED',
-        icon: '<path d="M20 12v10H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" stroke="#D97706" stroke-width="1.6" stroke-linejoin="round"/>',
-        path: 'gift'
-    },
+    // {
+    //     label: $lang('现金礼物'),
+    //     bg: '#FFF7ED',
+    //     icon: '<path d="M20 12v10H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" stroke="#D97706" stroke-width="1.6" stroke-linejoin="round"/>',
+    //     path: 'gift'
+    // },
     
     // {
     //     label: $lang('邀请'),

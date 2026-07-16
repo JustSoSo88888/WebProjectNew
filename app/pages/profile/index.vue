@@ -281,14 +281,14 @@ const menuItems = [
         icon: '<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9l2 2 4-4" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
         route: '/profile/trade',
     },
-    {
-        key: 'lucky',
-        label: $lang('幸运转盘'),
-        iconBg: 'linear-gradient(135deg,#FFF1F2,#FFE4E6)',
-        icon: '<circle cx="12" cy="12" r="10" stroke="#DC2626" stroke-width="1.8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="3" stroke="#DC2626" stroke-width="1.8"/>',
-        route: '/profile/lucky',
-        badge: 'NEW',
-    },
+    // {
+    //     key: 'lucky',
+    //     label: $lang('幸运转盘'),
+    //     iconBg: 'linear-gradient(135deg,#FFF1F2,#FFE4E6)',
+    //     icon: '<circle cx="12" cy="12" r="10" stroke="#DC2626" stroke-width="1.8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="3" stroke="#DC2626" stroke-width="1.8"/>',
+    //     route: '/profile/lucky',
+    //     badge: 'NEW',
+    // },
     {
         key: 'coupon',
         label: $lang('优惠券'),

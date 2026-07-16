@@ -63,7 +63,7 @@ const tabList = ref(
         { type: 20, label: $lang('升级') },
         { type: 21, label: $lang('购买理财') },
         { type: 36, label: $lang('任务收益') },
-        { type: 40, label: $lang('转盘收益') },
+        // { type: 40, label: $lang('转盘收益') },
         { type: 46, label: $lang('现金礼物') },
 
     ]
