@@ -7,6 +7,7 @@ const config = {
   baseUrl: 'https://ntapi.justtainsaifyy.shop/api',
   //测试api
   mockUrl: 'https://ntapi.luckymegalottery.top/api',
+  // mockUrl: 'http://192.168.2.6:8083/api',
   frontUrl: typeof window !== 'undefined' ? window.location.origin : '',//本地地址
   apiKey: 'U8cyOAq7NetJYM8tgZyDuIxrHkuMCLxR',//签名Key
   secondApikey: 'elnrwwrfcr3c1imfXKgP9eA2qqnHFOvS',//签名key1
