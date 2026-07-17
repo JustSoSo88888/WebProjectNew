@@ -19,7 +19,7 @@ const config = {
   enableDevtoolsDetector: false,
 
   //请求加密
-  isEncrypted:true,
+  isEncrypted:false,
 
   // wss 长连接配置-客服
   socketUrl: 'wss://service.novatravelexplore.cc/ws',
