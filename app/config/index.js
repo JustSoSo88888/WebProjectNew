@@ -4,7 +4,7 @@ const config = {
   // 项目名称
   projectName: 'NovaTravel',
   //正式api
-  baseUrl: 'https://ntapi.justtainsaifyy.shop/api',
+  baseUrl: 'https://api.novatravelexplore.cc/api',
   //测试api
   mockUrl: 'https://ntapi.luckymegalottery.top/api',
   // mockUrl: 'http://192.168.2.6:8083/api',
@@ -19,10 +19,10 @@ const config = {
   enableDevtoolsDetector: false,
 
   //请求加密
-  isEncrypted:false,
+  isEncrypted:true,
 
   // wss 长连接配置-客服
-  socketUrl: 'wss://ntserver.justtainsaifyy.shop/ws',
+  socketUrl: 'wss://service.novatravelexplore.cc/ws',
   mockSocketUrl: 'wss://ntservice.luckymegalottery.top/ws',
 
   // ECDH 公钥（写死后端提供）
