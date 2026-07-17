@@ -1,10 +1,29 @@
 <template>
     <div class="bank-info-page">
         <div class="form-card">
+            
+
+            
+
             <div class="form-item">
-                <div class="form-label">{{ $lang('类型') }}<span style="color: red;">*</span></div>
-                <div class="form-input form-select" :class="{ focused: inputFocused.payWayType }"
-                    @click="handleShowPicker">
+                <div class="form-label">{{ $lang('银行卡号') }}<span style="color: red;">*</span></div>
+                <div class="form-input" :class="{ focused: inputFocused.bank_card_no }">
+                    <div class="input-icon">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <rect x="1" y="4" width="22" height="16" rx="2" stroke="currentColor" stroke-width="1.8" />
+                            <path d="M1 10h22" stroke="currentColor" stroke-width="1.8" />
+                        </svg>
+                    </div>
+                    <input v-model="form.bank_card_no" type="tel" inputmode="numeric" pattern="[0-9]*"
+                        :disabled="isEdit" class="input" :placeholder="$lang('请输入银行卡号')"
+                        @input="handleBankCardInput" @focus="inputFocused.bank_card_no = true"
+                        @blur="inputFocused.bank_card_no = false" />
+                </div>
+            </div>
+
+            <div class="form-item">
+                <div class="form-label">{{ $lang('银行名称') }}<span style="color: red;">*</span></div>
+                <div class="form-input" :class="{ focused: inputFocused.bank_name }">
                     <div class="input-icon">
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"
@@ -12,37 +31,14 @@
                                 stroke-linejoin="round" />
                         </svg>
                     </div>
-                    <div class="select-value" :class="{ placeholder: !selectedBankName }">
-                        {{ selectedBankName || $lang('请选择银行类型') }}
-                    </div>
-                    <div class="select-arrow">
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                </div>
-            </div>
-            <!-- 用户姓名 -->
-            <div class="form-item">
-                <div class="form-label">{{ $lang('姓名') }}<span style="color: red;">*</span></div>
-                <div class="form-input" :class="{ focused: inputFocused.name }">
-                    <div class="input-icon">
-                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.8"
-                                stroke-linecap="round" />
-                            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.8" />
-                        </svg>
-                    </div>
-                    <input v-model="form.name" :disabled="isEdit" type="text" class="input"
-                        :placeholder="$lang('请输入姓名')" @focus="inputFocused.name = true"
-                        @blur="inputFocused.name = false" />
+                    <input v-model="form.bank_name" type="text" :disabled="isEdit" class="input"
+                        :placeholder="$lang('请输入银行名称')" @focus="inputFocused.bank_name = true"
+                        @blur="inputFocused.bank_name = false" />
                 </div>
             </div>
 
-            <!-- 手机号 -->
             <div class="form-item">
-                <div class="form-label">{{ $lang('手机号(11 位数字，仅限数字)') }}<span style="color: red;">*</span></div>
+                <div class="form-label">{{ $lang('手机号') }}<span style="color: red;">*</span></div>
                 <div class="form-input phone-input" :class="{ focused: inputFocused.phone }">
                     <div class="input-icon">
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -52,65 +48,45 @@
                                 stroke-linejoin="round" />
                         </svg>
                     </div>
-                    <input v-model="form.phone" type="number" :disabled="isEdit" class="input"
-                        :placeholder="$lang('请输入手机号(11 位数字，仅限数字)')" @input="numberInput"
+                    <input v-model="form.phone" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="19"
+                        :disabled="isEdit" class="input" :placeholder="$lang('请输入手机号')" @input="handlePhoneInput"
                         @focus="inputFocused.phone = true" @blur="inputFocused.phone = false" />
                 </div>
             </div>
+
             <div class="form-item">
-                <div class="form-label">{{ $lang('卡号') }}<span style="color: red;">*</span></div>
-                <div class="form-input" :class="{ focused: inputFocused.account }">
+                <div class="form-label">{{ $lang('用户名称') }}<span style="color: red;">*</span></div>
+                <div class="form-input" :class="{ focused: inputFocused.user_name }">
                     <div class="input-icon">
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <rect x="1" y="4" width="22" height="16" rx="2" stroke="currentColor" stroke-width="1.8" />
-                            <path d="M1 10h22" stroke="currentColor" stroke-width="1.8" />
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" />
+                            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.8" />
                         </svg>
                     </div>
-                    <input v-model="form.account" type="text" :disabled="isEdit" class="input"
-                        :placeholder="$lang('请输入卡号')" @focus="inputFocused.account = true"
-                        @blur="inputFocused.account = false" />
-                </div>
-            </div>
-            <div class="form-item">
-                <div class="form-label">{{ $lang('邮箱') }}<span style="color: red;"
-                        v-if="Object.keys(selectOpent).length > 0 && String(selectOpent.text).toUpperCase() === 'EMAIL'">*</span>
-                </div>
-                <div class="form-input" :class="{ focused: inputFocused.email }">
-                    <div class="input-icon">
-                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <rect x="1" y="4" width="22" height="16" rx="2" stroke="currentColor" stroke-width="1.8" />
-                            <path d="M1 10h22" stroke="currentColor" stroke-width="1.8" />
-                        </svg>
-                    </div>
-                    <input v-model="form.email" type="text" :disabled="isEdit" class="input"
-                        :placeholder="$lang('请输入邮箱')" @focus="inputFocused.email = true"
-                        @blur="inputFocused.email = false" />
+                    <input v-model="form.user_name" :disabled="isEdit" type="text" class="input"
+                        :placeholder="$lang('请输入用户名称')" @focus="inputFocused.user_name = true"
+                        @blur="inputFocused.user_name = false" />
                 </div>
             </div>
 
-
-            <!-- 账户号码 -->
-            <!-- <div class="form-item">
-                <div class="form-label">{{ $lang('账户号码') }}</div>
-                <div class="form-input" :class="{ focused: inputFocused.account }">
+            <div class="form-item">
+                <div class="form-label">{{ $lang('邮箱') }}</div>
+                <div class="form-input" :class="{ focused: inputFocused.mail }">
                     <div class="input-icon">
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <rect x="1" y="4" width="22" height="16" rx="2" stroke="currentColor" stroke-width="1.8" />
-                            <path d="M1 10h22" stroke="currentColor" stroke-width="1.8" />
+                            <path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"
+                                stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                            <path d="M22 6l-10 7L2 6" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </div>
-                    <input v-model="form.account" type="text" class="input" :placeholder="$lang('请输入账户号码')"
-                        @focus="inputFocused.account = true" @blur="inputFocused.account = false" />
+                    <input v-model="form.mail" type="text" :disabled="isEdit" class="input"
+                        :placeholder="$lang('请输入邮箱')" @focus="inputFocused.mail = true"
+                        @blur="inputFocused.mail = false" />
                 </div>
-            </div> -->
+            </div>
         </div>
-
-        <!-- 银行选择器 -->
-        <van-popup overlay-class="popup-overlay" class="popup-overlay" v-model:show="showPicker" position="bottom"
-            round>
-            <van-picker :columns="bankColumns" class="popup-overlay" @confirm="onBankConfirm"
-                @cancel="showPicker = false" :confirm-button-text="$lang('确认')" :cancel-button-text="$lang('取消')" />
-        </van-popup>
         <!-- 提交按钮 -->
         <div class="submit-wrap">
             <button class="submit-btn" :disabled="!canSubmit" @click="handleSubmit">
@@ -124,32 +100,16 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { bankCardList, bindBankCard } from '~/api/member';
-import { tokenChannelTypeConfigList } from '~/api/token_channel';
 
 definePageMeta({ layout: 'second-page' })
 
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
 
-const bankList = ref([])
-
 onMounted(() => {
     getBankCardList();
-    getTokenChannelTypeConfigList();
 })
 
-const getTokenChannelTypeConfigList = () => {
-    tokenChannelTypeConfigList({}).then(res => {
-        if (res.success) {
-            bankList.value = res.data
-        }
-    })
-}
-
-const handleShowPicker = () => {
-    if (isEdit.value) return
-    showPicker.value = true
-}
 const getBankCardList = () => {
     showLoading($lang('加载中'))
     bankCardList({}).then(res => {
@@ -157,12 +117,11 @@ const getBankCardList = () => {
         if (res.success) {
             if (res.data.rows && res.data.rows.length > 0) {
                 isEdit.value = true
-                form.value.name = res.data.rows[0].user_name
+                form.value.user_name = res.data.rows[0].user_name
                 form.value.phone = res.data.rows[0].phone
-                form.value.bank = res.data.rows[0].bank_name
-                form.value.account = res.data.rows[0].bank_card_no
-                form.value.payWayType = res.data.rows[0].pay_way_type
-                form.value.email = res.data.rows[0].mail
+                form.value.bank_name = res.data.rows[0].bank_name
+                form.value.bank_card_no = res.data.rows[0].bank_card_no
+                form.value.mail = res.data.rows[0].mail
             } else {
                 isEdit.value = false
             }
@@ -176,65 +135,52 @@ const getBankCardList = () => {
 }
 
 
-const showPicker = ref(false)
 const isEdit = ref(false)
-const bankColumns = computed(() => bankList.value.map(bank => ({ text: bank.name, value: bank.id })))
-
-
-const selectedBankName = computed(() => {
-    const bank = bankList.value.find(b => b.id == form.value.payWayType)
-    return bank ? bank.name : ''
-})
-
-const selectOpent = ref({})
-
-const onBankConfirm = ({ selectedOptions }) => {
-    selectOpent.value = selectedOptions[0]
-    form.value.payWayType = selectedOptions[0].value
-    showPicker.value = false
-}
 
 const inputFocused = ref({
-    name: false,
+    user_name: false,
     phone: false,
-    bank: false,
-    account: false,
-    payWayType: false,
-    email: false,
+    bank_name: false,
+    bank_card_no: false,
+    mail: false,
 })
 
 const form = ref({
-    name: '',
+    user_name: '',
     phone: '',
-    bank: 'PIX',
-    account: '',
-    payWayType: '',
-    email: ''
+    mail: '',
+    bank_card_no: '',
+    bank_name: '',
 })
 
-const numberInput = (val) => {
-    if (String(form.value.phone).length > 11) {
-        form.value.phone = String(form.value.phone).substring(0, 11);
-    }
+const handlePhoneInput = () => {
+    form.value.phone = String(form.value.phone).replace(/\D/g, '').slice(0, 19)
+}
+
+const handleBankCardInput = () => {
+    form.value.bank_card_no = String(form.value.bank_card_no).replace(/\D/g, '')
 }
 
 const canSubmit = computed(() => {
-    if (Object.keys(selectOpent.value).length > 0 && String(selectOpent.value.text).toUpperCase() === 'EMAIL') {
-        return form.value.name && form.value.phone && form.value.account && form.value.payWayType && !isEdit.value && form.value.email && String(form.value.phone).length == 11
-    }
-    return form.value.name && form.value.phone && form.value.account && form.value.payWayType && !isEdit.value && String(form.value.phone).length == 11
+    return form.value.user_name &&
+        form.value.phone &&
+        String(form.value.phone).length < 20 &&
+        /^\d+$/.test(form.value.phone) &&
+        form.value.bank_card_no &&
+        /^\d+$/.test(form.value.bank_card_no) &&
+        form.value.bank_name &&
+        !isEdit.value
 
 })
 
 const handleSubmit = () => {
     if (!canSubmit.value) return
     let params = {
-        phone: '55' + form.value.phone,
-        bank_card_no: form.value.account,
-        bank_name: form.value.bank,
-        user_name: form.value.name,
-        pay_way_type: form.value.payWayType,
-        mail: form.value.email,
+        phone: '92' +form.value.phone,
+        mail: form.value.mail,
+        bank_card_no: form.value.bank_card_no,
+        bank_name: form.value.bank_name,
+        user_name: form.value.user_name,
     }
     showLoading($lang('加载中'))
     bindBankCard(params).then(res => {

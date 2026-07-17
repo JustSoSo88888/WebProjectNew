@@ -66,7 +66,7 @@
                 </div> -->
                 <div class="task-bottom">
                   <div class="reward-amount"
-                    :class="task.status == 1 ? 'reward-amount--success' : 'reward-amount--warning'" translate="no">PKR{{
+                    :class="task.status == 1 ? 'reward-amount--success' : 'reward-amount--warning'" translate="no">PKR {{
                       parseFloat(task.income_amount) }}</div>
                   <button class="task-btn" :class="task.status == 1 ? 'task-btn--done' : 'task-btn--active'">
                     {{ task.status == 1 ? $lang('已完成') : $lang('进行中') }}
