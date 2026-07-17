@@ -14,11 +14,12 @@ import { ref, computed, onMounted } from 'vue'
 import { useAppStore } from '~/stores/app.js'
 import LangModal from '~/components/LangModal.vue'
 import { storage } from '~/utils/index'
+import config from '~/config'
 
 const appStore = useAppStore()
 const langList = computed(() => appStore.getLangList)
 const showLang = ref(false)
-const currentLang = ref(storage.get('locale') || 'ur')
+const currentLang = ref(storage.get('locale') || config.defaultLang)
 const currentLangData = computed(() => langList.value[currentLang.value])
 const currentLangIcon = computed(() => currentLangData.value?.icon)
 onMounted(() => {

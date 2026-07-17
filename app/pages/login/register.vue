@@ -85,7 +85,7 @@
         </div>
 
         <!-- 邀请码 -->
-        <div class="field">
+        <!-- <div class="field">
           <label>{{ $lang('邀请码') }}</label>
           <div class="input-wrap" :class="{ focused: focus === 'invite', error: errors.inviteCode }">
             <svg viewBox="0 0 24 24" fill="none">
@@ -98,7 +98,7 @@
               @blur="focus = ''" />
           </div>
           <span v-if="errors.inviteCode" class="err-msg">{{ errors.inviteCode }}</span>
-        </div>
+        </div> -->
 
         <!-- 注册按钮 -->
         <button class="btn-primary" :disabled="loading" @click="handleRegister">
@@ -145,7 +145,7 @@ const validate = () => {
   if (form.password.length < 6 || form.password.length > 18) { errors.password = $lang('请输入6到18位密码'); return false }
   if (!form.confirmPassword) { errors.confirmPassword = $lang('请输入确认密码'); return false }
   if (form.password !== form.confirmPassword) { form.password = ''; form.confirmPassword = ''; errors.confirmPassword = $lang('密码不一致请重新输入'); return false }
-  if (!form.inviteCode) { errors.inviteCode = $lang('请输入邀请码'); return false }
+  // if (!form.inviteCode) { errors.inviteCode = $lang('请输入邀请码'); return false }
   return true
 }
 

@@ -71,7 +71,12 @@ instance.interceptors.request.use(
             cfg.data.append('token', signed.token);
         } else {
             try {
-                const encrypted = await encryptPayloadWithSign(signed);
+                let encrypted = null
+                if(config.isEncrypted){
+                    encrypted = await encryptPayloadWithSign(signed);
+                }else{
+                    encrypted = signed
+                }
                 cfg.data = encrypted;
             } catch (e) {
                 return Promise.reject(e);

@@ -17,6 +17,9 @@ const config = {
   // false: 关闭检测（开发调试时设为 false）
   enableDevtoolsDetector: false,
 
+  //请求加密
+  isEncrypted:false,
+
   // wss 长连接配置-客服
   socketUrl: 'wss://ntserver.justtainsaifyy.shop/ws',
   mockSocketUrl: 'wss://ntservice.luckymegalottery.top/ws',
