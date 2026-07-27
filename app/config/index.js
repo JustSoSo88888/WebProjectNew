@@ -12,7 +12,7 @@ const config = {
   apiKey: 'U8cyOAq7NetJYM8tgZyDuIxrHkuMCLxR',//签名Key
   secondApikey: 'elnrwwrfcr3c1imfXKgP9eA2qqnHFOvS',//签名key1
   //默认语言
-  defaultLang: 'ur',
+  defaultLang: 'en',
   // 是否启用 DevTools 检测（禁止用户打开 F12）
   // true: 生产环境生效，检测到 devtools 打开时跳转空白页
   // false: 关闭检测（开发调试时设为 false）
