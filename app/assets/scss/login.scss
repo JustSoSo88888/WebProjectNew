@@ -34,16 +34,6 @@
     box-shadow: 0 rem(24) rem(42) rgba(206, 0, 0, 0.20);
   }
 
-  &::after {
-    content: '';
-    position: absolute;
-    left: rem(24);
-    top: rem(146);
-    width: rem(54);
-    height: rem(4);
-    border-radius: 999px;
-    background: $color-primary;
-  }
 }
 
 .auth-shell {
