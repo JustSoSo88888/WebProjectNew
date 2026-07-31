@@ -1,51 +1,39 @@
 <template>
   <nav class="bottom-nav" role="navigation" aria-label="底部导航">
-    <NuxtLink
-      v-for="item in navItems"
-      :key="item.name"
-      :to="item.path"
-      class="bottom-nav__item"
-      :class="{ 'bottom-nav__item--active': isActive(item.path) }"
-      :aria-label="item.label"
-    >
-      <span class="bottom-nav__icon" aria-hidden="true">
-        <!-- 首页 — 网格风格 -->
-        <svg v-if="item.name === 'home'" viewBox="0 0 24 24" fill="none">
-          <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
-          <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
-          <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
-          <rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
-        </svg>
-        <!-- 理财 — 趋势图 -->
-        <svg v-else-if="item.name === 'finance'" viewBox="0 0 24 24" fill="none">
-          <path d="M3 17l4.5-5 4 3.5L16 9l5 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M3 20h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-          <circle cx="21" cy="13" r="1.5" fill="currentColor"/>
-        </svg>
-        <!-- 团队 — 节点网络 -->
-        <svg v-else-if="item.name === 'team'" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="5" r="2.5" stroke="currentColor" stroke-width="1.8"/>
-          <circle cx="5" cy="17" r="2.5" stroke="currentColor" stroke-width="1.8"/>
-          <circle cx="19" cy="17" r="2.5" stroke="currentColor" stroke-width="1.8"/>
-          <path d="M12 7.5v3M12 10.5l-5.5 4.5M12 10.5l5.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        </svg>
-        <!-- 任务 — 进度条风格 -->
-        <svg v-else-if="item.name === 'task'" viewBox="0 0 24 24" fill="none">
-          <rect x="3" y="4" width="18" height="2.5" rx="1.25" fill="currentColor" opacity="0.3"/>
-          <rect x="3" y="4" width="13" height="2.5" rx="1.25" fill="currentColor"/>
-          <rect x="3" y="10.75" width="18" height="2.5" rx="1.25" fill="currentColor" opacity="0.3"/>
-          <rect x="3" y="10.75" width="8" height="2.5" rx="1.25" fill="currentColor"/>
-          <rect x="3" y="17.5" width="18" height="2.5" rx="1.25" fill="currentColor" opacity="0.3"/>
-          <rect x="3" y="17.5" width="16" height="2.5" rx="1.25" fill="currentColor"/>
-        </svg>
-        <!-- 个人中心 — 六边形头像 -->
-        <svg v-else viewBox="0 0 24 24" fill="none">
-          <path d="M12 2l8 4.5v9L12 20l-8-4.5v-9L12 2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-          <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.8"/>
-        </svg>
-      </span>
-      <span class="bottom-nav__label">{{ item.label }}</span>
-    </NuxtLink>
+    <div class="bottom-nav__surface">
+      <NuxtLink
+        v-for="item in navItems"
+        :key="item.name"
+        :to="item.path"
+        class="bottom-nav__item"
+        :class="{ 'bottom-nav__item--active': isActive(item.path) }"
+        :aria-label="item.label"
+        :aria-current="isActive(item.path) ? 'page' : undefined"
+      >
+        <span class="bottom-nav__indicator" aria-hidden="true"></span>
+        <span class="bottom-nav__icon" aria-hidden="true">
+          <svg v-if="item.name === 'home'" viewBox="0 0 24 24" fill="none">
+            <path d="M3.75 10.75L12 4l8.25 6.75" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5.75 10.5v8.25c0 .69.56 1.25 1.25 1.25h10c.69 0 1.25-.56 1.25-1.25V10.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9.5 20v-5.25c0-.41.34-.75.75-.75h3.5c.41 0 .75.34.75.75V20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg v-else-if="item.name === 'task'" viewBox="0 0 24 24" fill="none">
+            <path d="M8 6.5h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M8 11.5h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M8 16.5h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M4.5 6.5l.75.75L6.75 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4.5 11.5l.75.75 1.5-1.75" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4.5 16.5l.75.75 1.5-1.75" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <svg v-else viewBox="0 0 24 24" fill="none">
+            <path d="M12 12.5c2.35 0 4.25-1.9 4.25-4.25S14.35 4 12 4 7.75 5.9 7.75 8.25s1.9 4.25 4.25 4.25z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4.75 20c.85-3.2 3.65-5.25 7.25-5.25S18.4 16.8 19.25 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="bottom-nav__label">{{ item.label }}</span>
+      </NuxtLink>
+    </div>
   </nav>
 </template>
 
@@ -78,83 +66,118 @@ const navItems = [
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: rem(375);
-  height: rem(64);
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid $color-border;
-  box-shadow: $shadow-lg;
-  display: flex;
-  align-items: stretch;
+  width: min(100vw, rem(375));
+  height: calc(rem(68) + env(safe-area-inset-bottom, 0px));
+  background: $color-white;
+  border-top: 1px solid rgba(230, 230, 230, 0.9);
+  box-shadow: 0 -8px 24px rgba(31, 31, 31, 0.08);
   z-index: 50;
-  padding-bottom: env(safe-area-inset-bottom, 0);
+  box-sizing: border-box;
+  padding: rem(6) rem(10) calc(rem(6) + env(safe-area-inset-bottom, 0px));
+
+  &__surface {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    gap: rem(6);
+  }
 
   &__item {
-    flex: 1;
+    min-width: 0;
+    min-height: rem(52);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: rem(4);
+    gap: rem(3);
     cursor: pointer;
-    color: $color-text-muted;
-    transition: $transition-fast;
-    min-height: rem(44);
+    color: $color-gray-500;
+    border-radius: rem(12);
+    transition: color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
     text-decoration: none;
     position: relative;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 
     &--active {
       color: $color-primary;
-
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: rem(24);
-        height: 3px;
-        background: $gradient-primary;
-        border-radius: 0 0 rem(2) rem(2);
-        box-shadow: $shadow-gold;
-      }
+      background: $color-primary-bg;
 
       .bottom-nav__icon {
-        background: $color-primary-bg;
-        border-radius: rem(8);
+        color: $color-primary;
       }
+
+      .bottom-nav__indicator {
+        opacity: 1;
+        transform: translateX(-50%) scaleX(1);
+      }
+    }
+
+    &:focus-visible {
+      outline: rem(2) solid rgba(206, 0, 0, 0.35);
+      outline-offset: rem(2);
     }
 
     &:active {
-      opacity: 0.6;
+      transform: scale(0.96);
     }
   }
 
+  &__indicator {
+    position: absolute;
+    top: rem(5);
+    left: 50%;
+    width: rem(18);
+    height: rem(3);
+    background: $color-primary;
+    border-radius: $radius-full;
+    opacity: 0;
+    transform: translateX(-50%) scaleX(0.45);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+  }
+
   &__icon {
-    width: rem(32);
-    height: rem(28);
+    width: rem(28);
+    height: rem(24);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: $transition-fast;
+    color: inherit;
+    transition: color 0.18s ease;
 
     svg {
-      width: rem(20);
-      height: rem(20);
+      width: rem(22);
+      height: rem(22);
+      display: block;
     }
   }
 
   &__label {
-    font-size: rem(10);
-    line-height: 1;
-    font-weight: 500;
+    max-width: 100%;
+    font-size: rem(11);
+    line-height: 1.15;
+    font-weight: 600;
     white-space: nowrap;
-    letter-spacing: 0.2px;
+    letter-spacing: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     .bottom-nav__item--active & {
       font-weight: 700;
       color: $color-primary;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bottom-nav {
+    &__item,
+    &__indicator,
+    &__icon {
+      transition: none;
     }
   }
 }

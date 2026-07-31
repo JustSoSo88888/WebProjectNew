@@ -75,18 +75,31 @@
 
         <!-- ④ 功能菜单 -->
         <section class="menu-card">
-            <div v-for="item in menuItems" :key="item.key" class="menu-item"
-                :class="{ 'menu-item--danger': item.danger }" @click="handleMenu(item)" role="button"
-                :aria-label="item.label" tabindex="0" @keydown.enter="handleMenu(item)">
-                <div class="menu-icon" :style="{ background: item.iconBg }">
-                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" v-html="item.icon"></svg>
-                </div>
-                <span class="menu-label">{{ item.label }}</span>
+            <div class="profile-menu-grid">
+                <button v-for="item in normalMenuItems" :key="item.key" type="button" class="profile-menu-tile"
+                    :aria-label="item.label" @click="handleMenu(item)">
+                    <span class="menu-icon" :style="{ '--icon-bg': item.iconBg, '--icon-color': item.iconColor }">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" v-html="item.icon"></svg>
+                    </span>
+                    <span class="menu-label">{{ item.label }}</span>
+                    <svg class="menu-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <button v-if="logoutMenuItem" type="button" class="profile-menu-logout"
+                :aria-label="logoutMenuItem.label" @click="handleMenu(logoutMenuItem)">
+                <span class="menu-icon" :style="{ '--icon-bg': logoutMenuItem.iconBg, '--icon-color': logoutMenuItem.iconColor }">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" v-html="logoutMenuItem.icon"></svg>
+                </span>
+                <span class="menu-label">{{ logoutMenuItem.label }}</span>
                 <svg class="menu-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
                         stroke-linejoin="round"></path>
                 </svg>
-            </div>
+            </button>
         </section>
 
         <!-- ⑤ 语言切换弹窗 -->
@@ -209,78 +222,48 @@ const menuItems = [
     {
         key: 'settings',
         label: $lang('设置'),
-        iconBg: 'linear-gradient(135deg,#EFF6FF,#DBEAFE)',
-        icon: '<path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="#2563EB" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="#2563EB" stroke-width="1.8"/>',
+        iconBg: '#F3F4F6',
+        iconColor: '#333333',
+        icon: '<path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.8"/>',
         route: '/profile/setting',
     },
-    // {
-    //     key: 'address',
-    //     label: '地址',
-    //     iconBg: 'linear-gradient(135deg,#F0FDF4,#DCFCE7)',
-    //     icon: '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="#059669" stroke-width="1.8"/><circle cx="12" cy="10" r="3" stroke="#059669" stroke-width="1.8"/>',
-    //     route: '/profile/address',
-    // },
     {
         key: 'finance',
         label: $lang('财务记录'),
-        iconBg: 'linear-gradient(135deg,#FFF1F1,#FFD6D6)',
-        icon: '<rect x="2" y="5" width="20" height="14" rx="2" stroke="#CE0000" stroke-width="1.8"/><path d="M2 10h20" stroke="#CE0000" stroke-width="1.8"/><path d="M6 15h4M14 15h4" stroke="#CE0000" stroke-width="1.8" stroke-linecap="round"/>',
+        iconBg: '#F3F4F6',
+        iconColor: '#333333',
+        icon: '<rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M2 10h20" stroke="currentColor" stroke-width="1.8"/><path d="M6 15h4M14 15h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
         route: '/profile/finance',
     },
     {
         key: 'trade',
         label: $lang('交易记录'),
-        iconBg: 'linear-gradient(135deg,#F5F3FF,#EDE9FE)',
-        icon: '<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9l2 2 4-4" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+        iconBg: '#F3F4F6',
+        iconColor: '#525252',
+        icon: '<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
         route: '/profile/trade',
     },
-    // {
-    //     key: 'lucky',
-    //     label: $lang('幸运转盘'),
-    //     iconBg: 'linear-gradient(135deg,#FFF1F2,#FFE4E6)',
-    //     icon: '<circle cx="12" cy="12" r="10" stroke="#DC2626" stroke-width="1.8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="3" stroke="#DC2626" stroke-width="1.8"/>',
-    //     route: '/profile/lucky',
-    //     badge: 'NEW',
-    // },
-    // {
-    //     key: 'coupon',
-    //     label: $lang('优惠券'),
-    //     iconBg: 'linear-gradient(135deg,#FFECEC,#FFD6D6)',
-    //     icon: '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" stroke="#CE0000" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7" cy="7" r="1.5" fill="#CE0000"/>',
-    //     route: '/profile/coupon',
-    //     badge: '3',
-    // },
-    // {
-    //     key: 'message',
-    //     label: '信息',
-    //     iconBg: 'linear-gradient(135deg,#EFF6FF,#DBEAFE)',
-    //     icon: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#2563EB" stroke-width="1.8" stroke-linejoin="round"/>',
-    //     route: '/profile/email',
-    //     badge: '5',
-    // },
-    // {
-    //     key: 'invite',
-    //     label: $lang('邀请'),
-    //     iconBg: 'linear-gradient(135deg,#F0FDF4,#DCFCE7)',
-    //     icon: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#059669" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#059669" stroke-width="1.8"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#059669" stroke-width="1.8" stroke-linecap="round"/>',
-    //     route: '/team?tab=invite',
-    // },
     {
         key: 'lang',
         label: $lang('语言'),
-        iconBg: 'linear-gradient(135deg,#F5F3FF,#EDE9FE)',
-        icon: '<circle cx="12" cy="12" r="10" stroke="#7C3AED" stroke-width="1.8"/><path d="M12 2c-2.5 3-4 5.5-4 10s1.5 7 4 10M12 2c2.5 3 4 5.5 4 10s-1.5 7-4 10M2 12h20" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round"/>',
+        iconBg: '#F3F4F6',
+        iconColor: '#525252',
+        icon: '<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M12 2c-2.5 3-4 5.5-4 10s1.5 7 4 10M12 2c2.5 3 4 5.5 4 10s-1.5 7-4 10M2 12h20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
         action: 'lang',
     },
     {
         key: 'logout',
         label: $lang('退出登录'),
-        iconBg: 'linear-gradient(135deg,#FFF1F2,#FFE4E6)',
-        icon: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+        iconBg: '#FEF2F2',
+        iconColor: '#DC2626',
+        icon: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
         action: 'logout',
         danger: true,
     },
 ]
+
+const normalMenuItems = computed(() => menuItems.filter(item => !item.danger))
+const logoutMenuItem = computed(() => menuItems.find(item => item.danger))
 
 const handleMenu = (item) => {
     if (item.action === 'lang') {
@@ -572,65 +555,128 @@ async function copyText(text) {
 }
 
 .menu-card {
-    overflow: hidden;
+    padding: rem(12);
 }
 
-.menu-item {
-    min-height: rem(58);
+.profile-menu-grid {
     display: grid;
-    grid-template-columns: rem(38) minmax(0, 1fr) rem(16);
-    align-items: center;
-    gap: rem(12);
-    padding: rem(10) rem(14);
-    border-bottom: 1px solid $color-border-light;
-    cursor: pointer;
-    transition: background 0.15s ease;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: rem(8);
+}
 
-    &:last-child {
-        border-bottom: 0;
+.profile-menu-tile {
+    appearance: none;
+    min-height: rem(96);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) rem(16);
+    grid-template-rows: rem(42) auto;
+    align-items: center;
+    gap: rem(9);
+    padding: rem(12);
+    border: 1px solid $color-border-light;
+    border-radius: rem(8);
+    background: #FAFAFA;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+    transition: transform 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+
+    .menu-icon {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .menu-label {
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
+
+    .menu-arrow {
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: end;
     }
 
     &:active {
-        background: #FAFAFA;
+        background: #FFFFFF;
+        border-color: rgba(206, 0, 0, 0.18);
+        transform: scale(0.98);
     }
 
     &:focus-visible {
         outline: rem(2) solid rgba(206, 0, 0, 0.32);
-        outline-offset: rem(-2);
-    }
-
-    &--danger .menu-label,
-    &--danger .menu-arrow {
-        color: $color-danger;
+        outline-offset: rem(2);
     }
 }
 
 .menu-icon {
-    width: rem(38);
-    height: rem(38);
+    width: rem(42);
+    height: rem(42);
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: rem(6);
+    border-radius: rem(8);
+    background: var(--icon-bg);
+    color: var(--icon-color);
 
     svg {
-        width: rem(19);
-        height: rem(19);
+        width: rem(20);
+        height: rem(20);
     }
 }
 
 .menu-label {
     min-width: 0;
     color: $color-text-primary;
-    font-size: rem(14);
-    line-height: 1.3;
-    font-weight: 750;
+    font-size: rem(13);
+    line-height: 1.22;
+    font-weight: 850;
+    overflow-wrap: anywhere;
 }
 
 .menu-arrow {
     width: rem(16);
     height: rem(16);
     color: $color-text-muted;
+}
+
+.profile-menu-logout {
+    appearance: none;
+    width: 100%;
+    min-height: rem(52);
+    display: grid;
+    grid-template-columns: rem(38) minmax(0, 1fr) rem(16);
+    align-items: center;
+    gap: rem(12);
+    margin-top: rem(10);
+    padding: rem(7) rem(10);
+    border: 1px solid rgba(220, 38, 38, 0.12);
+    border-radius: rem(8);
+    background: #FFFFFF;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+    transition: transform 0.16s ease, background 0.16s ease;
+
+    .menu-icon {
+        width: rem(38);
+        height: rem(38);
+    }
+
+    .menu-label,
+    .menu-arrow {
+        color: $color-danger;
+    }
+
+    &:active {
+        background: #FEF2F2;
+        transform: scale(0.99);
+    }
+
+    &:focus-visible {
+        outline: rem(2) solid rgba(220, 38, 38, 0.28);
+        outline-offset: rem(2);
+    }
 }
 
 @media (max-width: 374px) {
