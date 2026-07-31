@@ -14,17 +14,12 @@
                     <span>{{ $lang('全球流量') }}</span>
                     <span>{{ $lang('收益增长') }}</span>
                 </div>
-                <div class="auth-orbit" aria-hidden="true">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
             </section>
 
             <main class="login-content">
                 <div class="login-card">
                     <h2>{{ $lang('登录') }}</h2>
-                    <p class="subtitle">{{ $lang('欢迎开启您的专属旅程') }}</p>
+                    <p class="subtitle">{{ $lang('管理流量与收益，继续增长') }}</p>
 
                     <div class="field">
                         <label>{{ $lang('手机号') }}</label>
@@ -79,11 +74,6 @@
                     </div>
                 </div>
 
-                <!-- <div class="auth-proof">
-                    <span>{{ $lang('品牌直连') }}</span>
-                    <span>{{ $lang('移动优先') }}</span>
-                    <span>{{ $lang('安全访问') }}</span>
-                </div> -->
             </main>
         </div>
     </div>

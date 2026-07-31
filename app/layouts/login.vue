@@ -67,17 +67,5 @@ const handleLangChange = (lang) => {
     height: rem(30);
     object-fit: contain;
   }
-
-  // 顶部装饰光晕
-  &::before {
-    content: '';
-    position: absolute;
-    top: -80px;
-    right: -60px;
-    width: 240px;
-    height: 240px;
-    background: radial-gradient(circle, rgba(206, 0, 0, 0.10) 0%, transparent 70%);
-    z-index: 0;
-  }
 }
 </style>
