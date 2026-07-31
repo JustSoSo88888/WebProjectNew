@@ -289,14 +289,14 @@ const menuItems = [
     //     route: '/profile/lucky',
     //     badge: 'NEW',
     // },
-    {
-        key: 'coupon',
-        label: $lang('优惠券'),
-        iconBg: 'linear-gradient(135deg,#FFECEC,#FFD6D6)',
-        icon: '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" stroke="#CE0000" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7" cy="7" r="1.5" fill="#CE0000"/>',
-        route: '/profile/coupon',
-        badge: '3',
-    },
+    // {
+    //     key: 'coupon',
+    //     label: $lang('优惠券'),
+    //     iconBg: 'linear-gradient(135deg,#FFECEC,#FFD6D6)',
+    //     icon: '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" stroke="#CE0000" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7" cy="7" r="1.5" fill="#CE0000"/>',
+    //     route: '/profile/coupon',
+    //     badge: '3',
+    // },
     // {
     //     key: 'message',
     //     label: '信息',

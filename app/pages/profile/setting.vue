@@ -3,7 +3,7 @@
         <!-- Settings List -->
         <div class="settings-list">
             <!-- 银行卡设置 -->
-            <div class="settings-group">
+            <!-- <div class="settings-group">
                 <div class="group-title">{{ $lang('支付设置') }}</div>
                 <div class="setting-item" @click="navigateTo('/profile/bankInfo')">
                     <div class="item-info">
@@ -23,7 +23,7 @@
                         </svg>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- 安全设置 -->
             <div class="settings-group">
