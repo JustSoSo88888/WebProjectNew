@@ -19,7 +19,7 @@
             <div class="profile-balance-block">
                 <div class="balance-copy">
                     <span>{{ $lang('余额') }}</span>
-                    <strong translate="no">Rs {{ formatAmount(balance) }}</strong>
+                    <strong translate="no">Rs {{ formatAmount(availableBalance) }}</strong>
                 </div>
                 <button type="button" class="balance-refresh" @click="getBalanceData" :aria-label="$lang('余额')">
                     <van-icon name="replay"></van-icon>
@@ -173,17 +173,37 @@ const getAwardTotal = () => {
 }
 
 //获取余额
+const withdrawalOrderCacheKey = 'withdrawal_orders'
 const balance = ref(0)
+const cachedWithdrawalOrders = ref([])
 const balanceData = ref({})
 const levelData = ref({
     name: ''
 })
+const pendingWithdrawalAmount = computed(() => {
+    return cachedWithdrawalOrders.value
+        .filter(order => order.status === 'processing')
+        .reduce((total, order) => total + formatAmount(order.amount), 0)
+})
+const availableBalance = computed(() => {
+    return Math.max(formatAmount(balance.value) - pendingWithdrawalAmount.value, 0)
+})
+const refreshWithdrawalOrders = () => {
+    try {
+        const cache = storage.get(withdrawalOrderCacheKey)
+        const orders = cache ? JSON.parse(cache) : []
+        cachedWithdrawalOrders.value = Array.isArray(orders) ? orders : []
+    } catch (_error) {
+        cachedWithdrawalOrders.value = []
+    }
+}
 const getBalanceData = () => {
+    refreshWithdrawalOrders()
     showLoading($lang('加载中'))
     getBalance({}).then(res => {
         hideLoading();
         if (res.success) {
-            balance.value = res.data.amount
+            balance.value = formatAmount(res.data.amount)
             balanceData.value = res.data
             handlelevelConfigList(res.data.level);
 

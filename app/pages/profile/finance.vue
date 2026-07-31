@@ -83,11 +83,9 @@
 </template>
 
 <script setup>
-import {ref, computed, watch, onMounted} from 'vue'
-import {useRoute} from '#imports'
+import {ref} from 'vue'
 import {memberRechargeOrder} from '~/api/member'
-import {bankCardList} from '~/api/member'
-import {bankCardWithdrawalList} from '~/api/withdrawal'
+import { storage } from '~/utils'
 
 definePageMeta({layout: 'second-page'})
 
@@ -100,9 +98,13 @@ const refreshing = ref(false)
 const page = ref(1)
 const rows = ref(20)
 const list = ref([])
-const activeTab = ref(1)
+const activeTab = ref(0)
+const withdrawalOrderCacheKey = 'withdrawal_orders'
 
 const getWithdrawType = (status) => {
+    if (status === 'processing') {
+        return {text: $lang('提现中'), class: 'pending'}
+    }
     if (Number(status) == 1) {
         return {text: $lang('已到达'), class: 'success'}
     } else if (Number(status) == 2) {
@@ -145,13 +147,17 @@ const onRefresh = () => {
 }
 
 const onLoad = () => {
+    if (activeTab.value == 1) {
+        loadCachedWithdrawalList()
+        return
+    }
+
     let param = {
         page: page.value,
         rows: rows.value,
     }
     showLoading($lang('加载中'))
-    let apiFn = activeTab.value == 0 ? memberRechargeOrder : bankCardWithdrawalList
-    apiFn(param).then(res => {
+    memberRechargeOrder(param).then(res => {
         hideLoading();
         refreshing.value = false
         if (res.success) {
@@ -180,7 +186,42 @@ const onLoad = () => {
     })
 }
 
-const route = useRoute()
+const loadWithdrawalOrders = () => {
+    try {
+        const cache = storage.get(withdrawalOrderCacheKey)
+        const orders = cache ? JSON.parse(cache) : []
+        return Array.isArray(orders) ? orders : []
+    } catch (_error) {
+        return []
+    }
+}
+
+const formatWithdrawOrder = (item) => {
+    return {
+        ...item,
+        order_no: item.id,
+        create_time: item.update_time,
+        status: 'processing',
+    }
+}
+
+const loadCachedWithdrawalList = () => {
+    const allOrders = loadWithdrawalOrders().map(formatWithdrawOrder)
+    const start = (page.value - 1) * rows.value
+    const dataList = allOrders.slice(start, start + rows.value)
+    if (page.value <= 1) {
+        list.value = dataList
+    } else {
+        list.value = [...list.value, ...dataList]
+    }
+    if (start + dataList.length >= allOrders.length) {
+        finished.value = true
+    } else {
+        page.value++
+    }
+    refreshing.value = false
+    loading.value = false
+}
 
 </script>
 

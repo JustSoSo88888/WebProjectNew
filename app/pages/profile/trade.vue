@@ -13,11 +13,11 @@
                         <div class="item-main">
                             <span class="col-type">{{ getType(item.type) }}</span>
                             <span class="col-amount" :class="item.change_type == 1 ? 'positive' : 'negative'">
-                                {{ item.change_type == 1 ? '+' : '-' }}Rs{{ parseFloat(item.amount) }}
+                                {{ item.change_type == 1 ? '+' : '-' }}PKR{{ parseFloat(item.amount) }}
                             </span>
                         </div>
                         <div class="item-footer">
-                            <span class="col-id">Rs{{ parseFloat(item.before_amount) }}→Rs{{
+                            <span class="col-id">PKR{{ parseFloat(item.before_amount) }}→PKR{{
                                 parseFloat(item.after_amount) }}</span>
                             <span class="col-time">{{ item.update_time }}</span>
                         </div>
@@ -53,9 +53,9 @@ const tabList = ref(
     [
         // { type: 8, label: $lang('充值') },
         { type: 7, label: $lang('注册赠送') },
-        { type: 11, label: $lang('提现') },
-        { type: 12, label: $lang('提现驳回') },
-        { type: 13, label: $lang('提现失败') },
+        // { type: 11, label: $lang('提现') },
+        // { type: 12, label: $lang('提现驳回') },
+        // { type: 13, label: $lang('提现失败') },
         // { type: 14, label: $lang('团队收益') },
         // { type: 17, label: $lang('理财收益') },
         // { type: 18, label: $lang('理财到期') },
