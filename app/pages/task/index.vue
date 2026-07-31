@@ -11,8 +11,8 @@
             stroke-dashoffset="0" />
           <defs>
             <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#d97706" />
-              <stop offset="100%" stop-color="#b45309" />
+              <stop offset="0%" stop-color="#CE0000" />
+              <stop offset="100%" stop-color="#990000" />
             </linearGradient>
           </defs>
         </svg>
@@ -200,8 +200,8 @@ const onLoad = () => {
   gap: rem(20);
   margin: rem(14);
   padding: rem(20) rem(18);
-  background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
-  border: 1px solid #FDE68A;
+  background: linear-gradient(135deg, #FFECEC 0%, #FFD6D6 100%);
+  border: 1px solid #FFB3B3;
   border-radius: $radius-xl;
   box-shadow: $shadow-md;
   position: relative;
@@ -303,7 +303,7 @@ const onLoad = () => {
 .stat-divider {
   width: 1px;
   height: rem(32);
-  background: #FDE68A;
+  background: #FFB3B3;
 }
 
 // ── Tabs ──────────────────────────────────────────────────
@@ -446,7 +446,7 @@ const onLoad = () => {
   font-size: rem(10);
   color: $color-text-muted;
   background: $color-warning-bg;
-  border: 1px solid #FDE68A;
+  border: 1px solid #FFB3B3;
   border-radius: $radius-full;
   padding: rem(1) rem(6);
 }
@@ -496,10 +496,10 @@ const onLoad = () => {
   &--active {
     background: $color-primary-bg;
     color: $color-primary;
-    border: 1.5px solid rgba(217, 119, 6, 0.25);
+    border: 1.5px solid rgba(206, 0, 0, 0.18);
 
     &:active {
-      background: #FDE68A;
+      background: #FFB3B3;
     }
   }
 

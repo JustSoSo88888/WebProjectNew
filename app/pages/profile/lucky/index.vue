@@ -366,7 +366,7 @@ const startDraw = async () => {
     color: rgba(255, 255, 255, 0.6);
 
     strong {
-        color: #d97706;
+        color: #CE0000;
         font-weight: 600;
     }
 }
@@ -401,7 +401,7 @@ const startDraw = async () => {
     align-items: flex-start;
     gap: rem(12);
     padding: rem(16);
-    background: linear-gradient(135deg, rgba(217, 119, 6, 0.15) 0%, rgba(180, 83, 9, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(206, 0, 0, 0.14) 0%, rgba(153, 0, 0, 0.1) 100%);
     border: 1px solid rgba(251, 191, 36, 0.3);
     border-radius: rem(12);
     margin-bottom: rem(24);
@@ -414,7 +414,7 @@ const startDraw = async () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    background: linear-gradient(135deg, #CE0000 0%, #990000 100%);
     border-radius: 50%;
 
     svg {
@@ -431,7 +431,7 @@ const startDraw = async () => {
 .tip-title {
     font-size: rem(15);
     font-weight: 600;
-    color: #fbbf24;
+    color: #F04444;
     margin-bottom: rem(4);
 }
 
@@ -456,7 +456,7 @@ const startDraw = async () => {
     height: 0;
     border-left: rem(16) solid transparent;
     border-right: rem(16) solid transparent;
-    border-top: rem(28) solid #d97706;
+    border-top: rem(28) solid #CE0000;
     z-index: 20;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
@@ -522,7 +522,7 @@ const startDraw = async () => {
     transform: translate(-50%, -50%);
     width: rem(80);
     height: rem(80);
-    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    background: linear-gradient(135deg, #CE0000 0%, #990000 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -530,7 +530,7 @@ const startDraw = async () => {
     font-size: rem(16);
     font-weight: 600;
     color: #fff;
-    box-shadow: 0 4px 16px rgba(217, 119, 6, 0.4);
+    box-shadow: 0 4px 16px rgba(206, 0, 0, 0.32);
     cursor: pointer;
     border: 2px solid rgba(255, 255, 255, 0.15);
     z-index: 10;
@@ -637,7 +637,7 @@ const startDraw = async () => {
 .record-prize {
     font-size: rem(14);
     font-weight: 600;
-    color: #d97706;
+    color: #CE0000;
 }
 
 .prize-modal {
@@ -665,7 +665,7 @@ const startDraw = async () => {
     transform: translate(-50%, -50%);
     width: rem(120);
     height: rem(120);
-    background: radial-gradient(circle, rgba(217, 119, 6, 0.25) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(206, 0, 0, 0.18) 0%, transparent 70%);
     animation: glowPulse 1.5s ease-in-out infinite;
 }
 
@@ -709,15 +709,15 @@ const startDraw = async () => {
 .prize-currency {
     font-size: rem(18);
     font-weight: 600;
-    color: #d97706;
+    color: #CE0000;
     margin-right: rem(3);
 }
 
 .prize-amount {
     font-size: rem(40);
     font-weight: 700;
-    color: #d97706;
-    text-shadow: 0 0 16px rgba(217, 119, 6, 0.4);
+    color: #CE0000;
+    text-shadow: 0 0 16px rgba(206, 0, 0, 0.32);
 
     &.animate {
         animation: countUp 0.5s ease-out;
@@ -747,7 +747,7 @@ const startDraw = async () => {
     font-size: rem(15);
     font-weight: 600;
     color: #fff;
-    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    background: linear-gradient(135deg, #CE0000 0%, #990000 100%);
     border: none;
     border-radius: rem(24);
     cursor: pointer;

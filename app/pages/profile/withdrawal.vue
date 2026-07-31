@@ -300,7 +300,7 @@ const handlePasswordConfirm = (password) => {
 }
 
 .balance-card {
-    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    background: linear-gradient(135deg, #CE0000 0%, #990000 100%);
     border-radius: $radius-xl;
     padding: rem(20);
     margin-bottom: rem(12);
@@ -634,12 +634,12 @@ const handlePasswordConfirm = (password) => {
     width: rem(56);
     height: rem(56);
     border-radius: 50%;
-    background: linear-gradient(135deg, #FFFBEB, #FEF3C7);
+    background: linear-gradient(135deg, #FFECEC, #FFD6D6);
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto rem(16);
-    color: #d97706;
+    color: #CE0000;
 
     svg {
         width: rem(28);

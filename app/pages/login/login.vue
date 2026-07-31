@@ -1,76 +1,90 @@
 <template>
-    <div class="page-login">
-        <!-- 背景图层 -->
+    <div class="page-login auth-page">
         <div class="bg-layer"></div>
 
-        <!-- 内容区 -->
-        <div class="login-content">
-            <!-- Logo 和品牌 -->
-            <div class="brand-section">
-                <img :src="LOGO" class="logo" alt="">
-            </div>
-
-            <!-- 登录卡片 -->
-            <div class="login-card">
-                <h2>{{ $lang('登录') }}</h2>
-                <p class="subtitle">{{ $lang('欢迎开启您的专属旅程') }}</p>
-
-                <!-- 邮箱 -->
-                <div class="field">
-                    <label>{{ $lang('手机号') }}</label>
-                    <div class="input-wrap" :class="{ focused: focus === 'phone', error: errors.phone }">
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <rect x="5" y="2" width="14" height="20" rx="2" stroke="currentColor" stroke-width="1.5" />
-                            <path d="M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                        </svg>
-                        <span class="area-code" translate="no">+{{ areaCode }}</span>
-                        <input v-model="form.phone" class="area-code-input" type="number" :placeholder="$lang('请输入手机号')" @focus="focus = 'phone'"
-                            @blur="focus = ''" />
-                    </div>
-                    <span v-if="errors.phone" class="err-msg">{{ errors.phone }}</span>
+        <div class="auth-shell">
+            <section class="auth-showcase">
+                <div class="brand-section">
+                    <img src="/brand/adsterra-logo.svg?v=2" class="logo adsterra-logo" alt="Adsterra">
                 </div>
+                <div class="auth-copy">
+                    <h1>{{ $lang('让增长更直接') }}</h1>
+                </div>
+                <div class="auth-tags">
+                    <span>{{ $lang('全球流量') }}</span>
+                    <span>{{ $lang('收益增长') }}</span>
+                </div>
+                <div class="auth-orbit" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </section>
 
-                <!-- 密码 -->
-                <div class="field">
-                    <label>{{ $lang('密码') }}</label>
-                    <div class="input-wrap" :class="{ focused: focus === 'pwd', error: errors.password }">
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5" />
-                            <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" stroke-width="1.5"
-                                stroke-linecap="round" />
-                        </svg>
-                        <input v-model="form.password" :type="showPwd ? 'text' : 'password'" :placeholder="$lang('请输入密码')"
-                            @focus="focus = 'pwd'" @blur="focus = ''" />
-                        <button class="eye-btn" @click="showPwd = !showPwd">
-                            <svg v-if="!showPwd" viewBox="0 0 24 24" fill="none">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor"
-                                    stroke-width="1.5" />
-                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5" />
+            <main class="login-content">
+                <div class="login-card">
+                    <h2>{{ $lang('登录') }}</h2>
+                    <p class="subtitle">{{ $lang('欢迎开启您的专属旅程') }}</p>
+
+                    <div class="field">
+                        <label>{{ $lang('手机号') }}</label>
+                        <div class="input-wrap" :class="{ focused: focus === 'phone', error: errors.phone }">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <rect x="5" y="2" width="14" height="20" rx="2" stroke="currentColor" stroke-width="1.5" />
+                                <path d="M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                             </svg>
-                            <svg v-else viewBox="0 0 24 24" fill="none">
-                                <path
-                                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
-                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="1.5"
+                            <span class="area-code" translate="no">+{{ areaCode }}</span>
+                            <input v-model="form.phone" class="area-code-input" type="number" :placeholder="$lang('请输入手机号')" @focus="focus = 'phone'"
+                                @blur="focus = ''" />
+                        </div>
+                        <span v-if="errors.phone" class="err-msg">{{ errors.phone }}</span>
+                    </div>
+
+                    <div class="field">
+                        <label>{{ $lang('密码') }}</label>
+                        <div class="input-wrap" :class="{ focused: focus === 'pwd', error: errors.password }">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5" />
+                                <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" stroke-width="1.5"
                                     stroke-linecap="round" />
                             </svg>
-                        </button>
+                            <input v-model="form.password" :type="showPwd ? 'text' : 'password'" :placeholder="$lang('请输入密码')"
+                                @focus="focus = 'pwd'" @blur="focus = ''" />
+                            <button class="eye-btn" @click="showPwd = !showPwd">
+                                <svg v-if="!showPwd" viewBox="0 0 24 24" fill="none">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor"
+                                        stroke-width="1.5" />
+                                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5" />
+                                </svg>
+                                <svg v-else viewBox="0 0 24 24" fill="none">
+                                    <path
+                                        d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                    <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" />
+                                </svg>
+                            </button>
+                        </div>
+                        <span v-if="errors.password" class="err-msg">{{ errors.password }}</span>
                     </div>
-                    <span v-if="errors.password" class="err-msg">{{ errors.password }}</span>
+
+                    <button class="btn-primary" :disabled="loading" @click="handleLogin">
+                        <span v-if="!loading">{{ $lang('登录') }}</span>
+                        <span v-else class="dots"><i></i><i></i><i></i></span>
+                    </button>
+
+                    <div class="bottom-link">
+                        <span>{{ $lang('没有账户') }}</span>
+                        <NuxtLink to="/login/register">{{ $lang('注册') }}</NuxtLink>
+                    </div>
                 </div>
 
-                <!-- 登录按钮 -->
-                <button class="btn-primary" :disabled="loading" @click="handleLogin">
-                    <span v-if="!loading">{{ $lang('登录') }}</span>
-                    <span v-else class="dots"><i></i><i></i><i></i></span>
-                </button>
-
-                <!-- 注册链接 -->
-                <div class="bottom-link">
-                    <span>{{ $lang('没有账户') }}</span>
-                    <NuxtLink to="/login/register">{{ $lang('注册') }}</NuxtLink>
-                </div>
-            </div>
+                <!-- <div class="auth-proof">
+                    <span>{{ $lang('品牌直连') }}</span>
+                    <span>{{ $lang('移动优先') }}</span>
+                    <span>{{ $lang('安全访问') }}</span>
+                </div> -->
+            </main>
         </div>
     </div>
 </template>
@@ -81,7 +95,6 @@ import { login } from '~/api/login';
 import { encrypt } from '~/api/AES.js';
 import { storage } from '../../utils/index';
 import md5 from 'js-md5';
-import LOGO from '../../../public/logo-transparent.png';
 definePageMeta({ layout: 'login' })
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang

@@ -179,7 +179,7 @@ const onLoad = () => {
 
     &.ongoing {
         background: $color-primary-bg;
-        color: #d97706;
+        color: #CE0000;
     }
 
     &.completed {
@@ -211,7 +211,7 @@ const onLoad = () => {
     color: $color-text-primary;
 
     &.highlight {
-        color: #d97706;
+        color: #CE0000;
     }
 
     &.profit {

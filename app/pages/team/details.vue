@@ -115,7 +115,7 @@ const onRefresh = () => {
 .stats-card {
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  background: linear-gradient(135deg, #CE0000 0%, #990000 100%);
   border-radius: $radius-xl;
   padding: rem(16) rem(12);
   box-shadow: $shadow-gold;
@@ -180,7 +180,7 @@ const onRefresh = () => {
   color: $color-text-primary;
 
   &.money {
-    color: #d97706;
+    color: #CE0000;
   }
 }
 </style>

@@ -15,7 +15,7 @@
                     <img v-if="lang.icon" :src="lang.icon" class="lang-icon" />
                     <span class="lang-name">{{ lang.label }}</span>
                     <svg v-if="currentLang === lang.id" class="lang-check" viewBox="0 0 24 24" fill="none">
-                        <path d="M20 6L9 17l-5-5" stroke="#D97706" stroke-width="2" stroke-linecap="round"
+                        <path d="M20 6L9 17l-5-5" stroke="#CE0000" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
                 </button>

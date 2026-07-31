@@ -463,18 +463,18 @@ const confirmRecharge = () => {
 // ── 充值说明 ─────────────────────────────────────────────────
 .notice-card {
     margin: rem(12) rem(16) 0;
-    background: #FFFBEB;
+    background: #FFECEC;
     border-radius: $radius-lg;
     padding: rem(14) rem(14);
     display: flex;
     gap: rem(10);
     align-items: flex-start;
-    border: rem(1) solid #FDE68A;
+    border: rem(1) solid #FFB3B3;
 }
 
 .notice-icon {
     flex-shrink: 0;
-    color: #D97706;
+    color: #CE0000;
     margin-top: rem(1);
 
     svg {

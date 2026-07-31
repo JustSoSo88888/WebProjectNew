@@ -1,98 +1,196 @@
 @use 'config' as *;
 
-// ===== 登录页布局 =====
 .page-login,
 .page-register {
   position: relative;
-  min-height: 100vh;
-  padding: rem(20);
+  min-height: 100dvh;
   overflow: hidden;
+  background: #F5F6F8;
 }
 
-// ===== 背景图层 =====
-// 📸 背景图片提示：请准备一张高端旅游场景图片
-// 建议：豪华酒店、私人飞机、游艇、或世界著名景点
-// 尺寸：至少 1920x1080px
-// 格式：JPG 或 WebP
-// 路径：将图片放在 /public/images/login-bg.jpg
+.auth-page {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
 .bg-layer {
   position: absolute;
   inset: 0;
-  background: $gradient-bg, url('../../assets/img/bg/login-bg.png') center/cover no-repeat;
   z-index: 0;
+  background:
+    linear-gradient(156deg, rgba(206, 0, 0, 0.18) 0%, rgba(255, 236, 236, 0.86) 34%, rgba(245, 246, 248, 0) 64%),
+    radial-gradient(circle at 88% 8%, rgba(206, 0, 0, 0.14) 0, transparent 28%),
+    linear-gradient(180deg, #F8D5D5 0%, #F7E4E4 34%, #F5F6F8 64%, #F5F6F8 100%);
+}
 
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 30% 50%, rgba($color-primary, 0.15) 0%, transparent 50%);
+.auth-shell {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: rem(375);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-showcase {
+  position: relative;
+  min-height: rem(190);
+  padding: rem(16) rem(24) rem(18);
+  overflow: hidden;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  .logo {
+    display: block;
+  }
+
+  .adsterra-logo {
+    width: rem(146);
+    height: auto;
+    filter: drop-shadow(0 rem(6) rem(12) rgba(153, 0, 0, 0.10));
   }
 }
 
-// ===== 内容区 =====
+.auth-copy {
+  position: relative;
+  z-index: 1;
+  margin-top: rem(38);
+  color: $color-text-primary;
+
+  h1 {
+    max-width: rem(250);
+    font-size: rem(25);
+    line-height: 1.2;
+    font-weight: 800;
+    color: $color-text-primary;
+    margin: 0;
+  }
+}
+
+.auth-tags {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: rem(8);
+  margin-top: rem(14);
+
+  span {
+    min-height: rem(32);
+    display: flex;
+    align-items: center;
+    padding: 0 rem(10);
+    border-radius: $radius-md;
+    background: rgba(255, 255, 255, 0.84);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: $shadow-xs;
+    color: $color-text-primary;
+    font-size: rem(12);
+    line-height: 1;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+}
+
+.auth-orbit {
+  position: absolute;
+  right: rem(-80);
+  top: rem(30);
+  width: rem(196);
+  height: rem(196);
+  border: 1px solid rgba(206, 0, 0, 0.16);
+  border-radius: 50%;
+  opacity: 0.82;
+
+  span {
+    position: absolute;
+    inset: rem(24);
+    border: 1px solid rgba(206, 0, 0, 0.14);
+    border-radius: 50%;
+  }
+
+  span:nth-child(2) {
+    inset: rem(54) rem(10);
+  }
+
+  span:nth-child(3) {
+    inset: rem(10) rem(54);
+  }
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 999px;
+    background: $color-primary;
+  }
+
+  &::before {
+    width: rem(8);
+    height: rem(8);
+    left: rem(44);
+    top: rem(46);
+  }
+
+  &::after {
+    width: rem(6);
+    height: rem(6);
+    right: rem(48);
+    bottom: rem(56);
+  }
+}
+
 .login-content {
   position: relative;
   z-index: 1;
   width: 100%;
-}
-
-// ===== 品牌区 =====
-.brand-section {
-  text-align: center;
+  flex: 1;
+  margin-top: rem(30);
+  padding: 0 rem(16) calc(rem(18) + env(safe-area-inset-bottom));
   display: flex;
-  justify-content: center;
-  align-items: center;
-
-
-  .logo {
-    display: block;
-    width: rem(200);
-  }
-
-  .tagline {
-    font-size: rem(14);
-    color: rgba(255, 255, 255, 0.8);
-    font-weight: 300;
-    letter-spacing: 2px;
-  }
+  flex-direction: column;
 }
 
-// ===== 登录卡片 =====
 .login-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: rem(16);
-  padding: rem(40) rem(32);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid $color-border;
+  border-radius: $radius-xl;
+  padding: rem(22) rem(16) rem(20);
+  box-shadow: 0 rem(16) rem(36) rgba(22, 24, 30, 0.10);
 
   h2 {
-    font-size: rem(26);
-    font-weight: 600;
+    font-size: rem(24);
+    line-height: 1.2;
+    font-weight: 800;
     color: $color-text-primary;
     margin-bottom: rem(6);
   }
 
   .subtitle {
-    font-size: rem(14);
+    font-size: rem(13);
+    line-height: 1.55;
     color: $color-text-secondary;
-    margin-bottom: rem(28);
+    margin-bottom: rem(20);
   }
 }
 
-// ===== 字段 =====
 .field {
-  margin-bottom: rem(20);
+  margin-bottom: rem(18);
 
   label {
     display: block;
     font-size: rem(13);
-    font-weight: 500;
-    color: $color-text-secondary;
+    font-weight: 700;
+    color: $color-text-primary;
     margin-bottom: rem(8);
   }
 }
 
-// ===== 输入框 =====
 .input-wrap {
   position: relative;
 
@@ -111,21 +209,25 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    left: rem(35);
+    left: rem(36);
+    color: $color-text-primary;
+    font-size: rem(13);
+    font-weight: 700;
   }
 
   input {
     width: 100%;
-    background: $color-bg-page;
+    height: rem(46);
+    background: #F9FAFB;
     border: 1.5px solid $color-border;
-    border-radius: rem(10);
-    padding: rem(13) rem(14) rem(13) rem(42);
+    border-radius: $radius-md;
+    padding: 0 rem(44) 0 rem(42);
     font-size: rem(14);
     color: $color-text-primary;
-    transition: all 0.2s;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 
-    &.area-code-input{
-      padding: rem(13) rem(14) rem(13) rem(65);
+    &.area-code-input {
+      padding-left: rem(68);
     }
 
     &::placeholder {
@@ -136,52 +238,57 @@
       outline: none;
       background: $color-white;
       border-color: $color-primary;
-      box-shadow: 0 0 0 3px $color-primary-glow;
+      box-shadow: 0 0 0 rem(3) $color-primary-glow;
     }
   }
 
   &.focused input {
     background: $color-white;
     border-color: $color-primary;
-    box-shadow: 0 0 0 3px $color-primary-glow;
+    box-shadow: 0 0 0 rem(3) $color-primary-glow;
   }
 
   &.error input {
     border-color: $color-danger;
-    box-shadow: 0 0 0 3px rgba($color-danger, 0.1);
+    box-shadow: 0 0 0 rem(3) rgba($color-danger, 0.10);
   }
 
   .eye-btn {
     position: absolute;
-    right: rem(14);
+    right: rem(6);
     top: 50%;
+    width: rem(38);
+    height: rem(38);
     transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    color: #94a3b8;
-    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $radius-md;
+    color: $color-text-muted;
+    transition: color 0.2s ease, background 0.2s ease;
 
-    &:hover {
-      color: $color-text-secondary;
+    &:hover,
+    &:active {
+      color: $color-primary;
+      background: $color-primary-bg;
     }
 
     svg {
       position: static;
+      width: rem(18);
+      height: rem(18);
       transform: none;
     }
   }
 }
 
-// ===== 错误提示 =====
 .err-msg {
+  display: block;
   font-size: rem(12);
   color: $color-danger;
   margin-top: rem(6);
 }
 
-// ===== 忘记密码 =====
 .forgot {
   text-align: right;
   margin-bottom: rem(24);
@@ -190,8 +297,8 @@
     font-size: rem(13);
     color: $color-primary;
     text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s;
+    font-weight: 700;
+    transition: color 0.2s ease;
 
     &:hover {
       color: $color-primary-dark;
@@ -199,36 +306,38 @@
   }
 }
 
-// ===== 主按钮 =====
 .btn-primary {
   width: 100%;
-  height: rem(48);
+  min-height: rem(46);
   background: $gradient-primary;
   color: $color-white;
   border: none;
-  border-radius: rem(10);
+  border-radius: $radius-md;
   font-size: rem(15);
-  font-weight: 600;
+  font-weight: 800;
   cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: $shadow-gold;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  box-shadow: 0 rem(8) rem(22) rgba(206, 0, 0, 0.28);
   display: flex;
   align-items: center;
   justify-content: center;
 
   &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba($color-primary, 0.5);
+    transform: translateY(rem(-1));
+    box-shadow: 0 rem(10) rem(26) rgba(206, 0, 0, 0.36);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 
   &:disabled {
-    opacity: 0.6;
+    opacity: 0.64;
     cursor: not-allowed;
     transform: none;
   }
 }
 
-// ===== 加载动画 =====
 .dots {
   display: flex;
   gap: rem(4);
@@ -251,19 +360,18 @@
   }
 }
 
-// ===== 底部链接 =====
 .bottom-link {
   text-align: center;
-  margin-top: rem(20);
+  margin-top: rem(16);
   font-size: rem(14);
   color: $color-text-secondary;
 
   a {
     color: $color-primary;
-    font-weight: 600;
+    font-weight: 800;
     margin-left: rem(6);
     text-decoration: none;
-    transition: color 0.2s;
+    transition: color 0.2s ease;
 
     &:hover {
       color: $color-primary-dark;
@@ -271,8 +379,85 @@
   }
 }
 
-@keyframes dot {
+.auth-proof {
+  margin-top: rem(18);
+  min-height: rem(64);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: rem(8);
 
+  span {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: rem(58);
+    padding: rem(10) rem(7);
+    border: 1px solid rgba(206, 0, 0, 0.10);
+    border-radius: $radius-md;
+    background: rgba(255, 255, 255, 0.76);
+    box-shadow: 0 rem(8) rem(22) rgba(22, 24, 30, 0.06);
+    color: $color-text-primary;
+    font-size: rem(12);
+    line-height: 1.25;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  span::before {
+    content: '';
+    width: rem(6);
+    height: rem(6);
+    margin-right: rem(6);
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: $color-primary;
+    box-shadow: 0 0 0 rem(4) rgba(206, 0, 0, 0.10);
+  }
+}
+
+@media (max-width: 374px) {
+  .auth-showcase {
+    min-height: rem(184);
+    padding: rem(16) rem(20) rem(16);
+  }
+
+  .auth-copy {
+    margin-top: rem(34);
+
+    h1 {
+      font-size: rem(23);
+    }
+  }
+
+  .login-card {
+    padding: rem(20) rem(16) rem(18);
+  }
+
+  .auth-proof {
+    gap: rem(6);
+
+    span {
+      padding-inline: rem(5);
+      font-size: rem(11);
+    }
+
+    span::before {
+      margin-right: rem(4);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary,
+  .input-wrap input,
+  .input-wrap .eye-btn {
+    transition: none;
+  }
+}
+
+@keyframes dot {
   0%,
   80%,
   100% {

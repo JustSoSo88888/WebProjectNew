@@ -38,20 +38,27 @@ const handleLangChange = (lang) => {
   position: relative;
   width: rem(375);
   margin: 0 auto;
-  min-height: 100vh;
-  background: #F8FAFC;
-  overflow: hidden;
+  min-height: 100dvh;
+  background: #F5F6F8;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 
   .lang-switch {
     position: absolute;
-    top: rem(15);
-    right: rem(15);
+    top: rem(8);
+    right: rem(14);
     z-index: 10;
     display: flex;
     align-items: center;
     color: $color-text-primary;
     cursor: pointer;
-    border-radius: rem(5);
+    justify-content: center;
+    width: rem(42);
+    height: rem(42);
+    border-radius: rem(12);
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 rem(8) rem(18) rgba(22, 24, 30, 0.08);
     overflow: hidden;
   }
 
@@ -69,7 +76,7 @@ const handleLangChange = (lang) => {
     right: -60px;
     width: 240px;
     height: 240px;
-    background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(206, 0, 0, 0.10) 0%, transparent 70%);
     z-index: 0;
   }
 }

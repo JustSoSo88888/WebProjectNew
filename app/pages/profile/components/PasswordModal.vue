@@ -273,11 +273,11 @@ const submit = () => {
     }
 
     &.icon-trade {
-        color: #D97706;
+        color: #CE0000;
     }
 
     &.icon-login {
-        color: #D97706;
+        color: #CE0000;
     }
 }
 

@@ -1,19 +1,30 @@
 <template>
-  <div class="page-register">
-    <!-- 背景图层 -->
+  <div class="page-register auth-page">
     <div class="bg-layer"></div>
 
-    <!-- 内容区 -->
-    <div class="login-content">
-      <!-- Logo 和品牌 -->
-      <div class="brand-section">
-        <img :src="LOGO" class="logo" alt="">
-      </div>
+    <div class="auth-shell">
+      <section class="auth-showcase">
+        <div class="brand-section">
+          <img src="/brand/adsterra-logo.svg?v=2" class="logo adsterra-logo" alt="Adsterra">
+        </div>
+        <div class="auth-copy">
+          <h1>{{ $lang('让增长更直接') }}</h1>
+        </div>
+        <div class="auth-tags">
+          <span>{{ $lang('全球流量') }}</span>
+          <span>{{ $lang('收益增长') }}</span>
+        </div>
+        <div class="auth-orbit" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </section>
 
-      <!-- 注册卡片 -->
-      <div class="login-card">
-        <h2>{{ $lang('注册') }}</h2>
-        <p class="subtitle">{{ $lang('今天就开始您的专属旅程吧') }}</p>
+      <main class="login-content">
+        <div class="login-card">
+          <h2>{{ $lang('注册') }}</h2>
+          <p class="subtitle">{{ $lang('今天就开始您的专属旅程吧') }}</p>
 
         <!-- 邮箱 -->
         <div class="field">
@@ -111,7 +122,14 @@
           <span>{{ $lang('已有账户') }}</span>
           <NuxtLink to="/login/login">{{ $lang('登录') }}</NuxtLink>
         </div>
-      </div>
+        </div>
+
+        <!-- <div class="auth-proof">
+          <span>{{ $lang('品牌直连') }}</span>
+          <span>{{ $lang('移动优先') }}</span>
+          <span>{{ $lang('安全访问') }}</span>
+        </div> -->
+      </main>
     </div>
   </div>
 </template>
@@ -122,7 +140,6 @@ import { register, login } from '~/api/login';
 import { encrypt } from '~/api/AES.js';
 import { storage } from '../../utils/index';
 import md5 from 'js-md5';
-import LOGO from '../../../public/logo-transparent.png';
 
 const route = useRoute();
 const nuxtApp = useNuxtApp()

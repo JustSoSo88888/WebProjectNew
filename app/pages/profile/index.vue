@@ -12,7 +12,7 @@
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path
                                 d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-                                fill="#F59E0B" stroke="#F59E0B" stroke-width="1" stroke-linejoin="round" />
+                                fill="#E00000" stroke="#E00000" stroke-width="1" stroke-linejoin="round" />
                         </svg>
                     </div>
                 </div>
@@ -270,8 +270,8 @@ const menuItems = [
     {
         key: 'finance',
         label: $lang('财务记录'),
-        iconBg: 'linear-gradient(135deg,#FFF7ED,#FFEDD5)',
-        icon: '<rect x="2" y="5" width="20" height="14" rx="2" stroke="#D97706" stroke-width="1.8"/><path d="M2 10h20" stroke="#D97706" stroke-width="1.8"/><path d="M6 15h4M14 15h4" stroke="#D97706" stroke-width="1.8" stroke-linecap="round"/>',
+        iconBg: 'linear-gradient(135deg,#FFF1F1,#FFD6D6)',
+        icon: '<rect x="2" y="5" width="20" height="14" rx="2" stroke="#CE0000" stroke-width="1.8"/><path d="M2 10h20" stroke="#CE0000" stroke-width="1.8"/><path d="M6 15h4M14 15h4" stroke="#CE0000" stroke-width="1.8" stroke-linecap="round"/>',
         route: '/profile/finance',
     },
     {
@@ -292,8 +292,8 @@ const menuItems = [
     {
         key: 'coupon',
         label: $lang('优惠券'),
-        iconBg: 'linear-gradient(135deg,#FFFBEB,#FEF3C7)',
-        icon: '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" stroke="#D97706" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7" cy="7" r="1.5" fill="#D97706"/>',
+        iconBg: 'linear-gradient(135deg,#FFECEC,#FFD6D6)',
+        icon: '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" stroke="#CE0000" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7" cy="7" r="1.5" fill="#CE0000"/>',
         route: '/profile/coupon',
         badge: '3',
     },
@@ -505,7 +505,7 @@ async function copyText(text) {
     }
 
     &--level {
-        background: #F59E0B;
+        background: #E00000;
         color: #fff;
     }
 }
@@ -739,7 +739,7 @@ async function copyText(text) {
     }
 
     &--dark {
-        color: #b45309;
+        color: #990000;
     }
 }
 

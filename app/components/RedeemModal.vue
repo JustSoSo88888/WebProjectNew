@@ -164,15 +164,15 @@ const goToDetail = () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+    background: linear-gradient(135deg, #FFD6D6 0%, #FFB3B3 100%);
     border-radius: 50%;
     margin-bottom: rem(16);
-    box-shadow: 0 4px 16px rgba(217, 119, 6, 0.2);
+    box-shadow: 0 4px 16px rgba(206, 0, 0, 0.18);
 
     svg {
         width: rem(36);
         height: rem(36);
-        color: #D97706;
+        color: #CE0000;
     }
 }
 
@@ -208,15 +208,15 @@ const goToDetail = () => {
     }
 
     &:focus {
-        border-color: #D97706;
-        box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+        border-color: #CE0000;
+        box-shadow: 0 0 0 3px rgba(206, 0, 0, 0.12);
     }
 }
 
 .redeem-btn {
     width: 100%;
     height: rem(48);
-    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    background: linear-gradient(135deg, #E00000 0%, #CE0000 100%);
     color: #fff;
     border: none;
     border-radius: rem(12);
@@ -224,7 +224,7 @@ const goToDetail = () => {
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.15s, box-shadow 0.15s;
-    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+    box-shadow: 0 4px 12px rgba(206, 0, 0, 0.24);
     display: flex;
     align-items: center;
     justify-content: center;

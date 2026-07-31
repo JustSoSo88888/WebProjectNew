@@ -17,8 +17,8 @@ body {
   font-size: rem(14);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  letter-spacing: -0.01em;
-  box-sizing: b;
+  letter-spacing: 0;
+  box-sizing: border-box;
 }
 
 a {
@@ -124,7 +124,8 @@ ol {
   max-width: rem(375);
   padding: rem(10) rem(16);
   background: #fff;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  border-top: 1px solid $color-border;
+  box-shadow: 0 -2px 14px rgba(0, 0, 0, 0.06);
   z-index: 10;
 }
 

@@ -189,7 +189,7 @@ function handleBuy(item) {
 // Hero Banner
 .hero-card {
   margin: rem(12) rem(14);
-  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  background: linear-gradient(135deg, #CE0000 0%, #990000 100%);
   border-radius: $radius-xl;
   padding: rem(20) rem(18);
   box-shadow: $shadow-gold;

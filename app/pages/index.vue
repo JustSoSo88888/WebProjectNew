@@ -3,7 +3,7 @@
 
         <!-- Hero Banner -->
         <div class="hero-banner">
-            <van-swipe class="hero-swipe" :autoplay="4000" indicator-color="#d97706">
+            <van-swipe class="hero-swipe" :autoplay="4000" indicator-color="#CE0000">
                 <van-swipe-item v-for="(item, index) in bannerList" :key="index">
                     <img :src="item">
                     <div class="hero-overlay"></div>
@@ -100,7 +100,7 @@
 
         <!-- 精选活动 -->
         <div class="activity-section">
-            <van-swipe class="activity-swipe" :autoplay="3000" indicator-color="#d97706">
+            <van-swipe class="activity-swipe" :autoplay="3000" indicator-color="#CE0000">
                 <van-swipe-item v-for="(item, index) in activityList" :key="index">
                     <img :src="item" alt="active" @click="previewActivity(index)">
                 </van-swipe-item>
@@ -314,8 +314,8 @@ const menuItems = [
     },
     // {
     //     label: $lang('现金礼物'),
-    //     bg: '#FFF7ED',
-    //     icon: '<path d="M20 12v10H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" stroke="#D97706" stroke-width="1.6" stroke-linejoin="round"/>',
+    //     bg: '#FFF1F1',
+    //     icon: '<path d="M20 12v10H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" stroke="#CE0000" stroke-width="1.6" stroke-linejoin="round"/>',
     //     path: 'gift'
     // },
     
@@ -630,7 +630,7 @@ const getAwardLog = () => {
         transition: opacity 0.3s;
 
         &--recharge {
-            background: linear-gradient(180deg, #F59E0B 0%, #D97706 100%);
+            background: linear-gradient(180deg, #E00000 0%, #CE0000 100%);
         }
 
         &--lucky {
@@ -695,8 +695,8 @@ const getAwardLog = () => {
     }
 
     &.qc-recharge .qc-icon {
-        background: linear-gradient(135deg, #FBBF24 0%, #D97706 50%, #B45309 100%);
-        box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
+        background: linear-gradient(135deg, #F04444 0%, #CE0000 50%, #990000 100%);
+        box-shadow: 0 6px 20px rgba(206, 0, 0, 0.32);
     }
 
     &.qc-lucky .qc-icon {
@@ -989,7 +989,7 @@ const getAwardLog = () => {
 .success-level {
     font-size: rem(20);
     font-weight: 600;
-    color: #fbbf24;
+    color: #F04444;
     animation: text-fade 0.4s ease-out 0.7s both;
 }
 

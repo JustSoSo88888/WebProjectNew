@@ -222,13 +222,13 @@ const confirmLogout = () => {
     }
 
     &.wallet-icon {
-        color: #D97706;
-        background: linear-gradient(135deg, #FFF7ED, #FFEDD5);
+        color: #CE0000;
+        background: linear-gradient(135deg, #FFF1F1, #FFD6D6);
     }
 
     &.security-icon {
-        color: #D97706;
-        background: linear-gradient(135deg, #FFFBEB, #FEF3C7);
+        color: #CE0000;
+        background: linear-gradient(135deg, #FFECEC, #FFD6D6);
     }
 
     &.logout-icon {

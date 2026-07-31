@@ -311,7 +311,7 @@ const goToRecord = () => {
 
 // ── Product Header ──────────────────────────────────────────
 .product-header {
-    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    background: linear-gradient(135deg, #CE0000 0%, #990000 100%);
     padding: rem(16);
     display: flex;
     gap: rem(16);

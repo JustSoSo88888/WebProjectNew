@@ -197,7 +197,7 @@ const tabs = [
 const teamGroups = ref([
   {
     name: $lang('A团队'),
-    color: 'linear-gradient(135deg, #d97706, #FBBF24)',
+    color: 'linear-gradient(135deg, #CE0000, #F04444)',
     number: 0,
     taskIncome: 0,
     referralIncome: 0,
@@ -207,7 +207,7 @@ const teamGroups = ref([
   },
   {
     name: $lang('B团队'),
-    color: 'linear-gradient(135deg, #b45309, #d97706)',
+    color: 'linear-gradient(135deg, #990000, #CE0000)',
     number: 0,
     taskIncome: 0,
     referralIncome: 0,
@@ -268,7 +268,7 @@ function generateQR() {
   QRCode.toCanvas(qrCanvas.value, inviteInfo.value.link, {
     width: 160,
     margin: 1,
-    color: { dark: '#d97706', light: '#FFFBEB' },
+    color: { dark: '#CE0000', light: '#FFECEC' },
   })
 }
 
@@ -291,7 +291,7 @@ async function copyText(text, type) {
 
 .hero-card {
   margin: rem(12) rem(14);
-  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  background: linear-gradient(135deg, #CE0000 0%, #990000 100%);
   border-radius: $radius-xl;
   padding: rem(20) rem(18);
   box-shadow: $shadow-gold;

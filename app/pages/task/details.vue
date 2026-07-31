@@ -242,7 +242,7 @@ onMounted(() => {
     }
 
     &:not(&--disabled) {
-        background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #f59e0b 100%);
+        background: linear-gradient(135deg, #E00000 0%, #F04444 50%, #E00000 100%);
         box-shadow: 0 4px 20px rgba(251, 191, 36, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
         animation: btnPulse 2s ease-in-out infinite;
 
@@ -382,7 +382,7 @@ onMounted(() => {
     position: absolute;
     width: rem(8);
     height: rem(8);
-    background: #fbbf24;
+    background: #F04444;
     border-radius: 50%;
     top: 50%;
     left: 50%;
@@ -476,13 +476,13 @@ onMounted(() => {
     .currency {
         font-size: rem(20);
         font-weight: 600;
-        color: #fbbf24;
+        color: #F04444;
     }
 
     .value {
         font-size: rem(48);
         font-weight: 900;
-        color: #fbbf24;
+        color: #F04444;
         text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
     }
 }
