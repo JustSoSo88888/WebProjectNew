@@ -22,7 +22,8 @@
             </div>
 
             <div v-if="showSuccess" class="success-modal" @click="closeShow">
-                <div class="success-card">
+                <div class="success-card" role="dialog" aria-modal="true" @click.stop>
+                    <div class="success-card-brand"></div>
                     <div class="particles">
                         <span v-for="i in 12" :key="i" class="particle" :style="{ '--delay': i * 0.1 + 's' }"></span>
                     </div>
@@ -41,6 +42,7 @@
                         <span class="value">{{ incomeAmount }}</span>
                     </div>
                     <div class="success-desc">{{ $lang('奖励已发放到您的账户') }}</div>
+                    <button type="button" class="success-close-hint" @click="closeShow">{{ $lang('我知道了') }}</button>
                 </div>
             </div>
         </div>
@@ -242,8 +244,8 @@ onMounted(() => {
     }
 
     &:not(&--disabled) {
-        background: linear-gradient(135deg, #E00000 0%, #F04444 50%, #E00000 100%);
-        box-shadow: 0 4px 20px rgba(251, 191, 36, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        background: #F01414;
+        box-shadow: 0 rem(10) rem(24) rgba(240, 20, 20, 0.22);
         animation: btnPulse 2s ease-in-out infinite;
 
         &:active {
@@ -290,17 +292,16 @@ onMounted(() => {
 }
 
 .success-modal {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.85);
+    position: fixed;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(4px);
-    animation: modalFade 0.4s ease;
+    padding: rem(24);
+    background: rgba(22, 24, 30, 0.56);
+    backdrop-filter: blur(8px);
+    z-index: 50;
+    animation: modalFade 0.22s ease-out;
 }
 
 @keyframes modalFade {
@@ -315,44 +316,51 @@ onMounted(() => {
 
 .success-card {
     position: relative;
-    width: rem(280);
-    padding: rem(40) rem(30);
-    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
-    border-radius: rem(24);
+    width: min(100%, rem(318));
+    min-height: rem(348);
+    padding: rem(34) rem(24) rem(22);
+    background: #FFFFFF;
+    border: 1px solid rgba(206, 0, 0, 0.08);
+    border-radius: rem(12);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: rem(12);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(251, 191, 36, 0.2);
-    animation: cardPop 0.5s ease;
+    box-shadow: 0 rem(22) rem(56) rgba(0, 0, 0, 0.22);
+    animation: cardPop 0.26s ease-out;
     overflow: hidden;
+}
+
+.success-card-brand {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: rem(7);
+    background: linear-gradient(90deg, #CE0000 0%, #F04444 52%, #303030 100%);
 }
 
 @keyframes cardPop {
     0% {
-        transform: scale(0.8);
+        transform: translateY(rem(18)) scale(0.96);
         opacity: 0;
     }
 
-    50% {
-        transform: scale(1.05);
-    }
-
     100% {
-        transform: scale(1);
+        transform: translateY(0) scale(1);
         opacity: 1;
     }
 }
 
 .glow-bg {
     position: absolute;
-    top: 50%;
+    top: rem(46);
     left: 50%;
     transform: translate(-50%, -50%);
-    width: rem(200);
-    height: rem(200);
-    background: radial-gradient(circle, rgba(251, 191, 36, 0.3) 0%, transparent 70%);
-    animation: glowPulse 2s ease-in-out infinite;
+    width: rem(178);
+    height: rem(178);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(206, 0, 0, 0.12) 0%, rgba(206, 0, 0, 0) 70%);
+    pointer-events: none;
 }
 
 @keyframes glowPulse {
@@ -372,21 +380,22 @@ onMounted(() => {
 .particles {
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: rem(150);
     top: 0;
     left: 0;
     pointer-events: none;
+    overflow: hidden;
 }
 
 .particle {
     position: absolute;
-    width: rem(8);
-    height: rem(8);
-    background: #F04444;
+    width: rem(5);
+    height: rem(5);
+    background: rgba(206, 0, 0, 0.28);
     border-radius: 50%;
-    top: 50%;
+    top: rem(78);
     left: 50%;
-    animation: particleOut 1s ease-out forwards;
+    animation: particleOut 0.82s ease-out forwards;
     animation-delay: var(--delay);
 
     @for $i from 1 through 12 {
@@ -409,8 +418,10 @@ onMounted(() => {
 }
 
 .success-icon {
-    width: rem(80);
-    height: rem(80);
+    width: rem(82);
+    height: rem(82);
+    margin-top: rem(8);
+    margin-bottom: rem(18);
     position: relative;
     z-index: 1;
 }
@@ -418,17 +429,17 @@ onMounted(() => {
 .icon-circle {
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #22c55e, #16a34a);
+    background: linear-gradient(135deg, #CE0000 0%, #F04444 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
-    animation: iconPop 0.5s ease 0.2s both;
+    box-shadow: 0 rem(14) rem(28) rgba(206, 0, 0, 0.24);
+    animation: iconPop 0.32s ease-out 0.08s both;
 
     svg {
-        width: rem(40);
-        height: rem(40);
+        width: rem(42);
+        height: rem(42);
         color: #fff;
     }
 }
@@ -460,39 +471,86 @@ onMounted(() => {
 }
 
 .success-text {
-    font-size: rem(16);
-    color: rgba(255, 255, 255, 0.7);
     position: relative;
     z-index: 1;
+    color: #333333;
+    font-size: rem(17);
+    line-height: 1.3;
+    font-weight: 900;
 }
 
 .success-amount {
     display: flex;
     align-items: baseline;
-    gap: rem(4);
+    justify-content: center;
+    gap: rem(6);
+    width: 100%;
+    margin-top: rem(12);
+    padding: rem(14) rem(12);
+    border-radius: rem(8);
+    background: #FFF1F1;
+    border: 1px solid rgba(206, 0, 0, 0.08);
     position: relative;
     z-index: 1;
 
     .currency {
-        font-size: rem(20);
-        font-weight: 600;
-        color: #F04444;
+        color: #CE0000;
+        font-size: rem(17);
+        line-height: 1;
+        font-weight: 850;
     }
 
     .value {
-        font-size: rem(48);
+        color: #CE0000;
+        font-size: rem(42);
+        line-height: 0.95;
         font-weight: 900;
-        color: #F04444;
-        text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+        overflow-wrap: anywhere;
     }
 }
 
 .success-desc {
-    font-size: rem(12);
-    color: rgba(255, 255, 255, 0.5);
-    margin-top: rem(8);
     position: relative;
     z-index: 1;
+    margin-top: rem(14);
+    max-width: rem(230);
     text-align: center;
+    color: #4A4A4A;
+    font-size: rem(13);
+    line-height: 1.55;
+}
+
+.success-close-hint {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-height: rem(45);
+    margin-top: rem(22);
+    border-radius: rem(4);
+    background: #303030;
+    color: #FFFFFF;
+    font-size: rem(14);
+    font-weight: 850;
+    cursor: pointer;
+    transition: transform 0.16s ease, background 0.16s ease;
+
+    &:active {
+        transform: scale(0.98);
+        background: #1F1F1F;
+    }
+}
+
+@media (max-width: 374px) {
+    .success-modal {
+        padding: rem(18);
+    }
+
+    .success-card {
+        padding-inline: rem(20);
+    }
+
+    .success-amount .value {
+        font-size: rem(36);
+    }
 }
 </style>
