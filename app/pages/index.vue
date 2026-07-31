@@ -23,8 +23,7 @@
 
         <main class="adsterra-source-sections">
             <section class="source-video">
-                <video :poster="adsterraAssets.videoPoster" :src="adsterraAssets.video" controls playsinline
-                    preload="none"></video>
+                <img :src="adsterraAssets.video" alt="">
             </section>
 
             <section class="source-awards" aria-label="Adsterra awards">
@@ -35,7 +34,7 @@
 
             <section class="source-benefits">
                 <h2>{{ $lang('Adsterra 助力合作伙伴实现长期收益增长') }}</h2>
-                <div ref="benefitsTrack" class="source-benefit-track" @scroll="handleCarouselScroll('benefits', $event)">
+                <div ref="benefitsTrack" class="source-benefit-track" @scroll="handleBenefitScroll">
                     <article v-for="item in benefitItems" :key="item.title" class="source-benefit-card">
                         <div class="source-benefit-icon">
                             <svg viewBox="0 0 24 24" fill="none" v-html="item.icon"></svg>
@@ -48,7 +47,7 @@
                     <button v-for="(_, index) in benefitItems" :key="index" type="button"
                         :class="{ 'is-active': activeBenefitIndex === index }"
                         :aria-label="`${$lang('跳转')} ${index + 1}`"
-                        @click="scrollCarouselTo('benefits', index)"></button>
+                        @click="scrollBenefitTo(index)"></button>
                 </div>
             </section>
 
@@ -56,7 +55,7 @@
                 <img :src="adsterraAssets.mediaKit" alt="" class="source-mediakit-img">
                 <h2>{{ $lang('查看资料包，获取更多信息。') }}</h2>
                 <div class="source-link-actions">
-                    <a :href="adsterraLinks.advertiserPdf" target="_blank" rel="noopener">
+                    <a @click="navigateTo('./chat')" target="_blank" rel="noopener">
                         <svg viewBox="0 0 24 24" fill="none">
                             <path d="M12 4v10" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" />
                             <path d="m8 10 4 4 4-4" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"
@@ -65,7 +64,7 @@
                         </svg>
                         {{ $lang('广告主') }}
                     </a>
-                    <a :href="adsterraLinks.publisherPdf" target="_blank" rel="noopener">
+                    <a @click="navigateTo('./chat')"target="_blank" rel="noopener">
                         <svg viewBox="0 0 24 24" fill="none">
                             <path d="M12 4v10" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" />
                             <path d="m8 10 4 4 4-4" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"
@@ -76,12 +75,6 @@
                     </a>
                 </div>
             </section>
-
-            
-
-           
-
-            
         </main>
 
         <LangModal v-model="showLang" v-model:currentLang="currentLang" @change="handleLangChange" />
@@ -112,22 +105,12 @@ const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
 
 const adsterraAssets = {
-    video: 'https://framerusercontent.com/assets/prCBP2yrJTbBFbbbEhtv4N8YtZg.mp4',
-    videoPoster: 'https://framerusercontent.com/images/YR3IEdzQSU0eXBHtPe6JJkw8btk.webp?width=1280&height=720',
-    award: 'https://framerusercontent.com/images/8NTV69EKrCje7IgeuoEn3ioj5w.png?width=300&height=300',
-    mediaKit: 'https://framerusercontent.com/images/XN1ZVJmuM0UCIUqamhZaRFMvof8.webp?width=1268&height=1168',
-    growth: 'https://framerusercontent.com/images/aXzJD6HQlALPMXLL8P9j8xFEek0.png?width=1200&height=956',
-    format: 'https://framerusercontent.com/images/WWApTvvgR2ThiHZjKms0ac6jSO8.webp?width=768&height=588',
-    popunderFormat: 'https://framerusercontent.com/images/KxLejJXN4R0GXH94JCT5W9lMDuo.webp?width=768&height=588',
-    socialBarFormat: 'https://framerusercontent.com/images/TrRIVBCGAMyMiYpaTE5sYUeZDuY.webp?width=768&height=588',
+    video: '/brand/336081.png',
+    videoPoster: '/brand/adsterra-landing-video-poster.webp',
+    award: '/brand/adsterra-award-top-traffic.png',
+    mediaKit: '/brand/adsterra-mediakit.webp',
 }
 
-const adsterraLinks = {
-    advertiserPdf: 'https://framerusercontent.com/assets/fVdrtwT1o8CDqlSU54wVhJVtwHM.pdf',
-    publisherPdf: 'https://framerusercontent.com/assets/PfuVYiWan9VlczIFrlR4Fsog.pdf',
-    advertiserSignup: 'https://beta.partners.adsterra.com/signup/',
-    publisherSignup: 'https://beta.publishers.adsterra.com/signup',
-}
 
 const actionItems = [
     {
@@ -183,53 +166,8 @@ const benefitItems = [
     },
 ]
 
-const formatSlides = [
-    {
-        title: 'In-Page Push',
-        subtitle: $lang('简洁且友好的浏览器通知'),
-        image: adsterraAssets.format,
-        items: [
-            $lang('取代传统流量推送的最先进替代方案'),
-            $lang('无需用户许可，广告可在所有操作系统和浏览器上运行。'),
-            $lang('CPM, Smart CPM, CPA Goal 或者 CPA Pricing'),
-        ]
-    },
-    {
-        title: 'Popunder',
-        subtitle: $lang('广告优惠会在新的浏览器标签页中打开。'),
-        image: adsterraAssets.popunderFormat,
-        items: [
-            $lang('每月118亿次广告展示'),
-            $lang('广告直接投放给高意向受众。'),
-            $lang('CPM, Smart CPM, CPA Goal 或者 CPA Pricing'),
-        ]
-    },
-    {
-        title: 'Social Bar',
-        subtitle: $lang('用户体验友好的广告可在移动和桌面浏览器上运行。'),
-        image: adsterraAssets.socialBarFormat,
-        items: [
-            $lang('非侵入式广告，月均9.9亿次展示。'),
-            $lang('专有创意广告，点击率高达30%。'),
-            $lang('CPM, Smart CPM, CPA Goal 或者 CPA Pricing'),
-        ]
-    },
-]
-
 const benefitsTrack = ref(null)
-const formatsTrack = ref(null)
 const activeBenefitIndex = ref(0)
-const activeFormatIndex = ref(0)
-
-const carouselRefs = {
-    benefits: benefitsTrack,
-    formats: formatsTrack,
-}
-
-const activeCarouselIndexes = {
-    benefits: activeBenefitIndex,
-    formats: activeFormatIndex,
-}
 
 const getCarouselIndex = (element) => {
     const firstItem = element?.children?.[0]
@@ -240,21 +178,19 @@ const getCarouselIndex = (element) => {
     return Math.round(element.scrollLeft / slideStep)
 }
 
-const handleCarouselScroll = (type, event) => {
-    const activeIndex = activeCarouselIndexes[type]
-    if (!activeIndex) return
-    activeIndex.value = getCarouselIndex(event.currentTarget)
+const handleBenefitScroll = (event) => {
+    activeBenefitIndex.value = getCarouselIndex(event.currentTarget)
 }
 
-const scrollCarouselTo = (type, index) => {
-    const element = carouselRefs[type]?.value
+const scrollBenefitTo = (index) => {
+    const element = benefitsTrack.value
     const target = element?.children?.[index]
     if (!element || !target) return
     element.scrollTo({
         left: target.offsetLeft - element.offsetLeft,
         behavior: 'smooth'
     })
-    activeCarouselIndexes[type].value = index
+    activeBenefitIndex.value = index
 }
 </script>
 
@@ -459,8 +395,7 @@ const scrollCarouselTo = (type, index) => {
     }
 }
 
-.source-mediakit,
-.source-join {
+.source-mediakit {
     margin: 0 rem(39) rem(42);
     min-height: rem(248);
     display: flex;
@@ -480,8 +415,7 @@ const scrollCarouselTo = (type, index) => {
     margin-bottom: rem(13);
 }
 
-.source-mediakit h2,
-.source-join h2 {
+.source-mediakit h2 {
     margin: 0;
     font-size: rem(18);
     line-height: 1.35;
@@ -516,163 +450,6 @@ const scrollCarouselTo = (type, index) => {
     }
 }
 
-.source-growth,
-.source-formats {
-    padding: 0 rem(22);
-    margin-bottom: rem(54);
-}
-
-.source-section-copy {
-    margin-bottom: rem(24);
-
-    h2 {
-        margin: 0 0 rem(16);
-        color: $color-text-primary;
-        font-size: rem(24);
-        line-height: 1.25;
-        font-weight: 900;
-    }
-
-    p {
-        margin: 0;
-        color: $color-text-secondary;
-        font-size: rem(15);
-        line-height: 1.62;
-    }
-}
-
-.source-growth img {
-    width: 100%;
-    display: block;
-    border-radius: rem(14);
-}
-
-.source-formats {
-    h2 {
-        margin: 0 auto rem(26);
-        max-width: rem(250);
-        text-align: center;
-        color: $color-text-primary;
-        font-size: rem(22);
-        line-height: 1.28;
-        font-weight: 900;
-    }
-}
-
-.source-format-track {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-}
-
-.source-format-slide {
-    flex: 0 0 100%;
-    scroll-snap-align: start;
-
-    img {
-        width: rem(288);
-        display: block;
-        margin: rem(24) auto rem(18);
-        object-fit: contain;
-    }
-}
-
-.source-format-tabs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: rem(4);
-    min-height: rem(42);
-    padding: rem(3);
-    margin-bottom: rem(48);
-    border-radius: rem(24);
-    background: #F5F5F5;
-
-    button {
-        border-radius: rem(20);
-        color: $color-text-primary;
-        font-size: rem(14);
-        font-weight: 850;
-
-        &.is-active {
-            background: #303030;
-            color: $color-white;
-        }
-    }
-}
-
-.source-format-copy {
-    h3 {
-        margin: 0 0 rem(7);
-        text-align: center;
-        color: $color-primary;
-        font-size: rem(16);
-        line-height: 1.25;
-        font-weight: 900;
-    }
-
-    > p {
-        margin: 0 0 rem(14);
-        text-align: center;
-        color: $color-text-muted;
-        font-size: rem(14);
-        line-height: 1.35;
-    }
-
-    ul {
-        display: grid;
-        gap: rem(9);
-        margin-bottom: rem(20);
-    }
-
-    li {
-        position: relative;
-        padding-left: rem(30);
-        color: $color-text-secondary;
-        font-size: rem(14);
-        line-height: 1.45;
-
-        &::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: rem(2);
-            width: rem(18);
-            height: rem(18);
-            border: rem(2) solid $color-primary;
-            border-radius: 50%;
-        }
-
-        &::after {
-            content: '';
-            position: absolute;
-            left: rem(6);
-            top: rem(8);
-            width: rem(7);
-            height: rem(4);
-            border-left: rem(2) solid $color-primary;
-            border-bottom: rem(2) solid $color-primary;
-            transform: rotate(-45deg);
-        }
-    }
-
-    a {
-        min-width: rem(94);
-        min-height: rem(38);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: max-content;
-        margin: 0 auto;
-        padding: 0 rem(18);
-        border: 1px solid rgba(51, 51, 51, 0.35);
-        border-radius: rem(5);
-        color: $color-text-secondary;
-        font-size: rem(14);
-        font-weight: 650;
-    }
-}
-
 .source-dots {
     display: flex;
     justify-content: center;
@@ -686,35 +463,6 @@ const scrollCarouselTo = (type, index) => {
 
         &.is-active {
             background: #777777;
-        }
-    }
-}
-
-.source-join {
-    align-items: flex-start;
-    min-height: rem(260);
-    margin: 0 rem(30);
-    padding: rem(38) rem(50);
-    border-radius: rem(20);
-    text-align: left;
-
-    h2 {
-        font-size: rem(22);
-    }
-
-    p {
-        margin: rem(12) 0 0;
-        color: $color-white;
-        font-size: rem(14);
-        line-height: 1.65;
-        font-weight: 650;
-    }
-
-    .source-link-actions {
-        justify-content: flex-start;
-
-        a {
-            min-width: rem(124);
         }
     }
 }
@@ -740,13 +488,5 @@ const scrollCarouselTo = (type, index) => {
         flex-basis: rem(304);
     }
 
-    .source-join {
-        padding-inline: rem(42);
-    }
-
-    .source-join .source-link-actions a {
-        min-width: rem(112);
-        font-size: rem(13);
-    }
 }
 </style>
