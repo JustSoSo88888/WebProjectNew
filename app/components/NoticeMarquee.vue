@@ -15,7 +15,7 @@
                         {{ replaceMap($lang('****9000邀请3级新用户佣金：100 ABCD'), {
                             "****9000": String(item.phone).slice(0, 2) + '***' + String(item.phone).slice(-2),
                             "3": item.level,
-                            "100":'PKR ' +item.amount
+                            "100":'Rs ' +item.amount
                         }) }}
                     </span>
                 </template>

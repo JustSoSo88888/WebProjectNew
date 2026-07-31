@@ -4,7 +4,7 @@
         <div class="balance-card">
             <div class="balance-label">{{ $lang('余额') }}</div>
             <div class="balance-amount" translate="no">
-                <span class="currency">PKR</span>
+                <span class="currency">Rs</span>
                 <span class="amount">{{ balance }}</span>
             </div>
         </div>
@@ -17,7 +17,7 @@
             </div>
             <div class="fee-item">
                 <span class="fee-label">{{ $lang('最低提现金额') }}</span>
-                <span class="fee-value" translate="no">PKR {{ minAmount }}</span>
+                <span class="fee-value" translate="no">Rs {{ minAmount }}</span>
             </div>
         </div>
 
@@ -61,14 +61,14 @@
                 <template v-for="preset in amountPresets" :key="preset">
                     <button v-if="parseFloat(preset.amount) > minAmount" class="preset-btn"
                         :class="{ active: selectedAmount == preset.amount }" @click="selectAmount(preset.amount)">
-                        PKR {{ parseFloat(preset.amount) }}
+                        Rs {{ parseFloat(preset.amount) }}
                     </button>
                 </template>
             </div>
 
             <!-- Custom Amount Input -->
             <div class="custom-amount">
-                <span class="prefix">PKR</span>
+                <span class="prefix">Rs</span>
                 <input v-model="customAmount" type="number" class="amount-input" :placeholder="$lang('请输入金额')"
                     @input="onCustomInput" />
             </div>
@@ -77,7 +77,7 @@
         <!-- Actual Amount -->
         <div class="actual-amount" v-if="actualAmount > 0">
             <span class="label" translate="no">{{ $lang('实际到账金额') }}</span>
-            <span class="value">PKR {{ actualAmount.toFixed(2) }}</span>
+            <span class="value">Rs {{ actualAmount.toFixed(2) }}</span>
         </div>
 
 

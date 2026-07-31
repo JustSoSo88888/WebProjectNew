@@ -11,7 +11,7 @@
         </div>
         <div class="hero-divider"></div>
         <div class="hero-stat">
-          <div class="hero-stat-val" translate="no">PKR {{ teamData.total_award_amount }}</div>
+          <div class="hero-stat-val" translate="no">Rs {{ teamData.total_award_amount }}</div>
           <div class="hero-stat-label">{{ $lang('团队收入') }}</div>
         </div>
         <div class="hero-divider"></div>
@@ -53,11 +53,11 @@
             <div class="group-stat-label">{{ $lang('注册人数') }}</div>
           </div>
           <div class="group-stat">
-            <div class="group-stat-val" translate="no">PKR {{ group.taskIncome }}</div>
+            <div class="group-stat-val" translate="no">Rs {{ group.taskIncome }}</div>
             <div class="group-stat-label">{{ $lang('任务收入') }}</div>
           </div>
           <div class="group-stat">
-            <div class="group-stat-val" translate="no">PKR {{ group.referralIncome }}</div>
+            <div class="group-stat-val" translate="no">Rs {{ group.referralIncome }}</div>
             <div class="group-stat-label">{{ $lang('推荐收入') }}</div>
           </div>
         </div>

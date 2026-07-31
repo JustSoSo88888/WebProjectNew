@@ -38,7 +38,7 @@
       <div class="wallet-row">
         <div class="wallet-label">{{ $lang('余额') }}</div>
         <div class="wallet-amount">
-          <span class="wallet-unit">PKR</span>
+          <span class="wallet-unit">Rs</span>
           <span class="wallet-num" translate="no">{{ balance }}</span>
         </div>
       </div>
@@ -46,12 +46,12 @@
       <!-- 收益统计 -->
       <div class="earnings-row">
         <div class="earning-item">
-          <div class="earning-val" translate="no">PKR {{ totalEarnings }}</div>
+          <div class="earning-val" translate="no">Rs {{ totalEarnings }}</div>
           <div class="earning-label">{{ $lang('总收益') }}</div>
         </div>
         <div class="earning-divider"></div>
         <div class="earning-item">
-          <div class="earning-val earning-val--today" translate="no">+PKR {{ todayEarnings }}</div>
+          <div class="earning-val earning-val--today" translate="no">+Rs {{ todayEarnings }}</div>
           <div class="earning-label">{{ $lang('今日收益') }}</div>
         </div>
       </div>
@@ -85,7 +85,7 @@
           <div class="product-bottom">
             <div class="product-stat">
               <span class="stat-label">{{ $lang('最低存款') }}</span>
-              <span class="stat-val" translate="no">PKR {{ parseFloat(item.min_amount) }}</span>
+              <span class="stat-val" translate="no">Rs {{ parseFloat(item.min_amount) }}</span>
             </div>
             <div class="product-progress-wrap">
               <div class="progress-info">

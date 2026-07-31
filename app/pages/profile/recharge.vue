@@ -3,51 +3,69 @@
 
         <!-- ① 当前余额 -->
         <div class="balance-card">
-            <div class="balance-label">{{ $lang('当前余额') }}</div>
-            <div class="balance-amount">
-                <span class="balance-unit">PKR</span>
-                <span class="balance-value">{{ balance }}</span>
+            <div>
+                <div class="balance-label">{{ $lang('当前余额') }}</div>
+                <div class="balance-amount" translate="no">
+                    <span class="balance-unit">Rs</span>
+                    <span class="balance-value">{{ formatMoney(balance) }}</span>
+                </div>
+            </div>
+            <div class="balance-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor"
+                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
             </div>
         </div>
 
-        <!-- ② 充值金额 -->
-        <div class="section-card">
-            <div class="section-title">{{ $lang('充值金额') }}</div>
-            <div class="preset-grid">
-                <template v-for="(item, index) in amountPresets" :key="index">
-                    <button class="preset-btn"
-                        :class="{ active: selectedAmount === parseFloat(item.amount) && !customActive }"
-                        @click="selectPreset(parseFloat(item.amount))"
-                        v-if="parseFloat(item.amount) >= parseFloat(minAmount) && parseFloat(item.amount) <= parseFloat(maxAmount)">
-                        <span class="preset-unit">PKR</span>{{ parseFloat(item.amount) }}
-                    </button>
-                </template>
-
-            </div>
-            <div class="input-wrap" :class="{ focused: inputFocused }">
-                <span class="input-prefix">PKR</span>
-                <input v-model="customAmount" type="number" inputmode="decimal" class="amount-input"
-                    :placeholder="$lang('输入其他金额')" @focus="onInputFocus" @blur="inputFocused = false" @input="onCustomInput" />
-            </div>
-        </div>
-
-        <!-- ③ 充值方式 -->
-        <div class="section-card">
-            <div class="section-title">{{ $lang('充值方式') }}</div>
-            <div class="channel-list">
-                <button v-for="channel in channels" :key="channel.id" class="channel-item"
-                    :class="{ active: selectedChannel === channel.id }" @click="handleSelectedChannel(channel)">
-                    <div class="channel-info">
-                        <div class="channel-name">{{ channel.channel }}</div>
-                        <div class="channel-range" translate="">PKR{{ parseFloat(channel.min_amount) }}-PKR{{
-                            parseFloat(channel.max_amount) }}</div>
-                    </div>
-                    <div class="channel-radio">
-                        <div class="radio-inner" v-if="selectedChannel === channel.id" />
-                    </div>
+        <!-- ② 支付方式 -->
+        <section class="recharge-section">
+            <div class="section-title">{{ $lang('支付方式') }}</div>
+            <div class="recharge-method-grid">
+                <button v-for="method in fixedPaymentMethods" :key="method.key" type="button"
+                    class="recharge-method-card" :class="{ active: selectedPaymentKey === method.key }"
+                    @click="handleSelectedPayment(method)">
+                    <span class="channel-logo">
+                        <img v-if="fixedLogo(method)" :src="fixedLogo(method)" :alt="method.label">
+                        <span v-else>{{ method.shortName }}</span>
+                    </span>
+                    <span class="method-name">{{ method.label }}</span>
+                    <span v-if="method.badge" class="reco-badge">{{ method.badge }}</span>
                 </button>
             </div>
-        </div>
+        </section>
+
+        <!-- ③ 充值渠道 -->
+        <section class="recharge-section">
+            <div class="section-title">{{ $lang('充值渠道') }}</div>
+            <div class="deposit-channel-grid">
+                <button v-for="channel in activeDepositChannels" :key="channel.key" type="button"
+                    class="deposit-channel-card" :class="{ active: selectedDepositKey === channel.key }"
+                    @click="handleSelectedDeposit(channel)">
+                    <span class="method-name">{{ channel.label }}</span>
+                    <span v-if="channel.badge" class="reco-badge">{{ channel.badge }}</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ④ 充值金额 -->
+        <section class="amount-panel">
+            <div class="preset-grid">
+                <button v-for="item in visibleAmountPresets" :key="item.amount" type="button" class="preset-btn"
+                    :class="{ active: selectedAmount === safeNumber(item.amount) && !customActive }"
+                    @click="selectPreset(safeNumber(item.amount))">
+                    <span class="preset-amount" translate="no">{{ formatMoney(item.amount) }}</span>
+                    <!-- <span v-if="presetBonus(item)" class="preset-bonus" translate="no">+{{ formatMoney(presetBonus(item)) }}{{ $lang('赠送') }}</span> -->
+                </button>
+            </div>
+
+            <label class="input-wrap" :class="{ focused: inputFocused }">
+                <span class="input-prefix">Rs</span>
+                <input v-model="customAmount" type="number" inputmode="decimal" class="amount-input"
+                    :placeholder="amountRangePlaceholder" @focus="onInputFocus" @blur="inputFocused = false"
+                    @input="onCustomInput" />
+            </label>
+        </section>
 
         <!-- ④ 底部说明 -->
         <!-- <div class="notice-card">
@@ -65,7 +83,7 @@
         <!-- ⑤ 确认充值按钮 -->
         <div class="submit-wrap">
             <button class="submit-btn" :disabled="!canSubmit" @click="handleSubmit">
-                {{ $lang('确认充值') }}
+                {{ $lang('立即充值') }}
             </button>
         </div>
 
@@ -93,6 +111,7 @@ import { navigateTo } from '#imports'
 import { getBalance, getCoinAddress, memberRecharge } from '~/api/member'
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
+const $dialog = nuxtApp.$dialog
 definePageMeta({
     layout: 'second-page',
     pageTransition: { name: 'slide-left', mode: 'out-in' },
@@ -120,7 +139,32 @@ const handleGetBalance = () => {
 }
 
 //获取充值信息
-const amountPresets = ref([])
+const fixedAmountPresets = [
+    { amount: 100, bonus: 0 },
+    { amount: 200, bonus: 7 },
+    { amount: 500, bonus: 37 },
+    { amount: 1000, bonus: 77 },
+    { amount: 2000, bonus: 77 },
+    { amount: 3000, bonus: 117 },
+    { amount: 5000, bonus: 217 },
+    { amount: 10000, bonus: 377 },
+    { amount: 50000, bonus: 1777 },
+]
+const fixedPaymentMethods = [
+    { key: 'jazzcash', label: 'JazzCash', shortName: 'JC', logo: '/brand/JazzCash.jpg', matchNames: ['jazzcash'], badge: 'RECO' },
+    { key: 'easypaisa', label: 'Easypaisa', shortName: 'EP', logo: '/brand/Easypaisa.jpg', matchNames: ['easypaisa'], badge: 'RECO' },
+]
+const fixedDepositChannels = [
+    { key: 'hot-u2', label: 'Hot U2', matchNames: ['hotu2', 'u2'], badge: 'RECO' },
+    { key: 'hot-wd', label: 'Hot WD', matchNames: ['hotwd', 'wd'], badge: 'RECO' },
+    { key: 'hot-kb', label: 'Hot KB', matchNames: ['hotkb', 'kb'], badge: 'RECO' },
+]
+const fixedDepositChannelsByPayment = {
+    jazzcash: fixedDepositChannels,
+    easypaisa: fixedDepositChannels.slice(0, 1),
+}
+const fixedRechargeMinAmount = 100
+const fixedRechargeMaxAmount = 50000
 const minAmount = ref(0)
 const maxAmount = ref(0)
 const handleGetCoinAddress = () => {
@@ -128,13 +172,8 @@ const handleGetCoinAddress = () => {
     getCoinAddress({}).then(res => {
         hideLoading();
         if (res.success) {
-            amountPresets.value = res.data.amount_configs
             channels.value = res.data.token_channels || []
-            if (channels.value.length > 0) {
-                selectedChannel.value = res.data.token_channels[0].id
-                minAmount.value = res.data.token_channels[0].min_amount
-                maxAmount.value = res.data.token_channels[0].max_amount
-            }
+            syncSelectedChannel()
 
         } else {
             showMsg(res.message, 'fail')
@@ -153,6 +192,86 @@ const handleSelectedChannel = (channel) => {
     customAmount.value = ''
 }
 
+const normalizeChannelName = (value) => {
+    return String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '')
+}
+
+const matchesFixedItem = (channel, fixedItem) => {
+    if (!channel || !fixedItem) return false
+    const matchNames = fixedItem.matchNames.map(normalizeChannelName)
+    const channelName = normalizeChannelName(channel.channel)
+    return matchNames.some(name => channelName.includes(name))
+}
+
+const resolveFixedChannel = (fixedDeposit, fixedPayment = fixedPaymentMethods.find(item => item.key === selectedPaymentKey.value)) => {
+    return channels.value.find(channel => matchesFixedItem(channel, fixedPayment) && matchesFixedItem(channel, fixedDeposit))
+        || channels.value.find(channel => matchesFixedItem(channel, fixedDeposit))
+        || channels.value.find(channel => matchesFixedItem(channel, fixedPayment))
+}
+
+const syncSelectedChannel = () => {
+    const selectedPayment = fixedPaymentMethods.find(item => item.key === selectedPaymentKey.value)
+    const selectedDeposit = activeDepositChannels.value.find(item => item.key === selectedDepositKey.value) || activeDepositChannels.value[0]
+    if (selectedDeposit && selectedDeposit.key !== selectedDepositKey.value) {
+        selectedDepositKey.value = selectedDeposit.key
+    }
+    const matchedChannel = resolveFixedChannel(selectedDeposit, selectedPayment) || channels.value[0]
+    if (matchedChannel) {
+        handleSelectedChannel(matchedChannel)
+    }
+}
+
+const handleSelectedPayment = (method) => {
+    selectedPaymentKey.value = method.key
+    const firstDeposit = activeDepositChannels.value[0]
+    if (firstDeposit) {
+        selectedDepositKey.value = firstDeposit.key
+    }
+    syncSelectedChannel()
+}
+
+const handleSelectedDeposit = (channel) => {
+    selectedDepositKey.value = channel.key
+    syncSelectedChannel()
+}
+
+const safeNumber = (value) => {
+    const number = Number.parseFloat(value)
+    return Number.isFinite(number) ? number : 0
+}
+
+const formatMoney = (value) => {
+    return safeNumber(value).toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    })
+}
+
+const amountRangePlaceholder = computed(() => {
+    return `${formatMoney(fixedRechargeMinAmount)} - ${formatMoney(fixedRechargeMaxAmount)}`
+})
+
+const visibleAmountPresets = computed(() => {
+    return fixedAmountPresets
+})
+
+const activeDepositChannels = computed(() => {
+    return fixedDepositChannelsByPayment[selectedPaymentKey.value] || fixedDepositChannels
+})
+
+const presetBonus = (item) => {
+    return safeNumber(item.bonus || item.bonus_amount || item.award_amount || item.gift_amount || item.give_amount)
+}
+
+const channelLogo = (channel) => {
+    return channel.logo || channel.logo_url || channel.image || channel.image_url || channel.icon || ''
+}
+
+const fixedLogo = (fixedItem) => {
+    const channel = resolveFixedChannel(fixedItem)
+    return fixedItem.logo || (channel ? channelLogo(channel) : '')
+}
+
 
 // 选中状态
 const selectedAmount = ref(null)
@@ -164,6 +283,8 @@ const inputFocused = ref(false)
 const channels = ref([])
 
 const selectedChannel = ref(0)
+const selectedPaymentKey = ref('jazzcash')
+const selectedDepositKey = ref('hot-u2')
 
 // 选中快捷金额
 const selectPreset = (amt) => {
@@ -181,9 +302,9 @@ const onInputFocus = () => {
 
 const onCustomInput = () => {
     // 检查输入金额是否与预设金额匹配
-    const matchedPreset = amountPresets.value.find(item => parseFloat(item.amount) === parseFloat(customAmount.value))
+    const matchedPreset = fixedAmountPresets.find(item => safeNumber(item.amount) === safeNumber(customAmount.value))
     if (matchedPreset) {
-        selectedAmount.value = parseFloat(matchedPreset.amount)
+        selectedAmount.value = safeNumber(matchedPreset.amount)
         customActive.value = false
     } else {
         selectedAmount.value = null
@@ -196,24 +317,33 @@ const finalAmount = computed(() => {
     return selectedAmount.value
 })
 
-const canSubmit = computed(() => !!finalAmount.value && finalAmount.value >= parseFloat(minAmount.value) && finalAmount.value <= parseFloat(maxAmount.value))
+const canSubmit = computed(() => !!finalAmount.value && finalAmount.value >= fixedRechargeMinAmount && finalAmount.value <= fixedRechargeMaxAmount)
 
 const handleSubmit = async () => {
-    if (!canSubmit.value) return
-    showLoading($lang('加载中'))
-    let params = {
-        amount: finalAmount.value,
-        token_channel_id: selectedChannel.value,
-        home_url: window.location.origin
-    }
-    let res = await memberRecharge(params)
-    hideLoading();
-    if (res.success) {
-        paymentUrl.value = res.data.paymentInfo
-        showRechargeConfirm.value = true
-    } else {
-        showMsg(res.message, 'fail')
-    }
+    $dialog.confirm({
+            title: $lang('提示'),
+            message: $lang('请联系客服进行充值。'),
+            confirmText: $lang('确认'),
+            cancelText: $lang('取消')
+        }).then(() => {
+            navigateTo('/chat')
+        }).catch(() => {
+        })
+    // if (!canSubmit.value) return
+    // showLoading($lang('加载中'))
+    // let params = {
+    //     amount: finalAmount.value,
+    //     token_channel_id: selectedChannel.value,
+    //     home_url: window.location.origin
+    // }
+    // let res = await memberRecharge(params)
+    // hideLoading();
+    // if (res.success) {
+    //     paymentUrl.value = res.data.paymentInfo
+    //     showRechargeConfirm.value = true
+    // } else {
+    //     showMsg(res.message, 'fail')
+    // }
 }
 
 const showRechargeConfirm = ref(false)
@@ -225,272 +355,309 @@ const confirmRecharge = () => {
 </script>
 
 <style scoped lang="scss">
+@use '~/assets/scss/config' as *;
+
 .recharge-page {
     min-height: 100vh;
-    background: $color-bg-page;
-    padding-bottom: rem(100);
+    background: #F5F6F8;
+    padding: rem(12) rem(16) rem(98);
 }
 
-// ── 余额卡片 ─────────────────────────────────────────────────
 .balance-card {
-    margin: rem(12) rem(16);
-    padding: rem(20) rem(20);
-    background: $gradient-primary;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-md;
-    text-align: center;
+    min-height: rem(88);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(14);
+    padding: rem(16);
+    border: 1px solid rgba(206, 0, 0, 0.12);
+    border-radius: rem(8);
+    background: $color-white;
+    box-shadow: 0 rem(8) rem(18) rgba(31, 31, 31, 0.04);
 }
 
 .balance-label {
+    color: $color-text-muted;
     font-size: rem(12);
-    color: rgba(255, 255, 255, 0.8);
-    margin-bottom: rem(6);
+    line-height: 1;
+    font-weight: 750;
 }
 
 .balance-amount {
     display: flex;
     align-items: baseline;
-    justify-content: center;
-    gap: rem(4);
+    gap: rem(5);
+    margin-top: rem(9);
 }
 
 .balance-unit {
-    font-size: rem(18);
-    font-weight: 600;
-    color: #fff;
+    color: $color-primary;
+    font-size: rem(13);
+    line-height: 1;
+    font-weight: 850;
 }
 
 .balance-value {
-    font-size: rem(32);
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: -0.5px;
+    color: $color-text-primary;
+    font-size: rem(28);
+    line-height: 1.05;
+    font-weight: 900;
 }
 
-// ── 通用 Section 卡片 ─────────────────────────────────────────
-.section-card {
-    margin: rem(12) rem(16) 0;
-    background: #fff;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-sm;
-    padding: rem(16);
+.balance-mark {
+    width: rem(42);
+    height: rem(42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: rem(8);
+    background: $color-primary-bg;
+    color: $color-primary;
+    flex-shrink: 0;
+
+    svg {
+        width: rem(22);
+        height: rem(22);
+    }
+}
+
+.recharge-section {
+    margin-top: rem(16);
 }
 
 .section-title {
-    font-size: rem(14);
-    font-weight: 600;
+    margin-bottom: rem(10);
     color: $color-text-primary;
-    margin-bottom: rem(14);
+    font-size: rem(14);
+    line-height: 1.2;
+    font-weight: 900;
 }
 
-// ── 快捷金额网格 ─────────────────────────────────────────────
-.preset-grid {
+.recharge-method-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: rem(10);
-    margin-bottom: rem(14);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: rem(8);
 }
 
-.preset-btn {
-    padding: rem(12) 0;
-    border-radius: $radius-md;
-    font-size: rem(15);
-    font-weight: 600;
-    background: $color-bg-page;
-    color: $color-text-secondary;
+.recharge-method-card,
+.deposit-channel-card {
+    appearance: none;
+    position: relative;
+    min-width: 0;
+    min-height: rem(68);
+    display: flex;
+    align-items: center;
+    gap: rem(10);
+    padding: rem(12);
+    border: 1px solid $color-border-light;
+    border-radius: rem(8);
+    background: $color-white;
+    color: $color-text-primary;
+    text-align: left;
+    font: inherit;
     cursor: pointer;
-    border: rem(1.5) solid $color-border;
-    transition: $transition-fast;
-    text-align: center;
-
-    .preset-unit {
-        font-size: rem(12);
-        font-weight: 400;
-        margin-right: rem(1);
-    }
+    transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
 
     &.active {
-        background: $color-primary-bg;
-        color: $color-primary;
         border-color: $color-primary;
-        box-shadow: 0 0 0 rem(1) $color-primary;
+        background: $color-primary-bg;
+        box-shadow: 0 0 0 rem(1) rgba(206, 0, 0, 0.08);
     }
 
     &:active {
-        opacity: 0.8;
+        transform: scale(0.98);
+    }
+
+    &:focus-visible {
+        outline: rem(2) solid rgba(206, 0, 0, 0.28);
+        outline-offset: rem(2);
     }
 }
 
-// ── 手动输入框 ───────────────────────────────────────────────
-.input-wrap {
+.channel-logo {
+    width: rem(40);
+    height: rem(40);
     display: flex;
     align-items: center;
-    border: rem(1.5) solid $color-border;
-    border-radius: $radius-md;
-    padding: rem(12) rem(14);
-    transition: border-color 0.2s;
-    background: $color-bg-page;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: rem(6);
+    background: #F3F4F6;
+    color: $color-primary;
+    font-size: rem(16);
+    font-weight: 900;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: rem(4);
+        box-sizing: border-box;
+        background: $color-white;
+    }
+}
+
+.method-name {
+    min-width: 0;
+    color: $color-text-primary;
+    font-size: rem(13);
+    line-height: 1.2;
+    font-weight: 850;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.reco-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: rem(40);
+    height: rem(18);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 rem(6);
+    border-radius: 0 rem(7) 0 rem(7);
+    background: $color-primary;
+    color: $color-white;
+    font-size: rem(9);
+    line-height: 1;
+    font-weight: 900;
+}
+
+.deposit-channel-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: rem(8);
+}
+
+.deposit-channel-card {
+    min-height: rem(50);
+    padding-right: rem(44);
+
+    .method-name {
+        white-space: normal;
+    }
+}
+
+.amount-panel {
+    margin-top: rem(16);
+    padding: rem(12);
+    border: 1px solid rgba(206, 0, 0, 0.14);
+    border-radius: rem(8);
+    background: $color-white;
+}
+
+.preset-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: rem(8);
+}
+
+.preset-btn {
+    appearance: none;
+    min-width: 0;
+    min-height: rem(60);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: rem(3);
+    padding: rem(8) rem(4);
+    border: 1px solid $color-border-light;
+    border-radius: rem(8);
+    background: #FAFAFA;
+    color: $color-text-primary;
+    font: inherit;
+    cursor: pointer;
+    transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+
+    &.active {
+        border-color: $color-primary;
+        background: $color-primary-bg;
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    &:focus-visible {
+        outline: rem(2) solid rgba(206, 0, 0, 0.28);
+        outline-offset: rem(2);
+    }
+}
+
+.preset-amount {
+    max-width: 100%;
+    color: $color-text-primary;
+    font-size: rem(14);
+    line-height: 1.05;
+    font-weight: 900;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.preset-bonus {
+    max-width: 100%;
+    color: $color-primary;
+    font-size: rem(10);
+    line-height: 1.1;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.input-wrap {
+    min-height: rem(58);
+    display: flex;
+    align-items: center;
+    gap: rem(7);
+    margin-top: rem(12);
+    padding: 0 rem(14);
+    border: 1px solid $color-border;
+    border-radius: rem(8);
+    background: $color-white;
+    transition: border-color 0.16s ease, box-shadow 0.16s ease;
 
     &.focused {
         border-color: $color-primary;
-        background: #fff;
-
-        input{
-            border-color:  transparent !important;
-        }
+        box-shadow: 0 0 0 rem(3) rgba(206, 0, 0, 0.08);
     }
 }
 
 .input-prefix {
-    font-size: rem(18);
-    font-weight: 600;
-    color: $color-text-muted;
-    margin-right: rem(6);
+    color: $color-primary;
+    font-size: rem(15);
     line-height: 1;
+    font-weight: 900;
 }
 
 .amount-input {
+    min-width: 0;
     flex: 1;
-    border: none;
-    outline: none;
-    font-size: rem(18);
-    font-weight: 600;
-    color: $color-text-primary;
+    border: 0;
+    outline: 0;
     background: transparent;
+    color: $color-text-primary;
+    font-size: rem(16);
+    font-weight: 800;
     padding: 0 !important;
 
     &::placeholder {
-        color: $color-text-placeholder;
-        font-weight: 400;
-        font-size: rem(14);
+        color: #8FA0BD;
+        font-weight: 800;
     }
-    
 
-    // 隐藏数字输入框箭头
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
         -webkit-appearance: none;
     }
 }
 
-.input-wrap:focus{
-    border-color: transparent !important;
-}
-
-// ── 充值通道 ─────────────────────────────────────────────────
-.channel-list {
-    display: flex;
-    flex-direction: column;
-    gap: rem(10);
-}
-
-.channel-item {
-    display: flex;
-    align-items: center;
-    gap: rem(12);
-    padding: rem(14) rem(14);
-    border-radius: $radius-md;
-    border: rem(1.5) solid $color-border;
-    cursor: pointer;
-    transition: $transition-fast;
-    text-align: left;
-
-    &.active {
-        border-color: $color-primary;
-        background: $color-primary-bg;
-    }
-
-    &:active {
-        opacity: 0.85;
-    }
-}
-
-.channel-icon {
-    width: rem(40);
-    height: rem(40);
-    border-radius: $radius-md;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-
-    svg {
-        width: rem(20);
-        height: rem(20);
-    }
-}
-
-.channel-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.channel-name {
-    font-size: rem(14);
-    font-weight: 600;
-    color: $color-text-primary;
-    margin-bottom: rem(3);
-}
-
-.channel-range {
-    font-size: rem(12);
-    color: $color-text-muted;
-}
-
-.channel-radio {
-    width: rem(20);
-    height: rem(20);
-    border-radius: 50%;
-    border: rem(2) solid $color-border;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: border-color 0.2s;
-
-    .channel-item.active & {
-        border-color: $color-primary;
-    }
-}
-
-.radio-inner {
-    width: rem(10);
-    height: rem(10);
-    border-radius: 50%;
-    background: $color-primary;
-}
-
-// ── 充值说明 ─────────────────────────────────────────────────
-.notice-card {
-    margin: rem(12) rem(16) 0;
-    background: #FFECEC;
-    border-radius: $radius-lg;
-    padding: rem(14) rem(14);
-    display: flex;
-    gap: rem(10);
-    align-items: flex-start;
-    border: rem(1) solid #FFB3B3;
-}
-
-.notice-icon {
-    flex-shrink: 0;
-    color: #CE0000;
-    margin-top: rem(1);
-
-    svg {
-        width: rem(16);
-        height: rem(16);
-    }
-}
-
-.notice-text {
-    font-size: rem(12);
-    color: #92400E;
-    line-height: 1.7;
-    margin: 0;
-}
-
-// ── 底部确认按钮 ─────────────────────────────────────────────
 .submit-wrap {
     position: fixed;
     bottom: 0;
@@ -498,47 +665,49 @@ const confirmRecharge = () => {
     transform: translateX(-50%);
     width: 100%;
     max-width: rem(375);
-    padding: rem(12) rem(16) calc(rem(12) + env(safe-area-inset-bottom));
-    background: #fff;
-    box-shadow: 0 rem(-1) rem(8) rgba(0, 0, 0, 0.06);
+    padding: rem(12) rem(16) calc(rem(12) + env(safe-area-inset-bottom, 0px));
+    background: rgba(255, 255, 255, 0.96);
+    border-top: 1px solid $color-border-light;
+    box-shadow: 0 rem(-8) rem(24) rgba(31, 31, 31, 0.08);
+    box-sizing: border-box;
 }
 
 .submit-btn {
     width: 100%;
-    padding: rem(14) 0;
-    border-radius: $radius-md;
-    background: $gradient-primary;
-    color: #fff;
+    min-height: rem(50);
+    border-radius: rem(8);
+    background: $color-primary;
+    color: $color-white;
     font-size: rem(16);
-    font-weight: 600;
+    font-weight: 900;
     cursor: pointer;
-    transition: opacity 0.2s;
+    transition: transform 0.16s ease, opacity 0.16s ease, background 0.16s ease;
 
     &:disabled {
-        opacity: 0.45;
+        opacity: 0.42;
         cursor: not-allowed;
+        background: #A3A3A3;
     }
 
     &:not(:disabled):active {
-        opacity: 0.9;
+        transform: scale(0.99);
     }
 }
 
 .upgrade-success-modal {
-    background: #fff;
-    border-radius: rem(20);
-    padding: rem(40) rem(50);
-    text-align: center;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(16, 185, 129, 0.3);
-    border: 1px solid rgba(16, 185, 129, 0.3);
     width: rem(300);
+    padding: rem(34) rem(26);
+    border-radius: rem(12);
+    background: $color-white;
+    text-align: center;
+    box-shadow: 0 rem(20) rem(50) rgba(0, 0, 0, 0.22);
     box-sizing: border-box;
 }
 
 .success-icon {
-    width: rem(80);
-    height: rem(80);
-    margin: 0 auto rem(20);
+    width: rem(66);
+    height: rem(66);
+    margin: 0 auto rem(18);
 
     svg {
         width: 100%;
@@ -547,10 +716,11 @@ const confirmRecharge = () => {
 }
 
 .success-title {
-    font-size: rem(20);
-    font-weight: 600;
-    color: #333;
     margin-bottom: rem(20);
+    color: $color-text-primary;
+    font-size: rem(18);
+    line-height: 1.35;
+    font-weight: 850;
 }
 
 .confirm-btn-wrap {
@@ -559,17 +729,31 @@ const confirmRecharge = () => {
 }
 
 .confirm-btn {
+    min-width: rem(132);
+    min-height: rem(44);
+    border-radius: rem(8);
     background: $color-primary;
-    color: #fff;
-    border: none;
-    border-radius: rem(25);
-    padding: rem(12) rem(40);
-    font-size: rem(16);
-    font-weight: 600;
+    color: $color-white;
+    font-size: rem(15);
+    font-weight: 850;
     cursor: pointer;
 
     &:active {
         opacity: 0.9;
+    }
+}
+
+@media (max-width: 374px) {
+    .recharge-page {
+        padding-inline: rem(12);
+    }
+
+    .preset-amount {
+        font-size: rem(16);
+    }
+
+    .method-name {
+        font-size: rem(12);
     }
 }
 </style>

@@ -19,7 +19,7 @@
             <div class="profile-balance-block">
                 <div class="balance-copy">
                     <span>{{ $lang('余额') }}</span>
-                    <strong translate="no">PKR {{ formatAmount(balance) }}</strong>
+                    <strong translate="no">Rs {{ formatAmount(balance) }}</strong>
                 </div>
                 <button type="button" class="balance-refresh" @click="getBalanceData" :aria-label="$lang('余额')">
                     <van-icon name="replay"></van-icon>
@@ -50,23 +50,23 @@
                     <div class="earnings-grid">
                         <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('昨日收入') }}</div>
-                            <div class="earnings-val" translate="no">PKR {{ formatAmount(awardTotalData.yesterday_income) }}</div>
+                            <div class="earnings-val" translate="no">Rs {{ formatAmount(awardTotalData.yesterday_income) }}</div>
                         </div>
                         <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('今日收入') }}</div>
-                            <div class="earnings-val" translate="no">PKR {{ formatAmount(awardTotalData.today_income) }}</div>
+                            <div class="earnings-val" translate="no">Rs {{ formatAmount(awardTotalData.today_income) }}</div>
                         </div>
                         <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('7日收入') }}</div>
-                            <div class="earnings-val" translate="no">PKR {{ formatAmount(awardTotalData.week_income) }}</div>
+                            <div class="earnings-val" translate="no">Rs {{ formatAmount(awardTotalData.week_income) }}</div>
                         </div>
                         <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('本月收入') }}</div>
-                            <div class="earnings-val" translate="no">PKR {{ formatAmount(awardTotalData.month_income) }}</div>
+                            <div class="earnings-val" translate="no">Rs {{ formatAmount(awardTotalData.month_income) }}</div>
                         </div>
                         <div class="earnings-item earnings-item--full">
                             <div class="earnings-label">{{ $lang('总收入') }}</div>
-                            <div class="earnings-val earnings-val--total" translate="no">PKR {{ formatAmount(awardTotalData.total_income) }}</div>
+                            <div class="earnings-val earnings-val--total" translate="no">Rs {{ formatAmount(awardTotalData.total_income) }}</div>
                         </div>
                     </div>
                 </Transition>

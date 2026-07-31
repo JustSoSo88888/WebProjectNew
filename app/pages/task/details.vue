@@ -38,7 +38,7 @@
                     </div>
                     <div class="success-text">{{ $lang('恭喜获得') }}</div>
                     <div class="success-amount">
-                        <span class="currency">PKR</span>
+                        <span class="currency">Rs</span>
                         <span class="value">{{ incomeAmount }}</span>
                     </div>
                     <div class="success-desc">{{ $lang('奖励已发放到您的账户') }}</div>

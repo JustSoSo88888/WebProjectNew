@@ -13,11 +13,11 @@
                         <div class="item-main">
                             <span class="col-type">{{ getType(item.type) }}</span>
                             <span class="col-amount" :class="item.change_type == 1 ? 'positive' : 'negative'">
-                                {{ item.change_type == 1 ? '+' : '-' }}PKR{{ parseFloat(item.amount) }}
+                                {{ item.change_type == 1 ? '+' : '-' }}Rs{{ parseFloat(item.amount) }}
                             </span>
                         </div>
                         <div class="item-footer">
-                            <span class="col-id">PKR{{ parseFloat(item.before_amount) }}→PKR{{
+                            <span class="col-id">Rs{{ parseFloat(item.before_amount) }}→Rs{{
                                 parseFloat(item.after_amount) }}</span>
                             <span class="col-time">{{ item.update_time }}</span>
                         </div>

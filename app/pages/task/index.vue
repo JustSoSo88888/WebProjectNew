@@ -73,7 +73,7 @@
                       <span>{{ $lang('收益') }}</span>
                       <strong class="reward-amount"
                         :class="task.status == 1 ? 'reward-amount--success' : 'reward-amount--warning'"
-                        translate="no">PKR {{ formatAmount(task.income_amount) }}</strong>
+                        translate="no">Rs {{ formatAmount(task.income_amount) }}</strong>
                     </div>
                     <button type="button" class="task-btn" :disabled="task.status == 1"
                       :class="task.status == 1 ? 'task-btn--done' : 'task-btn--active'" @click.stop="toDetails(task)">
