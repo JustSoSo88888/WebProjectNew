@@ -23,11 +23,11 @@ export default defineNuxtConfig({
         pageTransition: { name: 'slide-left', mode: 'out-in' },
         // 全局 <head> 配置
         head: {
-            title: 'Nova Travel',
+            title: 'Adsterra Ads Platform | A Leading Global Advertising Network Connecting You with Premium Worldwide Traffic',
             charset: 'utf-8',
             viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
             meta: [
-                { name: 'description', content: 'NovaTravel Application' },
+                { name: 'description', content: 'Launch your advertising campaigns and maximize your revenue with the Adsterra advertising network. Reach targeted audiences worldwide, boost app installs and website traffic, and achieve higher ROI. Buy high-quality, high-converting global traffic or monetize your website and blog with our powerful ad solutions.' },
                 { name: 'theme-color', content: '#ffffff' },
             ],
             link: [

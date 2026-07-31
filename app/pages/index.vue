@@ -2,14 +2,35 @@
     <div class="home">
         <header class="home-header">
             <img src="/brand/adsterra-logo.svg" alt="Adsterra" class="home-logo">
-            <ConnectionStatus></ConnectionStatus>
+            <button type="button" class="home-service-btn" :aria-label="$lang('客服')" @click="navigateTo('/chat')">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 13a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <path d="M5 13h2.5v5H6.8A2.8 2.8 0 0 1 4 15.2v-.4A1.8 1.8 0 0 1 5 13ZM19 13h-2.5v5h.7a2.8 2.8 0 0 0 2.8-2.8v-.4A1.8 1.8 0 0 0 19 13Z"
+                        stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                    <path d="M16 19c-.75 1.25-2.1 2-4 2" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                </svg>
+            </button>
         </header>
 
         <section class="adsterra-hero">
+            <button type="button" class="home-balance-card" :aria-label="$lang('余额')" @click="handleGetBalance">
+                <span class="home-balance-copy">
+                    <span>{{ $lang('余额') }}</span>
+                    <strong translate="no">Rs {{ formatMoney(availableBalance) }}</strong>
+                </span>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M20 12a8 8 0 0 1-13.7 5.6M4 12A8 8 0 0 1 17.7 6.4" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" />
+                    <path d="M18 3v4h-4M6 21v-4h4" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+
             <div class="ad-network-content">
                 <h2>{{ $lang('值得信赖的广告网络') }}</h2>
                 <h3>{{ $lang('与可靠的合作伙伴共赢增长，带来看得见的收益') }}</h3>
-                <p>{{ $lang('购买全球广告流量，精准触达来自中国、印度、印尼、菲律宾、孟加拉国、巴西、墨西哥、美国等248地区的线上目标人群') }}</p>
+                <p>{{ $lang('购买全球广告流量，精准触达来自巴基斯坦、印度、印尼、菲律宾、孟加拉国、巴西、墨西哥、美国等248地区的线上目标人群') }}</p>
             </div>
 
             <div class="home-action-grid">
@@ -82,13 +103,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { navigateTo } from '#imports'
 import LangModal from '~/components/LangModal.vue'
+import { getBalance } from '~/api/member'
 import { storage } from '~/utils'
 
 const currentLang = ref(storage.get('locale') || 'pt')
 const showLang = ref(false)
+const withdrawalOrderCacheKey = 'withdrawal_orders'
+const balance = ref(0)
+const cachedWithdrawalOrders = ref([])
 const handleLangChange = (lang) => {
     if (currentLang.value == lang) return;
     storage.set('locale', lang)
@@ -103,6 +128,56 @@ definePageMeta({
 })
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
+
+onMounted(() => {
+    refreshWithdrawalOrders()
+    handleGetBalance()
+})
+
+const safeNumber = (value) => {
+    const number = Number.parseFloat(value)
+    return Number.isFinite(number) ? number : 0
+}
+
+const formatMoney = (value) => {
+    return safeNumber(value).toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    })
+}
+
+const pendingWithdrawalAmount = computed(() => {
+    return cachedWithdrawalOrders.value
+        .filter(order => order.status === 'processing')
+        .reduce((total, order) => total + safeNumber(order.amount), 0)
+})
+
+const availableBalance = computed(() => {
+    return Math.max(balance.value - pendingWithdrawalAmount.value, 0)
+})
+
+const refreshWithdrawalOrders = () => {
+    try {
+        const cache = storage.get(withdrawalOrderCacheKey)
+        const orders = cache ? JSON.parse(cache) : []
+        cachedWithdrawalOrders.value = Array.isArray(orders) ? orders : []
+    } catch (_error) {
+        cachedWithdrawalOrders.value = []
+    }
+}
+
+const handleGetBalance = () => {
+    refreshWithdrawalOrders()
+    getBalance({}).then(res => {
+        if (res.success) {
+            balance.value = safeNumber(res.data.amount)
+        } else {
+            showMsg(res.message, 'fail')
+        }
+    }).catch(error => {
+        showMsg(error.message, 'fail')
+    })
+}
 
 const adsterraAssets = {
     video: '/brand/336081.png',
@@ -218,11 +293,83 @@ const scrollBenefitTo = (index) => {
     height: auto;
 }
 
+.home-service-btn {
+    width: rem(40);
+    height: rem(40);
+    border-radius: 50%;
+    background: #FFF1F1;
+    color: $color-primary;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.18s ease;
+
+    svg {
+        width: rem(22);
+        height: rem(22);
+    }
+
+    &:active {
+        transform: scale(0.96);
+        background: #FFE4E4;
+    }
+}
+
 .adsterra-hero {
     position: relative;
-    padding: rem(48) rem(22) rem(32);
+    padding: rem(72) rem(22) rem(32);
     background: linear-gradient(180deg, #F7BFC2 0%, #FBE3E4 100%);
     overflow: hidden;
+}
+
+.home-balance-card {
+    position: absolute;
+    top: rem(14);
+    right: rem(16);
+    z-index: 2;
+    min-width: rem(112);
+    min-height: rem(40);
+    padding: rem(7) rem(8) rem(7) rem(10);
+    border-radius: rem(999);
+    background: $color-white;
+    border: 1px solid rgba(206, 0, 0, 0.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: rem(7);
+    color: $color-primary;
+    box-shadow: 0 rem(8) rem(18) rgba(113, 32, 32, 0.08);
+    cursor: pointer;
+
+    > svg {
+        width: rem(14);
+        height: rem(14);
+        flex: none;
+    }
+}
+
+.home-balance-copy {
+    min-width: 0;
+    text-align: left;
+
+    span {
+        display: block;
+        margin-bottom: rem(2);
+        color: $color-text-muted;
+        font-size: rem(9);
+        line-height: 1;
+        font-weight: 750;
+    }
+
+    strong {
+        display: block;
+        color: $color-primary;
+        font-size: rem(13);
+        line-height: 1.1;
+        font-weight: 900;
+        white-space: nowrap;
+    }
 }
 
 .ad-network-content {

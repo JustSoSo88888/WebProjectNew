@@ -210,7 +210,7 @@ let en = {
     "成为广告主": "Become an Advertiser",
     "值得信赖的广告网络": "A trusted advertising network",
     "与可靠的合作伙伴共赢增长，带来看得见的收益": "Grow with reliable partners and visible results",
-    "购买全球广告流量，精准触达来自中国、印度、印尼、菲律宾、孟加拉国、巴西、墨西哥、美国等248地区的线上目标人群": "Buy global ad traffic and reach online audiences across 248 regions, including China, India, Indonesia, the Philippines, Bangladesh, Brazil, Mexico, and the United States.",
+    "购买全球广告流量，精准触达来自巴基斯坦、印度、印尼、菲律宾、孟加拉国、巴西、墨西哥、美国等248地区的线上目标人群": "Buy global ad traffic and reach online audiences across 248 regions, including Pakistan, India, Indonesia, the Philippines, Bangladesh, Brazil, Mexico, and the United States.",
     "Adsterra 助力合作伙伴实现长期收益增长": "Adsterra helps partners grow revenue over the long term",
     "稳定且高质量的流量": "Stable, high-quality traffic",
     "依托全球直接优质媒体，提供规模化、真实有效的高质量流量": "Access scalable, genuine traffic from premium direct publishers worldwide.",

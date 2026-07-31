@@ -25,7 +25,7 @@
             <section class="amount-panel">
                 <div class="amount-heading">
                     <span>{{ $lang('提现金额') }}</span>
-                    <span class="amount-range" translate="no">{{ $lang('最高') }} Rs {{
+                    <span class="amount-range" translate="no">Rs {{ formatMoney(fixedWithdrawMinAmount) }} - {{
                         formatMoney(fixedWithdrawMaxAmount) }}</span>
                 </div>
                 <div class="amount-presets">
@@ -196,8 +196,9 @@ definePageMeta({
 
 const withdrawalAccountCacheKey = 'withdrawal_accounts'
 const withdrawalOrderCacheKey = 'withdrawal_orders'
+const fixedWithdrawMinAmount = 2000
 const fixedWithdrawMaxAmount = 50000
-const fixedWithdrawAmountValues = [100, 300, 500, 1000, 5000, 10000, 30000, 50000]
+const fixedWithdrawAmountValues = [2000, 3000,5000, 8000,10000, 30000, 50000,100000]
 const fixedWithdrawMethods = [
     { key: 'jazzcash', label: 'JazzCash', shortName: 'JC', logo: '/brand/JazzCash.jpg' },
     { key: 'easypaisa', label: 'Easypaisa', shortName: 'EP', logo: '/brand/Easypaisa.jpg' },
@@ -206,8 +207,8 @@ const fixedWithdrawMethods = [
 
 const balance = ref(0)
 const selectedWithdrawKey = ref('jazzcash')
-const selectedAmount = ref(100)
-const customAmount = ref('100')
+const selectedAmount = ref(2000)
+const customAmount = ref('2000')
 const showPaymentPopup = ref(false)
 const showSuccessModal = ref(false)
 const showAddAccount = ref(false)
@@ -289,7 +290,7 @@ const customActive = computed(() => {
 
 const canSubmitAmount = computed(() => {
     const amount = withdrawAmount.value
-    return amount > 0 && amount <= fixedWithdrawMaxAmount && amount <= availableBalance.value
+    return amount >= fixedWithdrawMinAmount && amount <= fixedWithdrawMaxAmount && amount <= availableBalance.value
 })
 
 const pendingWithdrawalAmount = computed(() => {
@@ -307,7 +308,7 @@ const hasPendingWithdrawal = computed(() => {
 })
 
 const amountRangePlaceholder = computed(() => {
-    return `${$lang('最高')} ${formatMoney(fixedWithdrawMaxAmount)}`
+    return `${formatMoney(fixedWithdrawMinAmount)} - ${formatMoney(fixedWithdrawMaxAmount)}`
 })
 
 const selectWithdrawMethod = (method) => {
