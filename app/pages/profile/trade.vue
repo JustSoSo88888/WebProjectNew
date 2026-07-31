@@ -57,14 +57,14 @@ const tabList = ref(
         { type: 12, label: $lang('提现驳回') },
         { type: 13, label: $lang('提现失败') },
         // { type: 14, label: $lang('团队收益') },
-        { type: 17, label: $lang('理财收益') },
-        { type: 18, label: $lang('理财到期') },
-        { type: 19, label: $lang('理财收益结算') },
-        { type: 20, label: $lang('升级') },
-        { type: 21, label: $lang('购买理财') },
+        // { type: 17, label: $lang('理财收益') },
+        // { type: 18, label: $lang('理财到期') },
+        // { type: 19, label: $lang('理财收益结算') },
+        // { type: 20, label: $lang('升级') },
+        // { type: 21, label: $lang('购买理财') },
         { type: 36, label: $lang('任务收益') },
         // { type: 40, label: $lang('转盘收益') },
-        { type: 46, label: $lang('现金礼物') },
+        // { type: 46, label: $lang('现金礼物') },
 
     ]
 )

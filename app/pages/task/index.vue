@@ -1,98 +1,105 @@
 <template>
   <div class="task-page">
+    <section class="task-summary" aria-label="Task progress">
+      <div class="task-summary-copy">
+        <span>{{ $lang('任务中心') }}</span>
+        <h1>{{ $lang('今日进度') }}</h1>
+        <p>{{ $lang('完成广告任务后，奖励将自动进入账户') }}</p>
+      </div>
 
-    <!-- Stats Header -->
-    <div class="stats-header">
-      <!-- <ConnectionStatus class="ws-ststus"></ConnectionStatus> -->
-      <div class="ring-wrap">
+      <div class="ring-wrap" aria-label="Completion progress">
         <svg class="ring-svg" viewBox="0 0 100 100" aria-hidden="true">
-          <circle class="ring-track" cx="50" cy="50" r="40" />
+          <circle class="ring-track" cx="50" cy="50" r="40"></circle>
           <circle class="ring-progress" cx="50" cy="50" r="40" :stroke-dasharray="`${progressArc} ${circumference}`"
-            stroke-dashoffset="0" />
+            stroke-dashoffset="0"></circle>
           <defs>
             <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#CE0000" />
-              <stop offset="100%" stop-color="#990000" />
+              <stop offset="0%" stop-color="#F04444"></stop>
+              <stop offset="100%" stop-color="#CE0000"></stop>
             </linearGradient>
           </defs>
         </svg>
         <div class="ring-center">
-          <div class="ring-pct">{{ progressPct }}%</div>
+          <strong>{{ progressPct }}%</strong>
+          <small>{{ $lang('完成') }}</small>
         </div>
       </div>
+    </section>
 
-      <div class="stats-info">
-        <div class="stat-item">
-          <div class="stat-val stat-val--blue">{{ todayUndoneCount }}</div>
-          <div class="stat-label">{{ $lang('进行中') }}</div>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <div class="stat-val stat-val--green">{{ todayCompletedCount }}</div>
-          <div class="stat-label">{{ $lang('已完成') }}</div>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <div class="stat-val">{{ totalCount }}</div>
-          <div class="stat-label">{{ $lang('全部') }}</div>
-        </div>
+    <section class="task-metrics" aria-label="Task stats">
+      <article class="metric-card">
+        <span>{{ $lang('进行中') }}</span>
+        <strong>{{ todayUndoneCount }}</strong>
+      </article>
+      <article class="metric-card metric-card--success">
+        <span>{{ $lang('已完成') }}</span>
+        <strong>{{ todayCompletedCount }}</strong>
+      </article>
+      <article class="metric-card metric-card--total">
+        <span>{{ $lang('全部') }}</span>
+        <strong>{{ totalCount }}</strong>
+      </article>
+    </section>
+
+    <div class="task-panel">
+      <div class="tabs" role="tablist" aria-label="Task filters">
+        <button v-for="tab in tabs" :key="tab.key" type="button" role="tab" class="tab-btn"
+          :class="{ active: activeTab === tab.key }" :aria-selected="activeTab === tab.key" @click="handleTab(tab.key)">
+          {{ tab.label }}
+        </button>
       </div>
-    </div>
 
-    <!-- Tabs -->
-    <div class="tabs">
-      <button v-for="tab in tabs" :key="tab.key" class="tab-btn" :class="{ active: activeTab === tab.key }"
-        @click="handleTab(tab.key)">
-        {{ tab.label }}
-      </button>
-    </div>
-
-    <!-- Task List -->
-    <div class="task-list">
-      <van-pull-refresh :pulling-text="$lang('下拉即可刷新') + '...'" :loosing-text="$lang('释放即可刷新') + '...'"
-        :loading-text="$lang('加载中') + '...'" v-model="refreshing" @refresh="onRefresh">
-        <van-list v-model:loading="loading" :finished="finished" :loading-text="$lang('加载中')"
-          :finished-text="list.length > 0 ? $lang('没有更多了') : ''" @load="onLoad">
-          <template v-if="list.length > 0">
-            <div v-for="task in list" :key="task.id" class="task-card" @click="toDetails(task)">
-              <div class="task-img-box">
-                <img :src="task.image_url" class="task-img" />
-              </div>
-              <div class="task-body">
-                <div class="task-name">{{ task.product_name }}</div>
-                <!-- <div class="task-reward">
-                  <span class="reward-label">{{ $lang('收益') }}</span>
-                  
-                </div> -->
-                <div class="task-bottom">
-                  <div class="reward-amount"
-                    :class="task.status == 1 ? 'reward-amount--success' : 'reward-amount--warning'" translate="no">PKR {{
-                      parseFloat(task.income_amount) }}</div>
-                  <button class="task-btn" :class="task.status == 1 ? 'task-btn--done' : 'task-btn--active'">
-                    {{ task.status == 1 ? $lang('已完成') : $lang('进行中') }}
-                  </button>
+      <div class="task-list">
+        <van-pull-refresh :pulling-text="$lang('下拉即可刷新') + '...'" :loosing-text="$lang('释放即可刷新') + '...'"
+          :loading-text="$lang('加载中') + '...'" v-model="refreshing" @refresh="onRefresh">
+          <van-list v-model:loading="loading" :finished="finished" :loading-text="$lang('加载中')"
+            :finished-text="list.length > 0 ? $lang('没有更多了') : ''" @load="onLoad">
+            <template v-if="list.length > 0">
+              <article v-for="task in list" :key="task.id" class="task-card"
+                :class="{ 'is-completed': task.status == 1 }" :tabindex="task.status == 1 ? -1 : 0"
+                :aria-disabled="task.status == 1" @click="toDetails(task)" @keydown.enter.prevent="toDetails(task)"
+                @keydown.space.prevent="toDetails(task)">
+                <div class="task-img-box">
+                  <img :src="task.image_url" :alt="task.product_name || $lang('任务图片')" class="task-img"
+                    loading="lazy">
                 </div>
+                <div class="task-body">
+                  <div class="task-status-pill" :class="task.status == 1 ? 'is-done' : 'is-active'">
+                    {{ task.status == 1 ? $lang('已完成') : $lang('进行中') }}
+                  </div>
+                  <h2 class="task-name">{{ task.product_name }}</h2>
+                  <div class="task-bottom">
+                    <div class="reward-block">
+                      <span>{{ $lang('收益') }}</span>
+                      <strong class="reward-amount"
+                        :class="task.status == 1 ? 'reward-amount--success' : 'reward-amount--warning'"
+                        translate="no">PKR {{ formatAmount(task.income_amount) }}</strong>
+                    </div>
+                    <button type="button" class="task-btn" :disabled="task.status == 1"
+                      :class="task.status == 1 ? 'task-btn--done' : 'task-btn--active'" @click.stop="toDetails(task)">
+                      {{ task.status == 1 ? $lang('已完成') : $lang('开始') }}
+                    </button>
+                  </div>
+                </div>
+              </article>
+            </template>
+            <template v-else>
+              <div class="task-empty">
+                <Empty></Empty>
               </div>
-            </div>
-          </template>
-          <template v-else>
-            <Empty></Empty>
-          </template>
-        </van-list>
-      </van-pull-refresh>
-
-
+            </template>
+          </van-list>
+        </van-pull-refresh>
+      </div>
     </div>
-
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { navigateTo } from '#imports'
 import { memberProductOrderList } from '~/api/member'
 import Empty from '~/components/Empty.vue'
-import ConnectionStatus from '~/components/ConnectionStatus.vue'
 const nuxtApp = useNuxtApp()
 const $lang = nuxtApp.$lang
 definePageMeta({ layout: 'default' })
@@ -118,6 +125,11 @@ const toDetails = (task) => {
   if (task.status == 1) return
   appStore.setTaskData(task)
   navigateTo('/task/details')
+}
+
+const formatAmount = (amount) => {
+  const value = Number.parseFloat(amount)
+  return Number.isFinite(value) ? value : 0
 }
 
 const circumference = 2 * Math.PI * 40
@@ -187,38 +199,60 @@ const onLoad = () => {
 </script>
 
 <style scoped lang="scss">
+@use '~/assets/scss/config' as *;
+
 .task-page {
-  min-height: 100vh;
-  background: $color-bg-page;
-  padding-bottom: rem(24);
+  min-height: 100dvh;
+  background: #F5F6F8;
+  padding: rem(14) rem(14) rem(86);
 }
 
-// ── Stats Header ──────────────────────────────────────────
-.stats-header {
-  display: flex;
+.task-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) rem(94);
   align-items: center;
-  gap: rem(20);
-  margin: rem(14);
-  padding: rem(20) rem(18);
-  background: linear-gradient(135deg, #FFECEC 0%, #FFD6D6 100%);
-  border: 1px solid #FFB3B3;
-  border-radius: $radius-xl;
-  box-shadow: $shadow-md;
-  position: relative;
+  gap: rem(14);
+  min-height: rem(168);
+  padding: rem(24) rem(20);
+  border-radius: rem(8);
+  background: linear-gradient(180deg, #F7BFC2 0%, #FBE3E4 100%);
+  box-shadow: 0 rem(12) rem(28) rgba(113, 32, 32, 0.08);
+}
 
-  .ws-ststus{
-    position: absolute;
-    right: rem(10);
-    top: rem(10);
+.task-summary-copy {
+  span {
+    display: inline-flex;
+    align-items: center;
+    min-height: rem(26);
+    padding: 0 rem(10);
+    border-radius: rem(4);
+    background: rgba(255, 255, 255, 0.76);
+    color: $color-primary;
+    font-size: rem(12);
+    font-weight: 850;
+  }
+
+  h1 {
+    margin: rem(12) 0 rem(8);
+    color: $color-text-primary;
+    font-size: rem(28);
+    line-height: 1.12;
+    font-weight: 900;
+  }
+
+  p {
+    margin: 0;
+    max-width: rem(210);
+    color: rgba(49, 55, 65, 0.86);
+    font-size: rem(14);
+    line-height: 1.55;
   }
 }
 
-// Ring
 .ring-wrap {
   position: relative;
-  flex-shrink: 0;
-  width: rem(100);
-  height: rem(100);
+  width: rem(94);
+  height: rem(94);
 }
 
 .ring-svg {
@@ -229,7 +263,7 @@ const onLoad = () => {
 
 .ring-track {
   fill: none;
-  stroke: #E2E8F0;
+  stroke: rgba(255, 255, 255, 0.78);
   stroke-width: 8;
 }
 
@@ -238,279 +272,308 @@ const onLoad = () => {
   stroke: url(#ringGrad);
   stroke-width: 8;
   stroke-linecap: round;
-  transition: stroke-dasharray 0.6s ease;
+  transition: stroke-dasharray 0.28s ease-out;
 }
 
 .ring-center {
   position: absolute;
-  inset: 0;
+  inset: rem(14);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.82);
+
+  strong {
+    color: $color-text-primary;
+    font-size: rem(18);
+    line-height: 1;
+    font-weight: 900;
+  }
+
+  small {
+    margin-top: rem(4);
+    color: $color-text-muted;
+    font-size: rem(10);
+    line-height: 1;
+  }
 }
 
-.ring-pct {
-  font-size: rem(18);
-  font-weight: 800;
-  color: $color-text-primary;
-  line-height: 1;
+.task-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: rem(8);
+  margin: rem(10) 0 rem(12);
 }
 
-.ring-sub {
-  font-size: rem(10);
-  color: $color-text-muted;
-  margin-top: rem(3);
-}
-
-// Stats
-.stats-info {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.stat-item {
+.metric-card {
+  min-height: rem(74);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: rem(4);
-  flex: 1;
-}
+  justify-content: center;
+  gap: rem(8);
+  padding: rem(12);
+  border: 1px solid rgba(22, 24, 30, 0.06);
+  border-radius: rem(8);
+  background: $color-white;
 
-.stat-val {
-  font-size: rem(22);
-  font-weight: 800;
-  color: $color-text-primary;
-  line-height: 1;
-
-  &--blue {
-    color: $color-primary;
+  span {
+    color: $color-text-muted;
+    font-size: rem(12);
+    line-height: 1;
+    white-space: nowrap;
   }
 
-  &--green {
+  strong {
+    color: $color-primary;
+    font-size: rem(24);
+    line-height: 1;
+    font-weight: 900;
+  }
+
+  &--success strong {
     color: $color-success;
   }
+
+  &--total strong {
+    color: $color-text-primary;
+  }
 }
 
-.stat-label {
-  font-size: rem(11);
-  color: $color-text-muted;
-  white-space: nowrap;
+.task-panel {
+  padding: rem(6) 0 0;
 }
 
-.stat-divider {
-  width: 1px;
-  height: rem(32);
-  background: #FFB3B3;
-}
-
-// ── Tabs ──────────────────────────────────────────────────
 .tabs {
-  display: flex;
-  margin: 0 rem(14) rem(10);
-  background: #FFFFFF;
-  border: 1px solid $color-border;
-  border-radius: $radius-lg;
-  padding: rem(4);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: rem(4);
-  box-shadow: $shadow-xs;
+  min-height: rem(46);
+  padding: rem(4);
+  margin-bottom: rem(10);
+  border: 1px solid rgba(22, 24, 30, 0.06);
+  border-radius: rem(8);
+  background: $color-white;
 }
 
 .tab-btn {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: rem(5);
-  height: rem(38);
-  border-radius: $radius-md;
-  font-size: rem(13);
-  font-weight: 600;
+  min-height: rem(38);
+  border-radius: rem(5);
   color: $color-text-muted;
+  font-size: rem(14);
+  font-weight: 800;
   cursor: pointer;
-  transition: $transition-fast;
+  transition: background 0.16s ease, color 0.16s ease, transform 0.16s ease;
 
   &.active {
-    background: $gradient-primary;
-    color: #fff;
-    box-shadow: $shadow-blue;
+    background: #303030;
+    color: $color-white;
   }
 
-  &:not(.active):active {
-    background: $color-bg-hover;
-  }
-}
-
-.tab-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: rem(18);
-  height: rem(18);
-  padding: 0 rem(5);
-  border-radius: $radius-full;
-  font-size: rem(10);
-  font-weight: 700;
-  background: rgba(255, 255, 255, 0.25);
-  color: inherit;
-
-  .tab-btn:not(.active) & {
-    background: $color-primary-bg;
-    color: $color-primary;
+  &:active {
+    transform: scale(0.98);
   }
 }
 
-// ── Task List ─────────────────────────────────────────────
 .task-list {
-  padding: 0 rem(14);
+  min-height: rem(320);
 }
 
 .task-card {
-  display: flex;
-  align-items: stretch;
-  padding: rem(12);
-  background: #FFFFFF;
-  border: 1px solid $color-border;
-  border-radius: $radius-lg;
-  box-shadow: $shadow-sm;
+  display: grid;
+  grid-template-columns: rem(126) minmax(0, 1fr);
+  gap: rem(12);
+  min-height: rem(126);
+  padding: rem(10);
   margin-bottom: rem(10);
+  border: 1px solid rgba(22, 24, 30, 0.07);
+  border-radius: rem(8);
+  background: $color-white;
+  box-shadow: 0 rem(8) rem(18) rgba(31, 31, 31, 0.045);
   cursor: pointer;
-  transition: $transition-fast;
-  box-sizing: border-box;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
 
   &:active {
-    background: $color-bg-hover;
+    transform: scale(0.99);
+    background: #FAFAFA;
+  }
+
+  &:focus-visible {
+    outline: rem(2) solid rgba(206, 0, 0, 0.36);
+    outline-offset: rem(2);
+  }
+
+  &.is-completed {
+    cursor: default;
   }
 }
 
 .task-img-box {
-  flex-shrink: 0;
-  height: rem(100);
-  aspect-ratio: 16/9;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
-  display: flex;
-  border-radius: rem(10);
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-
-  .task-img {
-    width: 100%;
-    height: auto;
-  }
+  border-radius: rem(6);
+  background: $color-gray-100;
 }
 
+.task-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
 
 .task-body {
-  width: rem(133);
+  min-width: 0;
   display: flex;
-  margin-left: rem(10);
-  box-sizing: border-box;
-  justify-content: space-between;
   flex-direction: column;
+}
 
-  .task-bottom {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+.task-status-pill {
+  width: max-content;
+  max-width: 100%;
+  min-height: rem(24);
+  display: inline-flex;
+  align-items: center;
+  padding: 0 rem(9);
+  border-radius: rem(4);
+  font-size: rem(11);
+  line-height: 1;
+  font-weight: 850;
+
+  &.is-active {
+    background: $color-primary-bg;
+    color: $color-primary;
   }
 
+  &.is-done {
+    background: $color-success-bg;
+    color: $color-success;
+  }
 }
 
 .task-name {
-  font-size: rem(13);
-  font-weight: 600;
+  margin: rem(9) 0 auto;
   color: $color-text-primary;
-  line-height: 1.4;
+  font-size: rem(15);
+  line-height: 1.42;
+  font-weight: 850;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
-  width: 100%;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
-  box-sizing: border-box;
+  overflow-wrap: anywhere;
 }
 
-.task-reward {
+.task-bottom {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) rem(76);
+  align-items: end;
+  gap: rem(10);
+  margin-top: rem(12);
+}
+
+.reward-block {
+  min-width: 0;
   display: flex;
-  align-items: center;
-  gap: rem(5);
-}
+  flex-direction: column;
+  gap: rem(4);
 
-.reward-label {
-  font-size: rem(10);
-  color: $color-text-muted;
-  background: $color-warning-bg;
-  border: 1px solid #FFB3B3;
-  border-radius: $radius-full;
-  padding: rem(1) rem(6);
+  span {
+    color: $color-text-muted;
+    font-size: rem(11);
+    line-height: 1;
+  }
 }
 
 .reward-amount {
-  font-size: rem(16);
-  font-weight: 800;
-
-  margin-bottom: rem(5);
+  font-size: rem(17);
+  line-height: 1.15;
+  font-weight: 900;
+  overflow-wrap: anywhere;
 
   &--success {
     color: $color-success;
   }
 
   &--warning {
-    color: $color-warning;
+    color: $color-primary;
   }
 }
 
-.task-time {
-  display: flex;
-  align-items: center;
-  gap: rem(4);
-  font-size: rem(10);
-  color: $color-text-muted;
-
-  svg {
-    width: rem(12);
-    height: rem(12);
-    flex-shrink: 0;
-  }
-}
-
-// Buttons
 .task-btn {
-  flex-shrink: 0;
-  height: rem(34);
-  width: 100%;
-  padding: 0 rem(14);
-  border-radius: $radius-full;
-  font-size: rem(12);
-  font-weight: 700;
-  cursor: pointer;
-  transition: $transition-fast;
+  min-height: rem(44);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 rem(12);
+  border-radius: rem(4);
+  font-size: rem(13);
+  font-weight: 850;
   white-space: nowrap;
+  transition: transform 0.16s ease, background 0.16s ease;
 
   &--active {
-    background: $color-primary-bg;
-    color: $color-primary;
-    border: 1.5px solid rgba(206, 0, 0, 0.18);
-
-    &:active {
-      background: #FFB3B3;
-    }
+    background: #303030;
+    color: $color-white;
   }
 
   &--done {
-    background: $color-success-bg;
-    color: $color-success;
-    border: 1.5px solid rgba(5, 150, 105, 0.25);
+    background: $color-text-muted-bg;
+    color: $color-text-muted;
+  }
 
-    &:active {
-      background: #D1FAE5;
-    }
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+
+  &:not(:disabled):active {
+    transform: scale(0.96);
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.task-empty {
+  padding: rem(36) 0;
+  border-radius: rem(8);
+  background: $color-white;
+}
+
+@media (max-width: 374px) {
+  .task-page {
+    padding-inline: rem(10);
+  }
+
+  .task-summary {
+    grid-template-columns: minmax(0, 1fr) rem(82);
+    padding: rem(20) rem(16);
+  }
+
+  .task-summary-copy h1 {
+    font-size: rem(25);
+  }
+
+  .ring-wrap {
+    width: rem(82);
+    height: rem(82);
+  }
+
+  .task-card {
+    grid-template-columns: rem(108) minmax(0, 1fr);
+    gap: rem(10);
+  }
+
+  .task-bottom {
+    grid-template-columns: minmax(0, 1fr) rem(66);
+  }
+
+  .reward-amount {
+    font-size: rem(15);
   }
 }
 </style>
