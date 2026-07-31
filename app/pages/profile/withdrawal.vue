@@ -159,13 +159,13 @@ const checkBankCardBind = async (length) => {
     if (length > 0) return true
 
     try {
-        await $dialog.confirm({
-            title: $lang('提示'),
-            message: $lang('请先绑定银行卡'),
-            confirmButtonText: $lang('确认'),
-            cancelButtonText: $lang('取消')
-        })
-        navigateTo('/profile/bankInfo')
+        // await $dialog.confirm({
+        //     title: $lang('提示'),
+        //     message: $lang('请先绑定银行卡'),
+        //     confirmButtonText: $lang('确认'),
+        //     cancelButtonText: $lang('取消')
+        // })
+        // navigateTo('/profile/bankInfo')
     } catch (_error) {
         if (window.history.length > 1) {
             router.back()

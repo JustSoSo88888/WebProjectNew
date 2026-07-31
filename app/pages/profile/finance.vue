@@ -3,20 +3,20 @@
         <!-- Tab Switch -->
         <div class="tab-container">
             <div class="tab-wrapper">
-                <!-- <button class="tab-btn" :class="{ active: activeTab == 0 }" @click="onTabChange(0)">
+                <button class="tab-btn" :class="{ active: activeTab == 0 }" @click="onTabChange(0)">
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M12 5v14M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                               stroke-linejoin="round"/>
                     </svg>
                     {{ $lang('充值') }}
-                </button> -->
-                <!-- <button class="tab-btn" :class="{ active: activeTab == 1 }" @click="onTabChange(1)">
+                </button>
+                <button class="tab-btn" :class="{ active: activeTab == 1 }" @click="onTabChange(1)">
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M12 19V5M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                               stroke-linejoin="round"/>
                     </svg>
                     {{ $lang('提现') }}
-                </button> -->
+                </button>
             </div>
         </div>
 

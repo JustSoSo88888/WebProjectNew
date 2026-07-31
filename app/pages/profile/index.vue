@@ -1,83 +1,47 @@
 <template>
     <div class="profile-page">
-
-        <!-- ① 顶部头部区域 -->
-        <div class="profile-header">
-            <div class="header-bg"></div>
-            <div class="user-info">
-                <div class="avatar-wrap">
-                    <img class="avatar"
-                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=profile&backgroundColor=b6e3f4" />
-                    <div class="avatar-badge">
-                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <path
-                                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-                                fill="#E00000" stroke="#E00000" stroke-width="1" stroke-linejoin="round" />
-                        </svg>
-                    </div>
+        <section class="profile-account-card">
+            <div class="profile-heading-row">
+                <div class="profile-heading-copy">
+                    <span>{{ $lang('个人中心') }}</span>
+                    <h1>{{ userData.phone || userData.id || '-' }}</h1>
                 </div>
-                <div class="user-meta">
-                    <div class="user-account">{{ userData.phone }}</div>
-                    <div class="user-id" @click="copyText(userData.id)">
-                        ID:{{ userData.id }}
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.8" />
-                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor"
-                                stroke-width="1.8" stroke-linecap="round" />
-                        </svg>
-                    </div>
-                    <div class="user-tags">
-                        <span class="tag tag--credit">
-                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8" />
-                                <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-                            </svg>
-                            {{ $lang('信用分') }} {{ balanceData.credit }}
-                        </span>
-                        <span class="tag tag--level">{{ levelData.name }}</span>
-                    </div>
-                </div>
-                <div class="header-actions">
-                    <!-- <button class="action-btn action-btn--recharge" @click="navigateTo('/profile/recharge')">
-                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <path d="M12 5v14M5 12l7-7 7 7" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                        {{ $lang('充值') }}
-                    </button> -->
-                    <button class="action-btn action-btn--withdraw" @click="navigateTo('/profile/withdrawal')">
-                        <!-- <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <path d="M12 19V5M5 12l7 7 7-7" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg> -->
-                        {{ $lang('提现') }}
-                    </button>
-                </div>
+                <button type="button" class="user-id" @click="copyText(userData.id)">
+                    <span>ID:{{ userData.id || '-' }}</span>
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.8"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round"></path>
+                    </svg>
+                </button>
             </div>
-        </div>
 
-        <!-- ② 钱包余额卡片 -->
-        <div class="wallet-card">
-            <div class="wallet-row">
-                <div class="wallet-item" @click="getBalanceData">
-                    <div class="wallet-label">{{ $lang('余额') }}</div>
-                    <div class="wallet-amount" translate="no">PKR {{ balance }} <van-icon name="replay"
-                            style="font-weight: bold;" /></div>
+            <div class="profile-balance-block">
+                <div class="balance-copy">
+                    <span>{{ $lang('余额') }}</span>
+                    <strong translate="no">PKR {{ formatAmount(balance) }}</strong>
                 </div>
-                <div class="wallet-divider"></div>
-                <div class="wallet-item">
-                    <div class="wallet-label">{{ $lang('有效日期') }}</div>
-                    <div class="wallet-date">{{ balanceData.level_expire_time }}</div>
-                </div>
+                <button type="button" class="balance-refresh" @click="getBalanceData" :aria-label="$lang('余额')">
+                    <van-icon name="replay"></van-icon>
+                </button>
             </div>
-        </div>
+
+            <div class="profile-quick-actions">
+                <button type="button" class="quick-action quick-action--dark" @click="navigateTo('/profile/withdrawal')">
+                    {{ $lang('提现') }}
+                </button>
+                <button type="button" class="quick-action" @click="navigateTo('/profile/recharge')">
+                    {{ $lang('充值') }}
+                </button>
+            </div>
+        </section>
 
         <!-- ③ 收益统计 -->
-        <div class="earnings-card">
-            <div class="card-title">
+        <section class="earnings-card">
+            <div class="profile-section-title">
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor"
-                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
                 </svg>
                 {{ $lang('收益统计') }}
             </div>
@@ -86,46 +50,31 @@
                     <div class="earnings-grid">
                         <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('昨日收入') }}</div>
-                            <div class="earnings-val earnings-val--blue" translate="no">PKR {{
-                                parseFloat(awardTotalData.yesterday_income) }}</div>
+                            <div class="earnings-val" translate="no">PKR {{ formatAmount(awardTotalData.yesterday_income) }}</div>
                         </div>
                         <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('今日收入') }}</div>
-                            <div class="earnings-val earnings-val--purple" translate="no">PKR {{
-                                parseFloat(awardTotalData.today_income) }}</div>
+                            <div class="earnings-val" translate="no">PKR {{ formatAmount(awardTotalData.today_income) }}</div>
                         </div>
                         <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('7日收入') }}</div>
-                            <div class="earnings-val earnings-val--light" translate="no">PKR {{
-                                parseFloat(awardTotalData.week_income) }}</div>
+                            <div class="earnings-val" translate="no">PKR {{ formatAmount(awardTotalData.week_income) }}</div>
                         </div>
                         <div class="earnings-item">
                             <div class="earnings-label">{{ $lang('本月收入') }}</div>
-                            <div class="earnings-val earnings-val--info" translate="no">PKR {{
-                                parseFloat(awardTotalData.today_income) }}</div>
+                            <div class="earnings-val" translate="no">PKR {{ formatAmount(awardTotalData.month_income) }}</div>
                         </div>
-                        <!-- <div class="earnings-item">
-                            <div class="earnings-label">{{ $lang('团队任务收入') }}</div>
-                            <div class="earnings-val earnings-val--danger">PKR {{
-                                parseFloat(awardTotalData.order_referral_income) }}</div>
-                        </div>
-                        <div class="earnings-item">
-                            <div class="earnings-label">{{ $lang('团队邀请收入') }}</div>
-                            <div class="earnings-val earnings-val--dark">PKR {{
-                                parseFloat(awardTotalData.meal_referral_income) }}</div>
-                        </div> -->
                         <div class="earnings-item earnings-item--full">
                             <div class="earnings-label">{{ $lang('总收入') }}</div>
-                            <div class="earnings-val earnings-val--green">PKR {{ parseFloat(awardTotalData.total_income)
-                                }}</div>
+                            <div class="earnings-val earnings-val--total" translate="no">PKR {{ formatAmount(awardTotalData.total_income) }}</div>
                         </div>
                     </div>
                 </Transition>
             </div>
-        </div>
+        </section>
 
         <!-- ④ 功能菜单 -->
-        <div class="menu-card">
+        <section class="menu-card">
             <div v-for="item in menuItems" :key="item.key" class="menu-item"
                 :class="{ 'menu-item--danger': item.danger }" @click="handleMenu(item)" role="button"
                 :aria-label="item.label" tabindex="0" @keydown.enter="handleMenu(item)">
@@ -135,10 +84,10 @@
                 <span class="menu-label">{{ item.label }}</span>
                 <svg class="menu-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                        stroke-linejoin="round" />
+                        stroke-linejoin="round"></path>
                 </svg>
             </div>
-        </div>
+        </section>
 
         <!-- ⑤ 语言切换弹窗 -->
         <LangModal v-model="showLang" v-model:currentLang="currentLang" @change="switchLang" />
@@ -147,7 +96,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, reactive } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { navigateTo } from '#imports'
 import LangModal from '~/components/LangModal'
 import { getBalance, loginOut, awardTotal } from '~/api/member'
@@ -164,6 +113,10 @@ onMounted(() => {
 })
 //初始化
 const userData = ref({})
+const formatAmount = (amount) => {
+    const value = Number.parseFloat(amount)
+    return Number.isFinite(value) ? value : 0
+}
 const init = () => {
     getBalanceData();
     let user_data = storage.get('user_data') ? JSON.parse(storage.get('user_data')) : null;
@@ -375,439 +328,303 @@ async function copyText(text) {
 </script>
 
 <style scoped lang="scss">
+@use '~/assets/scss/config' as *;
+
 .profile-page {
-    min-height: 100vh;
-    background: $color-bg-page;
-    padding-bottom: rem(24);
+    min-height: 100dvh;
+    background: #F5F6F8;
+    padding: rem(14) rem(14) rem(86);
 }
 
-// ── Header ──────────────────────────────────────────────────
-.profile-header {
+.profile-account-card {
     position: relative;
-    padding: rem(24) rem(16) rem(20);
-    background: $gradient-primary;
+    padding: rem(18);
+    border: 1px solid rgba(22, 24, 30, 0.06);
+    border-radius: rem(8);
+    background: $color-white;
     overflow: hidden;
 
     &::before {
         content: '';
         position: absolute;
-        top: -40%;
-        right: -20%;
-        width: rem(200);
-        height: rem(200);
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.08);
-    }
-
-    &::after {
-        content: '';
-        position: absolute;
-        bottom: -30%;
-        left: -10%;
-        width: rem(150);
-        height: rem(150);
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.06);
+        top: 0;
+        left: 0;
+        right: 0;
+        height: rem(5);
+        background: #CE0000;
     }
 }
 
-.user-info {
-    position: relative;
-    z-index: 1;
+.profile-heading-row {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: space-between;
     gap: rem(12);
 }
 
-.avatar-wrap {
-    position: relative;
-    flex-shrink: 0;
-}
-
-.avatar {
-    width: rem(60);
-    height: rem(60);
-    border-radius: 50%;
-    border: rem(2) solid rgba(255, 255, 255, 0.6);
-    object-fit: cover;
-    background: #fff;
-}
-
-.avatar-badge {
-    position: absolute;
-    bottom: rem(-2);
-    right: rem(-2);
-    width: rem(20);
-    height: rem(20);
-    background: #fff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: $shadow-sm;
-
-    svg {
-        width: rem(12);
-        height: rem(12);
-    }
-}
-
-.user-meta {
-    flex: 1;
+.profile-heading-copy {
     min-width: 0;
-}
 
-.user-account {
-    font-size: rem(16);
-    font-weight: 600;
-    color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    span {
+        color: $color-text-muted;
+        font-size: rem(12);
+        line-height: 1;
+        font-weight: 750;
+    }
+
+    h1 {
+        margin: rem(7) 0 0;
+        color: $color-text-primary;
+        font-size: rem(21);
+        line-height: 1.18;
+        font-weight: 900;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 .user-id {
-    font-size: rem(12);
-    margin-bottom: rem(6);
-    color: $color-gray-50;
-
-    svg {
-        width: rem(12);
-        height: rem(12);
-        margin-left: rem(5);
-        cursor: pointer;
-    }
-}
-
-.user-tags {
-    display: flex;
-    gap: rem(6);
-    flex-wrap: wrap;
-}
-
-.tag {
+    flex-shrink: 0;
+    min-height: rem(32);
     display: inline-flex;
     align-items: center;
-    gap: rem(3);
-    padding: rem(2) rem(8);
-    border-radius: $radius-full;
-    font-size: rem(11);
-    font-weight: 500;
-
-    svg {
-        width: rem(11);
-        height: rem(11);
-    }
-
-    &--credit {
-        background: rgba(255, 255, 255, 0.2);
-        color: #fff;
-    }
-
-    &--level {
-        background: #E00000;
-        color: #fff;
-    }
-}
-
-.header-actions {
-    display: flex;
-    flex-direction: column;
     gap: rem(6);
-    flex-shrink: 0;
-}
-
-.action-btn {
-    display: flex;
-    align-items: center;
-    gap: rem(4);
-    padding: rem(6) rem(12);
-    border-radius: $radius-full;
+    padding: 0 rem(10);
+    border: 1px solid $color-border-light;
+    border-radius: rem(4);
+    background: #FAFAFA;
+    color: $color-text-secondary;
     font-size: rem(12);
-    font-weight: 500;
-    cursor: pointer;
-    transition: $transition-fast;
-    min-width: rem(64);
-    justify-content: center;
+    font-weight: 750;
 
     svg {
         width: rem(13);
         height: rem(13);
     }
+}
 
-    &--recharge {
-        background: #fff;
+.earnings-card,
+.menu-card {
+    margin-top: rem(10);
+    border: 1px solid rgba(22, 24, 30, 0.06);
+    border-radius: rem(8);
+    background: $color-white;
+}
+
+.profile-balance-block {
+    min-height: rem(96);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: rem(12);
+    margin-top: rem(16);
+    padding: rem(18);
+    border-radius: rem(8);
+    background: #FFF1F1;
+}
+
+.balance-copy {
+    min-width: 0;
+
+    span {
+        display: block;
+        margin-bottom: rem(10);
         color: $color-primary;
-
-        &:active {
-            opacity: 0.85;
-        }
+        font-size: rem(12);
+        line-height: 1;
+        font-weight: 850;
     }
 
-    &--withdraw {
-        background: rgba(255, 255, 255, 0.2);
-        color: #fff;
-        border: rem(1) solid rgba(255, 255, 255, 0.4);
-
-        &:active {
-            opacity: 0.85;
-        }
+    strong {
+        display: block;
+        color: $color-primary;
+        font-size: rem(30);
+        line-height: 1.05;
+        font-weight: 900;
+        overflow-wrap: anywhere;
     }
 }
 
-// ── Wallet Card ──────────────────────────────────────────────
-.wallet-card {
-    margin: rem(14) rem(14) 0;
-    background: $color-bg-card;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-md;
-    padding: rem(16);
-}
-
-.wallet-row {
-    display: flex;
-    align-items: center;
-}
-
-.wallet-item {
-    flex: 1;
-    text-align: center;
-}
-
-.wallet-divider {
-    width: rem(1);
-    height: rem(36);
-    background: $color-border;
-}
-
-.wallet-label {
-    font-size: rem(11);
-    color: $color-text-muted;
-    margin-bottom: rem(4);
-}
-
-.wallet-amount {
-    font-size: rem(16);
-    font-weight: 700;
-    color: $color-text-primary;
-
-    &--warning {
-        color: $color-warning;
-    }
-}
-
-.wallet-date {
-    font-size: rem(12);
-    font-weight: 600;
+.balance-refresh {
+    width: rem(40);
+    height: rem(40);
+    flex-shrink: 0;
+    border-radius: rem(4);
+    background: $color-white;
     color: $color-primary;
+    font-size: rem(18);
+    box-shadow: 0 rem(8) rem(18) rgba(206, 0, 0, 0.08);
 }
 
-// ── Earnings Card ────────────────────────────────────────────
+.profile-quick-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: rem(8);
+    margin-top: rem(12);
+}
+
+.quick-action {
+    min-height: rem(44);
+    border-radius: rem(4);
+    background: $color-primary-bg;
+    color: $color-primary;
+    font-size: rem(14);
+    font-weight: 850;
+    cursor: pointer;
+    transition: transform 0.16s ease, background 0.16s ease;
+
+    &--dark {
+        background: #303030;
+        color: $color-white;
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+}
+
 .earnings-card {
-    margin: rem(12) rem(14) 0;
-    background: $color-bg-card;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-md;
     padding: rem(16);
 }
 
-.card-title {
+.profile-section-title {
     display: flex;
     align-items: center;
-    gap: rem(6);
-    font-size: rem(14);
-    font-weight: 600;
+    gap: rem(7);
+    margin-bottom: rem(13);
     color: $color-text-primary;
-    margin-bottom: rem(12);
+    font-size: rem(16);
+    line-height: 1.2;
+    font-weight: 900;
 
     svg {
-        width: rem(16);
-        height: rem(16);
+        width: rem(18);
+        height: rem(18);
         color: $color-primary;
-    }
-}
-
-.time-tabs {
-    display: flex;
-    gap: rem(6);
-    margin-bottom: rem(14);
-    background: $color-bg-page;
-    border-radius: $radius-md;
-    padding: rem(3);
-}
-
-.time-tab {
-    flex: 1;
-    padding: rem(6) 0;
-    border-radius: rem(7);
-    font-size: rem(12);
-    font-weight: 500;
-    color: $color-text-secondary;
-    cursor: pointer;
-    transition: $transition-fast;
-    text-align: center;
-
-    &.active {
-        background: #fff;
-        color: $color-primary;
-        font-weight: 600;
-        box-shadow: $shadow-xs;
     }
 }
 
 .earnings-grid-wrap {
-    position: relative;
     overflow: hidden;
 }
 
 .earnings-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: rem(10);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: rem(8);
+}
+
+.earnings-item {
+    min-height: rem(82);
+    padding: rem(13) rem(12);
+    border-radius: rem(8);
+    background: #FAFAFA;
+
+    &--full {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        min-height: rem(74);
+        background: #FFF1F1;
+    }
+}
+
+.earnings-label {
+    margin-bottom: rem(9);
+    color: $color-text-muted;
+    font-size: rem(12);
+    line-height: 1.1;
+    font-weight: 650;
+}
+
+.earnings-val {
+    color: $color-text-primary;
+    font-size: rem(17);
+    line-height: 1.18;
+    font-weight: 900;
+    overflow-wrap: anywhere;
+
+    &--total {
+        color: $color-primary;
+        font-size: rem(20);
+    }
 }
 
 .slide-left-enter-active,
 .slide-left-leave-active,
 .slide-right-enter-active,
 .slide-right-leave-active {
-    transition: all 0.25s ease-out;
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.slide-left-enter-from {
-    opacity: 0;
-    transform: translateX(rem(30));
-}
-
-.slide-left-leave-to {
-    opacity: 0;
-    transform: translateX(rem(-30));
-}
-
-.slide-right-enter-from {
-    opacity: 0;
-    transform: translateX(rem(-30));
-}
-
+.slide-left-enter-from,
 .slide-right-leave-to {
     opacity: 0;
-    transform: translateX(rem(30));
+    transform: translateX(rem(20));
 }
 
-.earnings-item {
-    background: $color-bg-page;
-    border-radius: $radius-md;
-    padding: rem(12);
-
-    &--full {
-        grid-column: 1 / -1;
-        background: linear-gradient(135deg, #EFF6FF, #F5F3FF);
-    }
+.slide-right-enter-from,
+.slide-left-leave-to {
+    opacity: 0;
+    transform: translateX(rem(-20));
 }
 
-.earnings-label {
-    font-size: rem(11);
-    color: $color-text-muted;
-    margin-bottom: rem(4);
-}
-
-.earnings-val {
-    font-size: rem(18);
-    font-weight: 700;
-
-    &--blue {
-        color: $color-primary;
-    }
-
-    &--purple {
-        color: #7C3AED;
-    }
-
-    &--green {
-        color: $color-success;
-    }
-
-    &--light {
-        color: $color-primary-light;
-    }
-
-    &--info {
-        color: #0284C7;
-    }
-
-    &--danger {
-        color: #DC2626;
-    }
-
-    &--dark {
-        color: #990000;
-    }
-}
-
-// ── Menu Card ────────────────────────────────────────────────
 .menu-card {
-    margin: rem(12) rem(14) 0;
-    background: $color-bg-card;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-md;
     overflow: hidden;
 }
 
 .menu-item {
-    display: flex;
+    min-height: rem(58);
+    display: grid;
+    grid-template-columns: rem(38) minmax(0, 1fr) rem(16);
     align-items: center;
     gap: rem(12);
-    padding: rem(14) rem(16);
+    padding: rem(10) rem(14);
+    border-bottom: 1px solid $color-border-light;
     cursor: pointer;
     transition: background 0.15s ease;
-    border-bottom: rem(1) solid $color-border-light;
 
     &:last-child {
-        border-bottom: none;
+        border-bottom: 0;
     }
 
     &:active {
-        background: $color-bg-hover;
+        background: #FAFAFA;
     }
 
-    &--danger .menu-label {
-        color: $color-danger;
+    &:focus-visible {
+        outline: rem(2) solid rgba(206, 0, 0, 0.32);
+        outline-offset: rem(-2);
     }
 
+    &--danger .menu-label,
     &--danger .menu-arrow {
         color: $color-danger;
     }
 }
 
 .menu-icon {
-    width: rem(36);
-    height: rem(36);
-    border-radius: $radius-md;
+    width: rem(38);
+    height: rem(38);
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+    border-radius: rem(6);
 
     svg {
-        width: rem(18);
-        height: rem(18);
+        width: rem(19);
+        height: rem(19);
     }
 }
 
 .menu-label {
-    flex: 1;
-    font-size: rem(14);
+    min-width: 0;
     color: $color-text-primary;
-    font-weight: 500;
-}
-
-.menu-badge {
-    font-size: rem(10);
-    font-weight: 600;
-    padding: rem(2) rem(6);
-    border-radius: $radius-full;
-    background: $color-danger;
-    color: #fff;
-    margin-right: rem(4);
+    font-size: rem(14);
+    line-height: 1.3;
+    font-weight: 750;
 }
 
 .menu-arrow {
@@ -816,117 +633,21 @@ async function copyText(text) {
     color: $color-text-muted;
 }
 
-// ── Modal ────────────────────────────────────────────────────
-// .modal-overlay is no longer used directly in this file as popups are now components
-
-.modal-body {
-    padding: rem(16);
-
-    &--center {
-        text-align: center;
-        padding: rem(24) rem(16);
+@media (max-width: 374px) {
+    .profile-page {
+        padding-inline: rem(10);
     }
-}
 
-.confirm-btn {
-    width: 100%;
-    padding: rem(14) 0;
-    border-radius: $radius-md;
-    background: $gradient-primary;
-    color: #fff;
-    font-size: rem(15);
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.2s;
-
-    &:active {
-        opacity: 0.9;
+    .profile-account-card {
+        padding-inline: rem(16);
     }
-}
 
-
-.lang-flag {
-    font-size: rem(22);
-    line-height: 1;
-}
-
-.lang-name {
-    flex: 1;
-    font-size: rem(14);
-    color: $color-text-primary;
-    text-align: left;
-}
-
-.lang-check {
-    width: rem(18);
-    height: rem(18);
-}
-
-// ── Logout Modal ─────────────────────────────────────────────
-.logout-icon {
-    width: rem(56);
-    height: rem(56);
-    border-radius: 50%;
-    background: $color-danger-bg;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto rem(12);
-
-    svg {
-        width: rem(26);
-        height: rem(26);
+    .balance-copy strong {
+        font-size: rem(26);
     }
-}
 
-.logout-title {
-    font-size: rem(16);
-    font-weight: 600;
-    color: $color-text-primary;
-    margin-bottom: rem(6);
-}
-
-.logout-desc {
-    font-size: rem(13);
-    color: $color-text-muted;
-    margin-bottom: rem(20);
-}
-
-.logout-actions {
-    display: flex;
-    gap: rem(10);
-}
-
-.logout-cancel {
-    flex: 1;
-    padding: rem(12) 0;
-    border-radius: $radius-md;
-    background: $color-bg-page;
-    color: $color-text-secondary;
-    font-size: rem(14);
-    font-weight: 500;
-    cursor: pointer;
-    border: rem(1) solid $color-border;
-    transition: $transition-fast;
-
-    &:active {
-        background: $color-border;
-    }
-}
-
-.logout-confirm {
-    flex: 1;
-    padding: rem(12) 0;
-    border-radius: $radius-md;
-    background: $color-danger;
-    color: #fff;
-    font-size: rem(14);
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.2s;
-
-    &:active {
-        opacity: 0.9;
+    .earnings-val {
+        font-size: rem(15);
     }
 }
 </style>
