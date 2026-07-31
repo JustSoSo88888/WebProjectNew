@@ -63,7 +63,7 @@ const isActive = (path) => {
 
 const navItems = [
   { name: 'home',    label: $lang('首页'),    path: '/' },
-  { name: 'finance', label: $lang('理财'),    path: '/finance' },
+  // { name: 'finance', label: $lang('理财'),    path: '/finance' },
   // { name: 'team',    label: $lang('团队'),    path: '/team' },
   { name: 'task',    label: $lang('任务'),    path: '/task' },
   { name: 'profile', label: $lang('个人中心'), path: '/profile' },
